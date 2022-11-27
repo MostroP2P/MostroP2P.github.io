@@ -75,17 +75,8 @@
 <p>Mostro works with a simple server/client architecture on top of Nostr, the server will be the escrow that will allow buyer and seller operate reducing the risk for both parties.</p>
 <p>Mostro server will handle Bitcoin using a Lightning Network node, the node will create the hold invoices for sellers and pay the buyers lightning regular invoices.</p>
 <p>Mostro server will need a private key to be able to create, sign and send events to Nostr network.</p>
-<p>In the next graphic we can see a very summarized version of how Mostro, the seller and the lightning node interact, a more detailed explanation can be found <a href="./FLOW.md">here</a>:</p>
-<pre data-lang="mermaid" style="background-color:#2b303b;color:#c0c5ce;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>sequenceDiagram
-</span><span>    autonumber
-</span><span>    Seller-&gt;&gt;Mostro: I want to sell Bitcoin
-</span><span>    Mostro--&gt;&gt;LN-Node: Give me a hold invoice
-</span><span>    LN-Node-&gt;&gt;Mostro: Hold invoice
-</span><span>    Mostro-&gt;&gt;Seller: Please pay this hold invoice
-</span><span>    Seller-&gt;&gt;LN-Node: Paying throught lightning
-</span><span>    LN-Node--&gt;&gt;Mostro: Payment received
-</span><span>    Mostro--&gt;&gt;Seller: Thanks! talk to buyer now
-</span></code></pre>
+<p>In the next graphic we can see a very summarized version of how Mostro, the seller and the lightning node interact, a more detailed explanation can be found <a href="https://mostro.network/order-flow/">here</a>:</p>
+<p><img src="https://imagedelivery.net/wyrwp3c-j0gDDUWgnE7lig/d0040fa7-988e-4cb1-7954-26cb02e1ca00/public" alt="Client-server-ln" /></p>
 <p>In this repository we are building a Mostro server on Rust.</p>
 <h2 id="client">Client</h2>
 <p>Buyers and sellers will need Mostro's clients in order to buy/sell Bitcoin and a Lightning Wallet, for this we need to build at least a web client to start, we plan to build mobile and desktop clients in the future.</p>
