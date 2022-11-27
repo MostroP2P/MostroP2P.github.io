@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title></title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://mostro.network/style.css">
+    <link rel="stylesheet" href="https://mostro.network/color/green.css">
+
+        <link rel="stylesheet" href="https://mostro.network/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://mostro.network/font-hack.css">
+
+    </head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://mostro.network" style="text-decoration: none;">
+                    <img src='https://mostro.network/img/mostro.png' />
+                </a>
+            </div>
+        </div>
+        <img src='https://mostro.network/img/logo.png' width="30%" style="align-self: center; margin-top: 10px" />
+        
+        
+                <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://mostro.network">blog</a></li>
+            
+                <li><a href="https://github.com/MostroP2P" target="_blank" rel="noopener noreferrer">github</a></li>
+            
+                <li><a href="https://twitter.com/MostroP2P" target="_blank" rel="noopener noreferrer">twitter</a></li>
+            
+                <li><a href="https://geyser.fund/project/mostro" target="_blank" rel="noopener noreferrer">donate</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://mostro.network/mostro-server/">Mostro server</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2022-11-27
+        </span>
+
+    </div>
+
+    
+
+        
+        <div class="post-content">
+            <h2 id="overview">Overview</h2>
+<p>Due to the growing need to be able to operate with Bitcoin without giving up personal data, in 2021 I started a project to allows people to buy and sell Bitcoin through Lightning Network without funds custody and without KYC, this project is a telegram bot called @lnp2pbot.</p>
+<p><a href="https://github.com/lnp2pBot/bot">@lnp2pBot</a> is growing steadily and organically, it's being use in the whole world and is having a bigger impact in Latin-America, a place where there is no need to explain to people that money is broken, it's being used more and more in dictatorial regimes like Cuba and Venezuela, where people keep resisting tyranny and protesting using less the local currency and more Bitcoin.</p>
+<p>Although the bot works excellent, it's running on top of Telegram, a great platform but we do not know if one day it will be reached by the tentacles of a powerful government asking for political dissidents or simply awkward public person.</p>
+<p>At this point Nostr appears as a platform where a system like this can live without the possibility of being censored by a powerful entity. This document explains how we can create a censorship-resistant and non custodial lightning network peer-to-peer exchange without a single point of failure like a telegram bot.</p>
+<h2 id="server">Server</h2>
+<p>Mostro works with a simple server/client architecture on top of Nostr, the server will be the escrow that will allow buyer and seller operate reducing the risk for both parties.</p>
+<p>Mostro server will handle Bitcoin using a Lightning Network node, the node will create the hold invoices for sellers and pay the buyers lightning regular invoices.</p>
+<p>Mostro server will need a private key to be able to create, sign and send events to Nostr network.</p>
+<p>In the next graphic we can see a very summarized version of how Mostro, the seller and the lightning node interact, a more detailed explanation can be found <a href="./FLOW.md">here</a>:</p>
+<pre data-lang="mermaid" style="background-color:#2b303b;color:#c0c5ce;" class="language-mermaid "><code class="language-mermaid" data-lang="mermaid"><span>sequenceDiagram
+</span><span>    autonumber
+</span><span>    Seller-&gt;&gt;Mostro: I want to sell Bitcoin
+</span><span>    Mostro--&gt;&gt;LN-Node: Give me a hold invoice
+</span><span>    LN-Node-&gt;&gt;Mostro: Hold invoice
+</span><span>    Mostro-&gt;&gt;Seller: Please pay this hold invoice
+</span><span>    Seller-&gt;&gt;LN-Node: Paying throught lightning
+</span><span>    LN-Node--&gt;&gt;Mostro: Payment received
+</span><span>    Mostro--&gt;&gt;Seller: Thanks! talk to buyer now
+</span></code></pre>
+<p>In this repository we are building a Mostro server on Rust.</p>
+<h2 id="client">Client</h2>
+<p>Buyers and sellers will need Mostro's clients in order to buy/sell Bitcoin and a Lightning Wallet, for this we need to build at least a web client to start, we plan to build mobile and desktop clients in the future.</p>
+<h2 id="removing-the-single-point-of-failure">Removing the single point of failure</h2>
+<p>For this idea to work we need to make it as easy as possible for anyone to be a server, we don't need dozens of servers but we do need the ones that are running to be reliable, that's why with this implementation we encourage to create your own Mostro server and give more options to users.</p>
+<p>To handle a Mostro server is not going to be that easy, a Mostro server admin needs to have a lightning node up and running, it will need to have enough liquidity for users to operate lightning fast, the node MUST have uptime closer to 99.9%, all this requires resources that can be obtained by the fee that sellers pay on each successful order, this is a percentage that can vary between servers.</p>
+<h2 id="server-reputation">Server reputation</h2>
+<p>Users will be able to rate servers and servers will compete to obtain more users in order to survive. Bad servers should be rejected by users and will lose incentives to keep existing.</p>
+
+        </div>
+
+        
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright copyright--user">© 2022 @mostro. All rights reversed.</div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
