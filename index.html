@@ -37,7 +37,7 @@
             
                 <li><a href="https://github.com/MostroP2P" target="_blank" rel="noopener noreferrer">github</a></li>
             
-                <li><a href="https://iris.to/mostro@nostrplebs.com" target="_blank" rel="noopener noreferrer">nostr</a></li>
+                <li><a href="https://mostro.network/messages" target="_blank" rel="noopener noreferrer">Specs</a></li>
             
                 <li><a href="https://twitter.com/MostroP2P" target="_blank" rel="noopener noreferrer">twitter</a></li>
             
@@ -53,6 +53,28 @@
     <div class="content">
         
         <div class="posts">
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://mostro.network/docs/">Mostro specifications for clients</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2023-11-06
+        </span>
+
+    </div>
+
+    
+
+                    
+        <div class="post-content">
+            <p>We started this project writing how the communication will be made between parties, we called that our version <code>0</code>, then we coded on top of it, that worked great but while we went forward we found the need to update the specs and keep improving the communication, that's why we created a new site where you can find the version <code>0</code> of the Mostro specifications for clients, this is a work in progress and will be updated as we move forward to version <code>1</code>, if you want to play with it now you can start from here.</p>
+<p><a href="https://mostro.network/messages">Mostro specifications for clients</a></p>
+
+        </div>
+
+                </div>
+            
                 <div class="post on-list">
                     
     <h1 class="post-title"><a href="https://mostro.network/development-started/">Development started</a></h1>
@@ -133,9 +155,9 @@
 
                     
         <div class="post-content">
-            <p><strong>_ Updated: 2023-04-07 _</strong></p>
+            <p><strong><em>Updated: 2023-11-06</em></strong></p>
 <h2 id="overview">Overview</h2>
-<p>All mostro messages are <a href="https://github.com/nostr-protocol/nips/blob/master/33.md">Parameterized Replaceable Events</a> and use <code>30000</code> as event <code>kind</code>, a list of standard event kinds can be found <a href="https://github.com/nostr-protocol/nips">here</a></p>
+<p>All mostro messages are <a href="https://github.com/nostr-protocol/nips/blob/master/33.md">Parameterized Replaceable Events</a> and use <code>30078</code> as event <code>kind</code>, a list of standard event kinds can be found <a href="https://github.com/nostr-protocol/nips">here</a></p>
 <h2 id="keys">Keys</h2>
 <p>For this example the participants will use this keys:</p>
 <ul>
@@ -227,10 +249,10 @@
 </span><span>  &quot;</span><span style="color:#a3be8c;">sig</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">a21eb195fe418613aa9a3a8a78039b090e50dc3f9fb06b0f3fe41c63221adc073a9317a1f28d9db843a43c28d860ba173b70132ca85b0e706f6487d43a57ee82</span><span>&quot;
 </span><span>}
 </span></code></pre>
-<p>Mostro publishes this order as an event kind <code>30000</code> with status <code>Pending</code>:</p>
+<p>Mostro publishes this order as an event kind <code>30078</code> with status <code>Pending</code>:</p>
 <pre data-lang="json" style="background-color:#2b303b;color:#c0c5ce;" class="language-json "><code class="language-json" data-lang="json"><span>{
 </span><span>  &quot;</span><span style="color:#a3be8c;">id</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">74a1ce6e428ba3b4d7c99a5f582b04afdb645aa5f0c661cf83ed3c4e547c04ad</span><span>&quot;,
-</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30000</span><span>,
+</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30078</span><span>,
 </span><span>  &quot;</span><span style="color:#a3be8c;">pubkey</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">7590450f6b4d2c6793cacc8c0894e2c6bd2e8a83894912e79335f8f98436d2d8</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">content</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">{</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">id</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">kind</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">Sell</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">status</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">Pending</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:100,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_code</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">XXX</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:1000,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">payment_method</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">bank transfer</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">prime</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:0}</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">tags</span><span>&quot;: [[&quot;</span><span style="color:#a3be8c;">d</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span>&quot;]],
@@ -294,10 +316,10 @@
 </span><span>  }
 </span><span>}
 </span></code></pre>
-<p>After the seller pays the invoice mostro put the parties in touch and update the order sending a replaceable event kind <code>30000</code> with the same id, a newer timestamp and status <code>Active</code>:</p>
+<p>After the seller pays the invoice mostro put the parties in touch and update the order sending a replaceable event kind <code>30078</code> with the same id, a newer timestamp and status <code>Active</code>:</p>
 <pre data-lang="json" style="background-color:#2b303b;color:#c0c5ce;" class="language-json "><code class="language-json" data-lang="json"><span>{
 </span><span>  &quot;</span><span style="color:#a3be8c;">id</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">74a1ce6e428ba3b4d7c99a5f582b04afdb645aa5f0c661cf83ed3c4e547c04ad</span><span>&quot;,
-</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30000</span><span>,
+</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30078</span><span>,
 </span><span>  &quot;</span><span style="color:#a3be8c;">pubkey</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">7590450f6b4d2c6793cacc8c0894e2c6bd2e8a83894912e79335f8f98436d2d8</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">content</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">{</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">id</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">kind</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">Sell</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">status</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">Active</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:100,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_code</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">XXX</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:1000,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">payment_method</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">bank transfer</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">prime</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:0}</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">tags</span><span>&quot;: [[&quot;</span><span style="color:#a3be8c;">d</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span>&quot;]],
@@ -327,10 +349,10 @@
 </span><span>  &quot;</span><span style="color:#a3be8c;">sig</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">a21eb195fe418613aa9a3a8a78039b090e50dc3f9fb06b0f3fe41c63221adc073a9317a1f28d9db843a43c28d860ba173b70132ca85b0e706f6487d43a57ee82</span><span>&quot;
 </span><span>}
 </span></code></pre>
-<p>Now Mostro send a replaceable event kind <code>30000</code> with the same id, a newer timestamp and status <code>FiatSent</code>:</p>
+<p>Now Mostro send a replaceable event kind <code>30078</code> with the same id, a newer timestamp and status <code>FiatSent</code>:</p>
 <pre data-lang="json" style="background-color:#2b303b;color:#c0c5ce;" class="language-json "><code class="language-json" data-lang="json"><span>{
 </span><span>  &quot;</span><span style="color:#a3be8c;">id</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">74a1ce6e428ba3b4d7c99a5f582b04afdb645aa5f0c661cf83ed3c4e547c04ad</span><span>&quot;,
-</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30000</span><span>,
+</span><span>  &quot;</span><span style="color:#a3be8c;">kind</span><span>&quot;: </span><span style="color:#d08770;">30078</span><span>,
 </span><span>  &quot;</span><span style="color:#a3be8c;">pubkey</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">7590450f6b4d2c6793cacc8c0894e2c6bd2e8a83894912e79335f8f98436d2d8</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">content</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">{</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">id</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">kind</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">Sell</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">status</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">FiatSent</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:100,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_code</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">XXX</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">fiat_amount</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:1000,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">payment_method</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">bank transfer</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">,</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">prime</span><span style="color:#96b5b4;">\&quot;</span><span style="color:#a3be8c;">:0}</span><span>&quot;,
 </span><span>  &quot;</span><span style="color:#a3be8c;">tags</span><span>&quot;: [[&quot;</span><span style="color:#a3be8c;">d</span><span>&quot;, &quot;</span><span style="color:#a3be8c;">6ceda69d-99e4-4263-84cd-157a673aa307</span><span>&quot;]],
@@ -348,7 +370,7 @@
 </span><span>}
 </span></code></pre>
 <h2 id="settle-seller-s-invoice">Settle seller's invoice</h2>
-<p>Mostro settle the invoice and send a replaceable event kind <code>30000</code> with the same id, a newer timestamp and status <code>SettledHoldInvoice</code>, right after tries to pay the buyer's invoice, after the invoice is paid Mostro send a replaceable event kind <code>30000</code> with status <code>Success</code>.</p>
+<p>Mostro settle the invoice and send a replaceable event kind <code>30078</code> with the same id, a newer timestamp and status <code>SettledHoldInvoice</code>, right after tries to pay the buyer's invoice, after the invoice is paid Mostro send a replaceable event kind <code>30078</code> with status <code>Success</code>.</p>
 
         </div>
 
