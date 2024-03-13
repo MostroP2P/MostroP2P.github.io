@@ -1,1 +1,251 @@
 
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NO-KYC P2P Lightning exchange via nostr | Mostro.network</title>
+
+  <!-- Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Link to your CSS stylesheets -->
+  <link rel="stylesheet" href="style/styles.css">
+
+  <!-- JavaScript libraries -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- OpenGraph Meta Tags -->
+  <meta property="og:title" content="Mostro.network">
+  <meta property="og:description" content="NO-KYC P2P Lightning trading on nostr">
+  <meta property="og:image" content="assets/images/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="assets/images/favicon.png" type="favicon">
+  <link rel="shortcut icon" href="assets/images/favicon.png" type="favicon">
+
+  <script src="js/scripts.js"></script>
+</head>
+
+<body id="documentBody">
+
+  <header id="top">
+    <div class="container">
+      <a href="#top" class="logo">
+        <img src="assets/images/logo.svg" alt="">
+      </a>
+      <nav class="navMenu">
+        <div class="menu-button">
+          <span></span>
+        </div>
+        <ul>
+          <li><a href="#about" class="menu-item">About</a></li>
+          <li><a href="#documentazione" class="menu-item">Docs</a></li>
+          <li><a href="#donazioni" class="menu-item">Donate</a></li>
+          <li><a href="#github" class="menu-item">Github</a></li>
+          <li><a href="#socials" class="menu-item">Socials</a></li>
+          <li><a href="#disclaimer" class="menu-item">Disclaimer</a></li>
+        </ul>
+      </nav>
+
+      <nav class="navLang">
+        <ul>
+          <li><a href="index.html" class="active">EN</a></li>
+          <li><a href="index.es.html">ES</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="hero-section container hero-top">
+    <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 sm:gap-0 gap-16">
+      <!-- Column 1 -->
+      <div class="col-span-1 column1 animate-me">
+        <h1 class="main-heading">
+          <p class="animate-in">NO-KYC P2P Lightning exchange via <span class="nostrPurple">nostr</span></p>
+        </h1>
+
+        <div class="subheading">
+          Peer-to-peer Lightning Network platform over nostr
+        </div>
+        <br><br>
+        <a href="https://mostro.bilthon.dev/" target="_blank" class="button button-cta">Start testing</a>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="body-content">
+
+    <div class="section mx-auto py-6" id="about">
+      <div class="container grid grid-cols-1 s:grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+        <!-- Column 1 -->
+        <div class="col-span-2 column1 animate-me flex-second">
+          <h2 class="">About Mostro</h2>
+          <p>Mostro è un progetto innovativo che utilizza un nuovo modo per facilitare gli scambi di valuta via Lightning Network.
+            Cerchiamo di favorire la crescita delle richieste di vendita e acquisto di Bitcoin senza compromettere dati personali 
+            introducendo un nuovo modo di fare scambi peer-to-peer.</p>
+          <p>Mostro permette di eseguire gli scambi attraverso il nuovo protocollo di comunizione <a href="https://nostr.com" class="textLink">Nostr</a>,
+            creando un sistema decentralizzato senza singolo punto di attacco, questo permette a Mostro di essere più resistente a possibili attachi rispetto
+            ad altre piattaforme di scambio peer-to-peer già esistenti.</p>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-span-1 column2 animate-me text-center">
+          <br><br>
+          <img src="assets/images/mostro-icons.webp" alt="" class="column-image">
+        </div>
+      </div>
+    </div>
+
+    <div class="section mx-auto py-6" id="docs">
+      <div class="container grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+        <!-- Column 2 -->
+        <div class="col-span-1 column2 animate-me text-center">
+          <br><br>
+          <img src="assets/images/docs-icon.png" alt="" class="column-image">
+        </div>
+
+        <!-- Column 1 -->
+        <div class="col-span-2 column1 animate-me flex-second">
+          <h2 class="">Docs</h2>
+          <p>Se siete interesse allo sviluppo di Mostro o volete contribuire in qualche modo al progetto potete andare a questo link:</p>
+          <br>
+          <a href="https://mostro.network/messages/" target="_blank" class="button secondary">Docs</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="section dark-section mx-auto py-6" id="donate">
+      <div class="container grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+
+        <!-- Column 1 -->
+        <div class="col-span-2 column1 animate-me flex-second">
+          <h2 class="">Donate</h2>
+          <p>Mostro is FOSS, if you think the project is useful, consider making a donation to help us develop and
+            maintain it in the long term. Thanks! </p>
+          <br>
+          <a href="https://geyser.fund/project/mostro" target="_blank" class="button secondary">Donate</a>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-span-1 column2 animate-me text-center">
+          <br><br>
+          <img src="assets/images/geyser-logo.svg" alt="" class="column-image">
+        </div>
+
+      </div>
+    </div>
+
+    <div class="section mx-auto py-6" id="github">
+      <div class="container grid grid-cols-1 s:grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+        <!-- Column 1 -->
+        <div class="col-span-2 column1 animate-me flex-second">
+          <h2 class="">How it works?</h2>
+          <p>Mostro works as an escrow that allows the buyer and seller to exchange bitcoin p2p, reducing the risk for
+            both parties, while only holding the Sats for the minimum time necessary. Mostro handles Bitcoin using a
+            Lightning Network node. The node creates hold invoices for sellers and pays the buyers lightning regular
+            invoices.</p>
+          <p>It works within the Nostr protocol so buyers and sellers will need Mostro's clients to buy/sell Bitcoin.
+            Users will be able to rate Mostros and Mostros will compete to obtain more users to survive.
+            Users should reject bad Mostros which will lose incentives to keep existing.</p>
+          <br>
+          <a href="https://github.com/MostroP2P" target="_blank" class="button secondary">Github</a>
+        </div>
+
+        <!-- Column 2 -->
+        <div class="col-span-1 column2 animate-me text-center">
+          <br><br>
+          <img src="assets/images/code-icon.png" alt="" class="column-image">
+        </div>
+      </div>
+    </div>
+
+    <!-- end body content -->
+  </div>
+
+  <div class="section mx-auto py-6" id="disclaimer">
+    <div class="container grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+      <!-- Column 2 -->
+      <div class="col-span-1 column2 animate-me text-center">
+        <br><br>
+        <img src="assets/images/exclamation-triangle.svg" alt="" class="column-image">
+      </div>
+
+      <!-- Column 1 -->
+      <div class="col-span-2 column1 animate-me flex-second">
+        <h2 class="">Disclaimer</h2>
+        <h3>By using the P2P trade bot, you agree to the following terms and conditions:</h3>
+        <br />
+        <p>Mostro is an open-source software that is available for anyone to use, copy, modify, and run. The developers
+          are not responsible for the actions of other individuals using the software in any manner, whether legal or
+          illegal, honest or dishonest.</p>
+        <p>Mostro is provided on an "as is" and "as available" basis, and the developers make no warranties of any kind,
+          express or implied, with respect to Mostro or its use.</p>
+        <p>The developers and the dispute resolvers make their best efforts to remove bad actors, frauds, and scams from
+          using Mostro, but the user recognizes that the system can be exploited and accepts full responsibility while
+          using it.</p>
+        <p>Neither the developers nor the dispute resolvers are responsible for any losses or damages that the user may
+          suffer as a result of using the bot.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section mx-auto py-6">
+    <div class="container grid grid-cols-1 s:grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-16">
+      <!-- Column 1 -->
+      <div class="col-span-12 column1 animate-me flex-second text-center">
+        <h2>Sponsored By</h2>
+        <div class="sponsor-banner animate-me">
+          <div class="row">
+            <img src="assets/images/HRF-logo.svg" alt="" class="column-image">
+            <div class="sponsor-text">Human Rights Foundation - 2023.</div>
+          </div>
+
+          <div class="row">
+            <img src="assets/images/support.svg" alt="" class="column-image opensats" width="100px">
+            <div class="sponsor-text">???????? - 2024</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="socials">
+
+    <div class="hero-section hero-bottom animate-me text-center">
+
+      <h2>Follow us</h2>
+
+      <a href="https://github.com/MostroP2P/mostro" target="_blank" class="button secondary socials">
+        <img src="assets/images/github-icon.svg" alt="">
+      </a>
+      <a href="https://twitter.com/MostroP2P" target="_blank" class="button secondary socials">
+        <img src="assets/images/X-icon.svg" alt="">
+      </a>
+      <a href="https://iris.to/mostro@nostrplebs.com" target="_blank" class="button secondary socials">
+        <img src="assets/images/nostr-icon.svg" alt="">
+      </a>
+      <a href="https://t.me/mostrop2p" target="_blank" class="button secondary socials">
+        <img src="assets/images/tg-icon.svg" alt="">
+      </a>
+    </div>
+  </div>
+
+  <div id="footer">
+    <div class="copyright text-center">
+      <a href="#top" class="scroll-up">
+        <span class="">TOP</span>
+      </a>
+
+      © 2024 MOSTRO. All rights reversed.
+    </div>
+  </div>
+
+</body>
+
+</html>
