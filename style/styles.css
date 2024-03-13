@@ -1,18 +1,20 @@
 /* Reset some default styles for consistent rendering across browsers */
 * {
-    margin: 0;
-    padding: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body::-webkit-scrollbar {
   width: 7px;
 }
+
 body::-webkit-scrollbar-track-piece {
   background: rgba(0, 0, 0, 0);
 }
+
 body::-webkit-scrollbar-thumb {
   background: #739C3D;
   border-radius: 3px;
@@ -27,50 +29,60 @@ body::-webkit-scrollbar-thumb:hover {
   color: #000;
 }
 
-.clear { clear: both; }
-
-@font-face {
-    font-family: 'Roboto Condensed';
-    src: url('../assets/fonts/RobotoCondensed-Regular.woff2') format('woff2'), /* Modern Browsers */
-         url('../assets/fonts/RobotoCondensed-Regular.woff') format('woff'); /* Legacy Browsers */
-    font-weight: normal;
-    font-style: normal;
+.clear {
+  clear: both;
 }
 
 @font-face {
-    font-family: 'Roboto Condensed';
-    src: url('../assets/fonts/RobotoCondensed-Italic.woff2') format('woff2'), /* Modern Browsers */
-         url('../assets/fonts/RobotoCondensed-Italic.woff') format('woff'); /* Legacy Browsers */
-    font-weight: normal;
-    font-style: italic;
+  font-family: 'Roboto Condensed';
+  src: url('../assets/fonts/RobotoCondensed-Regular.woff2') format('woff2'),
+    /* Modern Browsers */
+    url('../assets/fonts/RobotoCondensed-Regular.woff') format('woff');
+  /* Legacy Browsers */
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'Roboto Condensed';
-    src: url('../assets/fonts/RobotoCondensed-BoldItalic.woff2') format('woff2'), /* Modern Browsers */
-         url('../assets/fonts/RobotoCondensed-BoldItalic.woff') format('woff'); /* Legacy Browsers */
-    font-weight: bold;
-    font-style: italic;
+  font-family: 'Roboto Condensed';
+  src: url('../assets/fonts/RobotoCondensed-Italic.woff2') format('woff2'),
+    /* Modern Browsers */
+    url('../assets/fonts/RobotoCondensed-Italic.woff') format('woff');
+  /* Legacy Browsers */
+  font-weight: normal;
+  font-style: italic;
 }
 
 @font-face {
-    font-family: 'Roboto Condensed';
-    src: url('../assets/fonts/RobotoCondensed-Bold.woff2') format('woff2'), /* Modern Browsers */
-         url('../assets/fonts/RobotoCondensed-Bold.woff') format('woff'); /* Legacy Browsers */
-    font-weight: bold;
-    font-style: normal;
+  font-family: 'Roboto Condensed';
+  src: url('../assets/fonts/RobotoCondensed-BoldItalic.woff2') format('woff2'),
+    /* Modern Browsers */
+    url('../assets/fonts/RobotoCondensed-BoldItalic.woff') format('woff');
+  /* Legacy Browsers */
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  src: url('../assets/fonts/RobotoCondensed-Bold.woff2') format('woff2'),
+    /* Modern Browsers */
+    url('../assets/fonts/RobotoCondensed-Bold.woff') format('woff');
+  /* Legacy Browsers */
+  font-weight: bold;
+  font-style: normal;
 }
 
 /* Apply basic styling to the body */
 body {
-    font-family: 'Roboto Condensed', sans-serif;
-    background-color: #1D212C;
-    color: #fff;
-    line-height: 1.6;
-    font-size: 18px;
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
+  font-family: 'Roboto Condensed', sans-serif;
+  background-color: #1D212C;
+  color: #fff;
+  line-height: 1.6;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
 }
 
 @media screen and (max-width: 1024px) {
@@ -81,16 +93,16 @@ body {
 
 /* Style the header */
 header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 10px 40px;
-    height: 100px;
-    background: rgb(29 33 44 / 50%);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    z-index: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 40px;
+  height: 100px;
+  background: rgb(29 33 44 / 50%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1;
 }
 
 @media screen and (max-width: 1024px) {
@@ -108,32 +120,32 @@ header .container {
 
 /* Style the navigation menu */
 nav ul {
-    list-style: none;
+  list-style: none;
 }
 
 nav ul li {
-    display: inline;
-    padding: 0 8px;
+  display: inline;
+  padding: 0 8px;
 }
 
 nav ul li a {
   position: relative;
-    text-decoration: none;
-    color: #fff;
-    font-weight: 400;
-    text-transform: uppercase;
-    font-size: 16px;
-    padding: 3px 1px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 16px;
+  padding: 3px 1px;
 }
 
 nav ul li a.active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #8CC63F;
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #8CC63F;
 }
 
 @media screen and (max-width: 1024px) {
@@ -211,7 +223,7 @@ nav ul li a.active::after {
     left: auto;
     right: 75px;
     z-index: 2;
-}
+  }
 
   .navLang ul li {
     text-align: center;
@@ -263,7 +275,8 @@ nav ul li a.active::after {
   transition: background .3s;
 }
 
-.menu-button span:before, .menu-button span:after {
+.menu-button span:before,
+.menu-button span:after {
   content: '';
   background: #fff;
   width: 25px;
@@ -311,7 +324,7 @@ nav ul li a.active::after {
   transition-delay: 0s, 0.3s;
 }
 
-.menu-button.expand + ul {
+.menu-button.expand+ul {
   display: block;
 }
 
@@ -325,27 +338,32 @@ nav a:hover {
 
 
 /* Apply a basic style to headings */
-h1, h2, h3, h4, h5, h6 {
-    margin: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
 /* Apply styling to paragraphs */
 p {
-    margin: 0 0 20px 0;
+  margin: 0 0 20px 0;
 }
 
 /* Add some spacing to top and bottom of elements */
 .margin-top {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .margin-bottom {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 /* Center-align text */
 .text-center {
-    text-align: center;
+  text-align: center;
 }
 
 .logo {
@@ -435,8 +453,8 @@ p {
 }
 
 .hero-section.hero-bottom {
-  height: 240px;
-  min-height: 240px;
+  height: 340px;
+  min-height: 340px;
 }
 
 .hero-section.hero-top {
@@ -529,6 +547,7 @@ p {
 }
 
 @media screen and (max-width: 1024px) {
+
   .button,
   .button.secondary {
     font-size: 16px;
@@ -681,15 +700,15 @@ h3 {
   padding-top: 160px;
   font-size: 16px;
   color: #92949A;
-  background: -webkit-linear-gradient(0deg, rgba(16,18,25,1) 17%, rgba(16,18,25,0) 100%);
-  background: linear-gradient(0deg, rgba(16,18,25,1) 17%, rgba(16,18,25,0) 100%);
+  background: -webkit-linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
+  background: linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
 }
 
 .scroll-up {
   position: absolute;
   top: 60px;
   left: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   width: 65px;
   height: 65px;
   border-radius: 33px;
@@ -787,7 +806,7 @@ h3 {
   transform: translateY(-50%);
 }
 
-.sponsor-banner .column-image.opensats {
+.sponsor-banner .column-image.os {
   width: 120px;
 }
 
@@ -829,8 +848,8 @@ h3 {
   .sponsor-banner .column-image {
     top: 35%;
     left: 50%;
-    -webkit-transform: translate(-50%,-50%);
-    transform: translate(-50%,-50%);
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
   }
 
   .sponsor-text {
