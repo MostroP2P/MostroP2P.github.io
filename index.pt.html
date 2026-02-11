@@ -45,6 +45,7 @@
           <li><a href="#docs" class="menu-item">Documentação</a></li>
           <li><a href="#donate" class="menu-item">Doar</a></li>
           <li><a href="#github" class="menu-item">Github</a></li>
+          <li><a href="#faq" class="menu-item">FAQ</a></li>
           <li><a href="#socials" class="menu-item">Siga-nos</a></li>
           <li><a href="#disclaimer" class="menu-item">Disclaimer</a></li>
           <li><a href="https://mostro.network/blog/" target="_blank" class="">Blog</a></li>
@@ -166,6 +167,104 @@
         <div class="col-span-1 column2 animate-me text-center">
           <br><br>
           <img src="assets/images/code-icon.png" alt="" class="column-image">
+        </div>
+      </div>
+    </div>
+
+    <div class="section faq-section mx-auto py-6" id="faq">
+      <div class="container">
+        <h2 class="animate-me">Perguntas Frequentes</h2>
+        <div class="faq-list animate-me">
+
+          <details class="faq-item">
+            <summary class="faq-question">O que é o Mostro? É um app?</summary>
+            <div class="faq-answer">
+              <p>Mostro não é um app, é um <strong>protocolo</strong> para trocar Bitcoin de forma peer-to-peer usando Lightning Network e Nostr. O protocolo define as regras e mensagens que permitem que duas pessoas troquem bitcoin sem intermediários. Para usar o Mostro você precisa de um <strong>cliente</strong>, que pode ser um app móvel, um aplicativo de desktop ou uma interface de linha de comando.</p>
+              <p>A confusão é comum porque existem apps que implementam o protocolo Mostro, mas esses apps não são o Mostro: são apenas uma forma de interagir com ele. Pensar que o Mostro é um app é como pensar que Bitcoin é uma carteira. Mostro também não é uma blockchain nem uma camada adicional (L2 ou L3) do Bitcoin, nem cria um novo sistema monetário: limita-se exclusivamente a coordenar trocas P2P de bitcoin utilizando a infraestrutura existente.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Preciso me registrar ou verificar minha identidade?</summary>
+            <div class="faq-answer">
+              <p>Não. Mostro não requer registro, e-mail, telefone nem nenhum tipo de KYC. Sua identidade é gerada automaticamente no cliente que você usa e somente você a controla por meio de uma <strong>frase de recuperação de 12 palavras</strong>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Como o Mostro me protege se a contraparte tentar me enganar?</summary>
+            <div class="faq-answer">
+              <p>Os sats do vendedor ficam retidos na sua carteira por meio de uma <em>hold invoice</em> até que ele confirme ter recebido o pagamento fiat. Se surgir um problema, qualquer uma das partes pode abrir uma disputa e um mediador revisará o caso. Além disso, o chat entre usuários não pode ser apagado nem alterado, o que permite verificar o que realmente aconteceu durante a operação.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Minhas operações são privadas?</summary>
+            <div class="faq-answer">
+              <p>Sim. Toda a comunicação é criptografada de ponta a ponta. Mostro usa chaves diferentes para cada operação, o que impede vincular suas trocas entre si. Você pode até operar em um modo de privacidade avançada no qual nem mesmo o próprio nó do Mostro pode saber quais operações pertencem a você. Os operadores de nós Mostro também não têm acesso a nenhuma informação pessoal dos usuários.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">O que acontece se eu tiver um problema com meu celular durante uma operação?</summary>
+            <div class="faq-answer">
+              <p>Se seu celular desligar, quebrar, você perdê-lo ou for roubado durante uma operação, você pode recuperar o controle <strong>somente se tiver backup da sua frase de recuperação</strong>. Restaurando essa frase em outro dispositivo, você recupera o acesso às suas chaves e pode continuar a operação.</p>
+              <p>Sem esse backup, não há como recuperar a sessão nem os fundos associados, porque o Mostro não tem contas, suporte central nem mecanismos de recuperação. Por isso é fundamental fazer o backup antes de iniciar sua primeira operação.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">O que torna o Mostro diferente de outros exchanges P2P?</summary>
+            <div class="faq-answer">
+              <p>Três diferenças fundamentais:</p>
+              <p><strong>Resistência real à censura</strong><br>Mostro não é uma plataforma nem uma empresa: é um protocolo. Não há um servidor central para desligar, nem um app para "derrubar", nem um banco de dados para confiscar. Funciona sobre Nostr, um protocolo aberto e descentralizado. Se um relay parar de funcionar, usa-se outro. Se um nó desaparecer, o protocolo continua existindo e outros nós podem continuar operando. Mostro não pode ser desabilitado como um serviço porque não é um.</p>
+              <p><strong>Privacidade por design, não como opção</strong><br>Não existem contas, e-mails ou identidades persistentes. Cada operação usa chaves diferentes e a troca de mensagens ocorre por chat criptografado de ponta a ponta. Não há um histórico global nem uma entidade capaz de correlacionar suas trocas. A privacidade não depende da boa-fé de um operador: é imposta pela arquitetura.</p>
+              <p><strong>Custódia mínima e não permanente</strong><br>Mostro não mantém fundos dos usuários. Utiliza <em>hold invoices</em> do Lightning: os sats permanecem bloqueados na carteira do vendedor até que este confirme o recebimento do fiat. Somente nesse momento os fundos passam de forma transitória e automática pelo nó Lightning do nó Mostro, para serem imediatamente enviados ao comprador.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Quanto o Mostro cobra por operação?</summary>
+            <div class="faq-answer">
+              <p>Cada operador de um nó Mostro define suas próprias tarifas. Geralmente são baixas (por exemplo, cerca de 0,3% para comprador e vendedor). Antes de operar, verifique sempre as tarifas do nó que escolher.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Quais moedas e métodos de pagamento o Mostro aceita?</summary>
+            <div class="faq-answer">
+              <p>Depende de cada nó Mostro. Os operadores decidem quais moedas fiat suportam e os usuários decidem o método de pagamento (transferência bancária, dinheiro, pagamento móvel, etc.). Mostro não intervém na troca de fiat, apenas coordena a troca de sats.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Existe apenas um nó Mostro ou há vários?</summary>
+            <div class="faq-answer">
+              <p>Há vários. Mostro é o protocolo, e cada nó Mostro é uma implementação independente que o executa. Qualquer pessoa pode operar seu próprio nó, com suas próprias tarifas, moedas suportadas e regras operacionais. Não existe um nó central ou oficial: se um nó parar de funcionar, outros continuam disponíveis e o protocolo segue operando sem interrupções.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Por que existem vários nós Mostro em vez de apenas um?</summary>
+            <div class="faq-answer">
+              <p>Porque a descentralização é o que torna o sistema resistente à censura. Se existisse um único nó, bastaria fechá-lo ou bloqueá-lo para parar todas as trocas. Ao haver múltiplos nós operados por pessoas diferentes em diferentes jurisdições, não existe um ponto único de falha. Além disso, essa diversidade introduz competição: melhores tarifas, melhor serviço e mais opções para os usuários, que podem decidir com qual nó interagir.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Como começo a usar o Mostro?</summary>
+            <div class="faq-answer">
+              <p>Baixe um cliente Mostro, faça backup da sua frase de recuperação de 12 palavras e pronto. Você pode criar uma ordem de compra ou venda, ou aceitar uma ordem existente do livro de ofertas. Você só precisa de uma carteira Lightning para enviar ou receber sats.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Quero rodar meu próprio nó Mostro, por onde começo?</summary>
+            <div class="faq-answer">
+              <p>Mostro é software livre e qualquer pessoa pode operar seu próprio nó. Você precisará de um servidor, um nó Lightning Network (LND) e acesso a relays Nostr. A documentação técnica completa está disponível no <a href="https://github.com/MostroP2P/mostro" target="_blank" class="textLink">repositório oficial do Mostro no GitHub</a>, com guias de instalação passo a passo. Se você faz parte de uma comunidade Bitcoin local, rodar seu próprio nó pode ser uma forma direta de oferecer troca P2P sem intermediários aos seus usuários.</p>
+            </div>
+          </details>
+
         </div>
       </div>
     </div>
