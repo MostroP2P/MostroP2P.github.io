@@ -45,6 +45,7 @@
           <li><a href="#docs" class="menu-item">Docs</a></li>
           <li><a href="#donate" class="menu-item">Donate</a></li>
           <li><a href="#github" class="menu-item">Github</a></li>
+          <li><a href="#faq" class="menu-item">FAQ</a></li>
           <li><a href="#socials" class="menu-item">Socials</a></li>
           <li><a href="#disclaimer" class="menu-item">Disclaimer</a></li>
           <li><a href="https://mostro.network/blog/" target="_blank" class="">Blog</a></li>
@@ -164,6 +165,104 @@
         <div class="col-span-1 column2 animate-me text-center">
           <br><br>
           <img src="assets/images/code-icon.png" alt="" class="column-image">
+        </div>
+      </div>
+    </div>
+
+    <div class="section faq-section mx-auto py-6" id="faq">
+      <div class="container">
+        <h2 class="animate-me">FAQ</h2>
+        <div class="faq-list animate-me">
+
+          <details class="faq-item">
+            <summary class="faq-question">What is Mostro? Is it an app?</summary>
+            <div class="faq-answer">
+              <p>Mostro is not an app, it is a <strong>protocol</strong> for exchanging Bitcoin peer-to-peer using Lightning Network and Nostr. The protocol defines the rules and messages that allow two people to exchange bitcoin without intermediaries. To use Mostro you need a <strong>client</strong>, which can be a mobile app, a desktop application, or a command-line interface.</p>
+              <p>The confusion is common because there are apps that implement the Mostro protocol, but those apps are not Mostro: they are just a way to interact with it. Thinking that Mostro is an app is like thinking that Bitcoin is a wallet. Mostro is neither a blockchain nor an additional layer (L2 or L3) of Bitcoin, nor does it create a new monetary system: it is exclusively limited to coordinating P2P bitcoin exchanges using existing infrastructure.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Do I need to register or verify my identity?</summary>
+            <div class="faq-answer">
+              <p>No. Mostro does not require registration, email, phone, or any type of KYC. Your identity is automatically generated in the client you use and only you control it through a <strong>12-word recovery phrase</strong>.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">How does Mostro protect me if my counterpart tries to scam me?</summary>
+            <div class="faq-answer">
+              <p>The seller's sats are held in their wallet through a <em>hold invoice</em> until they confirm having received the fiat payment. If a problem arises, either party can open a dispute and a mediator will review the case. Additionally, the chat between users cannot be deleted or altered, which allows verifying what actually happened during the operation.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Are my operations private?</summary>
+            <div class="faq-answer">
+              <p>Yes. All communication is end-to-end encrypted. Mostro uses different keys for each operation, which prevents linking your exchanges to each other. You can even operate in an advanced privacy mode in which not even the Mostro node itself can know which operations belong to you. Mostro node operators also have no access to any personal information of the users.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What happens if I have a problem with my phone during an operation?</summary>
+            <div class="faq-answer">
+              <p>If your phone shuts down, breaks, you lose it, or it gets stolen during an operation, you can regain control <strong>only if you have a backup of your recovery phrase</strong>. By restoring that phrase on another device, you regain access to your keys and can continue the operation.</p>
+              <p>Without that backup, there is no way to recover the session or the associated funds, because Mostro has no accounts, central support, or recovery mechanisms. That is why it is critical to make the backup before starting your first operation.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What makes Mostro different from other P2P exchanges?</summary>
+            <div class="faq-answer">
+              <p>Three fundamental differences:</p>
+              <p><strong>Real censorship resistance</strong><br>Mostro is not a platform or a company: it is a protocol. There is no central server to shut down, no app to "take down," no database to confiscate. It runs on Nostr, an open and decentralized protocol. If a relay stops working, another one is used. If a node disappears, the protocol continues to exist and other nodes can keep operating. Mostro cannot be disabled like a service because it is not one.</p>
+              <p><strong>Privacy by design, not as an option</strong><br>There are no accounts, emails, or persistent identities. Each operation uses different keys and message exchange occurs through end-to-end encrypted chat. There is no global history nor an entity capable of correlating your exchanges. Privacy does not depend on the good faith of an operator: it is enforced by the architecture.</p>
+              <p><strong>Minimal and non-permanent custody</strong><br>Mostro does not hold users' funds. It uses Lightning <em>hold invoices</em>: the sats remain locked in the seller's wallet until they confirm receipt of the fiat. Only at that moment do the funds pass transiently and automatically through the Mostro node's Lightning node, to be immediately sent to the buyer.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">How much does Mostro charge per operation?</summary>
+            <div class="faq-answer">
+              <p>Each operator of a Mostro node sets their own fees. They are generally low (for example, around 0.3% for both buyer and seller). Before operating, always check the fees of the node you choose.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">What currencies and payment methods does Mostro accept?</summary>
+            <div class="faq-answer">
+              <p>It depends on each Mostro node. Operators decide which fiat currencies they support and users decide the payment method (bank transfer, cash, mobile payment, etc.). Mostro does not intervene in the fiat exchange, it only coordinates the exchange of sats.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Is there only one Mostro node or are there several?</summary>
+            <div class="faq-answer">
+              <p>There are several. Mostro is the protocol, and each Mostro node is an independent implementation that runs it. Anyone can operate their own node, with their own fees, supported currencies, and operational rules. There is no central or official node: if one node stops working, others remain available and the protocol continues operating without interruptions.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">Why do several Mostro nodes exist instead of just one?</summary>
+            <div class="faq-answer">
+              <p>Because decentralization is what makes the system resistant to censorship. If there were a single node, it would be enough to shut it down or block it to stop all exchange. By having multiple nodes operated by different people in different jurisdictions, there is no single point of failure. Additionally, this diversity introduces competition: better fees, better service, and more options for users, who can decide which node to interact with.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">How do I start using Mostro?</summary>
+            <div class="faq-answer">
+              <p>Download a Mostro client, back up your 12-word recovery phrase and you're ready. You can create a buy or sell order, or take an existing order from the order book. You only need a Lightning wallet to send or receive sats.</p>
+            </div>
+          </details>
+
+          <details class="faq-item">
+            <summary class="faq-question">I want to run my own Mostro node, where do I start?</summary>
+            <div class="faq-answer">
+              <p>Mostro is free software and anyone can operate their own node. You will need a server, a Lightning Network node (LND), and access to Nostr relays. The complete technical documentation is available in <a href="https://github.com/MostroP2P/mostro" target="_blank" class="textLink">Mostro's official GitHub repository</a>, with step-by-step installation guides. If you are part of a local Bitcoin community, running your own node can be a direct way to offer P2P exchange without intermediaries to your users.</p>
+            </div>
+          </details>
+
         </div>
       </div>
     </div>
