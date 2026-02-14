@@ -795,7 +795,8 @@ admin_privkey = "nsec1your_admin_key"
 <span class="cm"># The relays your Mostro node uses</span>
 relays = [
   "wss://relay.mostro.network",
-  "wss://nos.lol"
+  "wss://nos.lol",
+  "wss://relay.nostr.band"
 ]
 
 <span class="cm"># Fiat currencies you want to see</span>
@@ -881,7 +882,7 @@ pubkey = "YOUR_MOSTRO_PUBKEY"
 
 [nostr]
 <span class="cm"># The same relays your Mostro daemon uses</span>
-relays = ["wss://relay.mostro.network", "wss://nos.lol"]
+relays = ["wss://relay.mostro.network", "wss://nos.lol", "wss://relay.nostr.band"]
 
 [telegram]
 <span class="cm"># Get this from @BotFather on Telegram</span>
@@ -952,8 +953,12 @@ docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
 <p><strong>Verify from outside:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>cargo install nostreq nostcat
-nostreq --kinds 38383 --limit 1 --authors YOUR_MOSTRO_NPUB | nostcat --stream wss://nos.lol | jq</code></pre>
+  <pre><code><span class="cm"># Install tools (requires Rust) and jq for JSON formatting</span>
+cargo install nostreq nostcat
+apt install -y jq
+
+<span class="cm"># Use your Mostro's 64-char hex pubkey (not npub — decode with nostrtool.com if needed)</span>
+nostreq --kinds 38383 --limit 1 --authors YOUR_MOSTRO_HEX_PUBKEY | nostcat --stream wss://nos.lol | jq</code></pre>
 </div>
 
 <div class="callout tip">
@@ -1275,7 +1280,7 @@ sqlite3 /path/to/mostro.db "SELECT SUM(fee * 2) as total_fees_sats FROM orders W
 </ul>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>nostreq --kinds 38383 --limit 1 --authors YOUR_PUBKEY | nostcat --stream wss://nos.lol</code></pre>
+  <pre><code>nostreq --kinds 38383 --limit 1 --authors YOUR_HEX_PUBKEY | nostcat --stream wss://nos.lol</code></pre>
 </div>
 
 <h4>Payments failing</h4>
