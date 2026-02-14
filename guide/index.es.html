@@ -54,6 +54,8 @@
     <li class="toc-sub"><a href="#cfg-rpc">RPC Admin</a></li>
     <li><a href="#operacion">5. Operación del nodo</a></li>
     <li class="toc-sub"><a href="#disputas">Disputas</a></li>
+    <li class="toc-sub"><a href="#mostrix">Mostrix</a></li>
+    <li class="toc-sub"><a href="#watchdog">mostro-watchdog</a></li>
     <li class="toc-sub"><a href="#monitoreo">Monitoreo</a></li>
     <li class="toc-sub"><a href="#actualizacion">Actualización</a></li>
     <li class="toc-sub"><a href="#respaldos">Respaldos</a></li>
@@ -586,7 +588,6 @@ journalctl -u mostro -f</code></pre>
   <pre><code>[nostr]
 nsec_privkey = 'YOUR_NSEC_PRIVATE_KEY'
 relays = [
-  'wss://relay.damus.io',
   'wss://relay.mostro.network',
   'wss://nos.lol',
   'wss://relay.nostr.band'
@@ -603,8 +604,7 @@ relays = [
 <p><strong>¿Qué relays usar?</strong></p>
 <ul>
   <li><code>wss://relay.mostro.network</code> — Relay propio de Mostro, recomendado</li>
-  <li><code>wss://relay.damus.io</code> — Relay grande y popular</li>
-  <li><code>wss://nos.lol</code> — Relay bien conectado</li>
+  <li><code>wss://nos.lol</code> — Relay confiable y bien conectado</li>
   <li>Agrega 3–5 relays para fiabilidad. Más relays = mejor disponibilidad pero más ancho de banda.</li>
 </ul>
 
@@ -746,7 +746,190 @@ port = 50051</code></pre>
   Elige a los árbitros cuidadosamente. Tienen el poder de decidir a dónde van los fondos bloqueados. Elige miembros de confianza e imparciales de tu comunidad. Se recomiendan 2–3 árbitros.
 </div>
 
-<h3 id="monitoreo">5.2 Monitoreo de uptime</h3>
+<h3 id="mostrix">5.2 Mostrix — Tu herramienta de administración para resolución de disputas</h3>
+
+<p><a href="https://github.com/MostroP2P/mostrix" target="_blank" rel="noopener noreferrer"><strong>Mostrix</strong></a> es un cliente de terminal (TUI) para Mostro. Actualmente es la <strong>única herramienta disponible para resolución de disputas</strong> por parte de los operadores de nodos. Si operás un nodo Mostro, necesitás Mostrix.</p>
+
+<p><strong>Qué hace:</strong></p>
+<ul>
+  <li>Navegar e interactuar con órdenes en tu nodo Mostro</li>
+  <li><strong>Tomar disputas</strong> — reclamar una disputa para que otros admins sepan que la estás manejando</li>
+  <li><strong>Chatear con ambas partes</strong> — comunicarte con comprador y vendedor en una vista dividida</li>
+  <li><strong>Resolver disputas</strong> — "Pagar al Comprador" (liberar sats al comprador) o "Reembolsar al Vendedor" (devolver sats al vendedor)</li>
+  <li><strong>Gestionar solvers</strong> — agregar otros resolvedores de disputas desde la interfaz de administración</li>
+</ul>
+
+<h4>Instalación de Mostrix</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Instalar dependencias (Ubuntu/Debian)</span>
+sudo apt update
+sudo apt install -y cmake build-essential pkg-config
+
+<span class="cm"># Clonar y compilar</span>
+git clone https://github.com/MostroP2P/mostrix.git
+cd mostrix
+cargo build --release
+
+<span class="cm"># Ejecutar</span>
+cargo run</code></pre>
+</div>
+
+<p>En la primera ejecución, Mostrix crea <code>~/.mostrix/settings.toml</code>. Editá este archivo para configurarlo.</p>
+
+<h4>Configuración de Mostrix en modo administrador</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Clave pública de tu nodo Mostro (formato hex)</span>
+mostro_pubkey = "YOUR_MOSTRO_PUBKEY_HEX"
+
+<span class="cm"># Tu clave privada personal de Nostr</span>
+nsec_privkey = "nsec1your_personal_key"
+
+<span class="cm"># Tu clave privada de ADMIN — debe coincidir con una clave de solver registrada en el nodo</span>
+admin_privkey = "nsec1your_admin_key"
+
+<span class="cm"># Los relays que usa tu nodo Mostro</span>
+relays = [
+  "wss://relay.mostro.network",
+  "wss://nos.lol"
+]
+
+<span class="cm"># Monedas fiat que querés ver</span>
+currencies = ["USD", "EUR", "ARS"]
+
+<span class="cm"># IMPORTANTE: Configurar como "admin" para habilitar funciones de resolución de disputas</span>
+user_mode = "admin"</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Distinción clave</div>
+  <code>nsec_privkey</code> es tu clave personal de Nostr (para firmar eventos). <code>admin_privkey</code> es la clave que otorga privilegios de administrador — debe estar registrada como solver en el nodo Mostro.
+</div>
+
+<h4>Resolución de disputas con Mostrix</h4>
+<ol>
+  <li><strong>Pestaña Disputes Pending</strong> — Muestra todas las disputas con estado "Initiated". Seleccioná una y presioná <strong>Enter</strong> para tomarla (otros admins verán que la reclamaste).</li>
+  <li><strong>Pestaña Disputes in Progress</strong> — Tu espacio de trabajo. Cada disputa muestra:
+    <ul>
+      <li>Información completa de la disputa (comprador, vendedor, montos, moneda, calificaciones)</li>
+      <li>Vista de chat dividida — presioná <strong>Tab</strong> para alternar entre el chat del comprador y vendedor</li>
+      <li>Presioná <strong>Shift+I</strong> para habilitar la entrada de chat, escribí tu mensaje</li>
+      <li>Usá <strong>PageUp/PageDown</strong> para desplazarte, <strong>End</strong> para ir al último mensaje</li>
+    </ul>
+  </li>
+  <li><strong>Finalizar</strong> — Presioná <strong>Shift+F</strong> para abrir el popup de finalización:
+    <ul>
+      <li><strong>Pay Buyer</strong> — Liberar los sats bloqueados al comprador (usar cuando el vendedor recibió el fiat pero no libera)</li>
+      <li><strong>Refund Seller</strong> — Cancelar la hold invoice, devolviendo sats al vendedor (usar cuando el comprador no pagó realmente)</li>
+      <li><strong>Exit</strong> — Cerrar sin acción si necesitás más tiempo</li>
+    </ul>
+  </li>
+  <li>Una vez finalizada, la disputa se cierra y no puede modificarse.</li>
+</ol>
+
+<div class="callout note">
+  <div class="callout-title">📝 Nota</div>
+  Mostrix todavía está en desarrollo. Algunas funciones como chat peer-to-peer y cancelación cooperativa aún no están implementadas. Pero el flujo principal de resolución de disputas es completamente funcional.
+</div>
+
+<h3 id="watchdog">5.3 mostro-watchdog — Notificaciones de disputas en Telegram</h3>
+
+<p><a href="https://github.com/MostroP2P/mostro-watchdog" target="_blank" rel="noopener noreferrer"><strong>mostro-watchdog</strong></a> es un bot de notificaciones que monitorea tu nodo Mostro en busca de disputas y envía alertas instantáneas a un grupo de Telegram. Esto es esencial para tiempos de respuesta rápidos — no querés estar constantemente mirando Mostrix esperando disputas.</p>
+
+<p><strong>Cómo funciona:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>Flujo</span></div>
+  <pre><code>Mostro daemon → Nostr (kind 38386) → mostro-watchdog → Alerta en Telegram 🚨</code></pre>
+</div>
+
+<p>Cuando un usuario abre una disputa, tu grupo de Telegram de admins recibe una notificación instantánea como:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>Alerta de Telegram</span></div>
+  <pre><code>🚨 NEW DISPUTE
+
+📋 Dispute ID: abc123def456
+👤 Initiated by: buyer
+⏰ Time: 2026-02-11 18:30:00 UTC
+
+⚡ Please take this dispute in Mostrix or your admin client.</code></pre>
+</div>
+
+<h4>Instalación de mostro-watchdog</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code>git clone https://github.com/MostroP2P/mostro-watchdog.git
+cd mostro-watchdog
+cargo build --release</code></pre>
+</div>
+
+<h4>Configuración de mostro-watchdog</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code>cp config.example.toml config.toml
+nano config.toml</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+<span class="cm"># Clave pública Nostr de tu daemon Mostro</span>
+pubkey = "YOUR_MOSTRO_PUBKEY"
+
+[nostr]
+<span class="cm"># Los mismos relays que usa tu daemon Mostro</span>
+relays = ["wss://relay.mostro.network", "wss://nos.lol"]
+
+[telegram]
+<span class="cm"># Obtené esto de @BotFather en Telegram</span>
+bot_token = "YOUR_BOT_TOKEN"
+
+<span class="cm"># El ID del grupo/canal de Telegram para alertas de admin</span>
+chat_id = "YOUR_CHAT_ID"</code></pre>
+</div>
+
+<p><strong>Configuración del bot de Telegram:</strong></p>
+<ol>
+  <li>Enviá un mensaje a <a href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">@BotFather</a> en Telegram → <code>/newbot</code> → seguí las instrucciones</li>
+  <li>Copiá el token del bot a <code>config.toml</code></li>
+  <li>Creá un <strong>grupo privado de Telegram</strong> para tu equipo de administración</li>
+  <li>Agregá el bot al grupo</li>
+  <li>Obtené el chat ID (enviá un mensaje en el grupo, luego revisá <code>https://api.telegram.org/bot&lt;YOUR_TOKEN&gt;/getUpdates</code>)</li>
+</ol>
+
+<h4>Ejecución de mostro-watchdog</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Ejecutar con configuración por defecto</span>
+./target/release/mostro-watchdog
+
+<span class="cm"># Ruta de configuración personalizada</span>
+./target/release/mostro-watchdog /path/to/config.toml
+
+<span class="cm"># Con logging de debug</span>
+RUST_LOG=mostro_watchdog=debug ./target/release/mostro-watchdog</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Consejo</div>
+  Ejecutá mostro-watchdog como un servicio systemd (igual que Mostro) para que se inicie automáticamente y funcione 24/7. Tus admins nunca deberían perderse una notificación de disputa.
+</div>
+
+<h4>El flujo completo de disputas</h4>
+<p>Poniendo todo junto, el flujo completo para un operador de nodo es:</p>
+<ol>
+  <li><strong>mostro-watchdog</strong> detecta una nueva disputa → envía alerta de Telegram a tu grupo de admins</li>
+  <li>El admin ve la alerta en su teléfono/escritorio</li>
+  <li>El admin abre <strong>Mostrix</strong> en modo administrador</li>
+  <li>El admin va a <strong>Disputes Pending</strong> → toma la disputa</li>
+  <li>El admin investiga mediante chat con comprador y vendedor en <strong>Disputes in Progress</strong></li>
+  <li>El admin resuelve con <strong>Pay Buyer</strong> o <strong>Refund Seller</strong></li>
+  <li>Listo — disputa cerrada, usuarios notificados automáticamente</li>
+</ol>
+
+<p>Este flujo asegura tiempos de respuesta rápidos y responsabilidad clara.</p>
+
+<h3 id="monitoreo">5.4 Monitoreo de uptime</h3>
 
 <p>Tu nodo necesita estar funcionando 24/7.</p>
 
@@ -768,7 +951,7 @@ docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
   Configura un monitor de uptime simple usando <a href="https://uptimerobot.com/" target="_blank" rel="noopener noreferrer">UptimeRobot</a> (nivel gratuito) o un cron job que te alerte si Mostro se cae.
 </div>
 
-<h3 id="actualizacion">5.3 Actualizando Mostro</h3>
+<h3 id="actualizacion">5.5 Actualizando Mostro</h3>
 
 <details class="collapsible">
 <summary>Actualización Docker</summary>
@@ -806,7 +989,7 @@ systemctl restart mostro.service</code></pre>
   Siempre respalda tu base de datos antes de actualizar.
 </div>
 
-<h3 id="respaldos">5.4 Respaldos</h3>
+<h3 id="respaldos">5.6 Respaldos</h3>
 
 <p>Archivos críticos a respaldar: <code>settings.toml</code> (¡contiene tu clave privada Nostr!) y <code>mostro.db</code> (historial de órdenes, reputaciones).</p>
 
@@ -833,7 +1016,7 @@ cp /opt/mostro/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)</code></
   Tu <code>nsec_privkey</code> en <code>settings.toml</code> ES la identidad de tu nodo. Si la pierdes, pierdes tu reputación y todos los usuarios deben reconectarse a una nueva identidad. <strong>Guarda una copia offline.</strong>
 </div>
 
-<h3 id="actividad">5.5 Revisando la actividad de operaciones</h3>
+<h3 id="actividad">5.7 Revisando la actividad de operaciones</h3>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
@@ -1184,8 +1367,8 @@ fiat_currencies_accepted = ['USD']  <span class="cm"># Cambia a tu moneda local<
 [nostr]
 relays = [
   'wss://relay.mostro.network',
-  'wss://relay.damus.io',
-  'wss://nos.lol'
+  'wss://nos.lol',
+  'wss://relay.nostr.band'
 ]</code></pre>
 </div>
 
