@@ -142,11 +142,11 @@
 
 <p><strong>Provedores VPS populares:</strong></p>
 <ul>
-  <li><a href="https://www.digitalocean.com/" target="_blank">Digital Ocean</a> — $12/mês</li>
-  <li><a href="https://www.hetzner.com/" target="_blank">Hetzner</a> — ~€4-8/mês (bom custo-benefício, baseado na UE)</li>
-  <li><a href="https://www.ovhcloud.com/" target="_blank">OVH</a> — ~$6-12/mês</li>
-  <li><a href="https://www.linode.com/" target="_blank">Linode/Akamai</a> — $12/mês</li>
-  <li><a href="https://www.lunanode.com/" target="_blank">Lunanode</a> — Aceita pagamentos em Bitcoin</li>
+  <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $12/mês</li>
+  <li><a href="https://www.hetzner.com/" target="_blank" rel="noopener noreferrer">Hetzner</a> — ~€4-8/mês (bom custo-benefício, baseado na UE)</li>
+  <li><a href="https://www.ovhcloud.com/" target="_blank" rel="noopener noreferrer">OVH</a> — ~$6-12/mês</li>
+  <li><a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode/Akamai</a> — $12/mês</li>
+  <li><a href="https://www.lunanode.com/" target="_blank" rel="noopener noreferrer">Lunanode</a> — Aceita pagamentos em Bitcoin</li>
 </ul>
 
 <div class="callout tip">
@@ -167,9 +167,9 @@
   <tbody>
     <tr><td>Usar um nó LND existente</td><td><span class="badge badge-easy">Fácil</span></td><td>Grátis (se você já tem um)</td><td>Melhor se alguém já tem um</td></tr>
     <tr><td>Executar LND no mesmo VPS</td><td><span class="badge badge-hard">Difícil</span></td><td>Mesmo VPS + liquidez</td><td>Requer VPS com 4GB+ RAM</td></tr>
-    <tr><td>Solução nó-na-caixa</td><td><span class="badge badge-medium">Médio</span></td><td>$200-600 + liquidez</td><td><a href="https://start9.com/" target="_blank">Start9</a>, <a href="https://umbrel.com/" target="_blank">Umbrel</a>, <a href="https://raspiblitz.org/" target="_blank">RaspiBlitz</a></td></tr>
+    <tr><td>Solução nó-na-caixa</td><td><span class="badge badge-medium">Médio</span></td><td>$200-600 + liquidez</td><td><a href="https://start9.com/" target="_blank" rel="noopener noreferrer">Start9</a>, <a href="https://umbrel.com/" target="_blank" rel="noopener noreferrer">Umbrel</a>, <a href="https://raspiblitz.org/" target="_blank" rel="noopener noreferrer">RaspiBlitz</a></td></tr>
     <tr><td>StartOS com pacote Mostro</td><td><span class="badge badge-easy">Mais fácil</span></td><td>$300-600 + liquidez</td><td>Start9 tem um pacote Mostro com instalação em um clique</td></tr>
-    <tr><td>Usar Voltage.cloud</td><td><span class="badge badge-easy">Fácil</span></td><td>A partir de ~$20/mês + liquidez</td><td><a href="https://voltage.cloud/" target="_blank">Voltage</a> — LND hospedado com infraestrutura gerenciada</td></tr>
+    <tr><td>Usar Voltage.cloud</td><td><span class="badge badge-easy">Fácil</span></td><td>A partir de ~$20/mês + liquidez</td><td><a href="https://voltage.cloud/" target="_blank" rel="noopener noreferrer">Voltage</a> — LND hospedado com infraestrutura gerenciada</td></tr>
   </tbody>
 </table>
 </div>
@@ -211,9 +211,9 @@
 
 <p><strong>Obtendo liquidez:</strong></p>
 <ul>
-  <li>Abra canais para nós bem conectados (use <a href="https://1ml.com/" target="_blank">1ML</a> ou <a href="https://amboss.space/" target="_blank">Amboss</a> para encontrar bons pares)</li>
+  <li>Abra canais para nós bem conectados (use <a href="https://1ml.com/" target="_blank" rel="noopener noreferrer">1ML</a> ou <a href="https://amboss.space/" target="_blank" rel="noopener noreferrer">Amboss</a> para encontrar bons pares)</li>
   <li>Você precisa de capacidade <strong>de saída</strong> (para pagar compradores) e capacidade <strong>de entrada</strong> (para receber de vendedores)</li>
-  <li>Obter liquidez de entrada é geralmente mais difícil — considere <a href="https://lightning.engineering/loop/" target="_blank">Lightning Loop</a>, <a href="https://amboss.space/magma" target="_blank">Magma</a>, ou serviços de swap de canais</li>
+  <li>Obter liquidez de entrada é geralmente mais difícil — considere <a href="https://lightning.engineering/loop/" target="_blank" rel="noopener noreferrer">Lightning Loop</a>, <a href="https://amboss.space/magma" target="_blank" rel="noopener noreferrer">Magma</a>, ou serviços de swap de canais</li>
 </ul>
 
 <h3 id="chaves-nostr">2.4 Chaves Nostr</h3>
@@ -325,7 +325,7 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
       <li>Máquina diferente: <code>'https://SEU_IP_LND:10009'</code></li>
     </ul>
   </li>
-  <li><strong><code>nsec_privkey</code></strong> — A chave privada Nostr do seu Mostro. Use <a href="https://nostrtool.com/" target="_blank">nostrtool.com</a> para gerar uma. <strong>Salve tanto a nsec quanto a npub com segurança!</strong></li>
+  <li><strong><code>nsec_privkey</code></strong> — A chave privada Nostr do seu Mostro. Use <a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a> para gerar uma. <strong>Salve tanto a nsec quanto a npub com segurança!</strong></li>
   <li><strong><code>relays</code></strong> — Os relays Nostr aos quais seu nó se conectará.</li>
 </ol>
 
@@ -571,7 +571,7 @@ journalctl -u mostro -f</code></pre>
 <div class="code-block">
   <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>[nostr]
-nsec_privkey = 'nsec1sua_chave_privada_aqui'
+nsec_privkey = 'YOUR_NSEC_PRIVATE_KEY'
 relays = [
   'wss://relay.damus.io',
   'wss://relay.mostro.network',
@@ -583,7 +583,7 @@ relays = [
 <p><strong>Gerando chaves Nostr:</strong></p>
 <ul>
   <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — suporta geração de chaves vanity</li>
-  <li><strong><a href="https://nostrtool.com/" target="_blank">nostrtool.com</a></strong> — Rápido e fácil, mas menos seguro</li>
+  <li><strong><a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a></strong> — Rápido e fácil, mas menos seguro</li>
   <li>Qualquer cliente Nostr (Damus, Amethyst, etc.)</li>
 </ul>
 
@@ -632,7 +632,7 @@ fiat_currencies_accepted = ['USD', 'BRL', 'EUR']</code></pre>
 <ul>
   <li><strong><code>max_order_amount</code>:</strong> Maior negociação em satoshis. Configure baseado na capacidade dos seus canais.</li>
   <li><strong><code>min_payment_amount</code>:</strong> Negociação mínima em satoshis.</li>
-  <li><strong><code>fiat_currencies_accepted</code>:</strong> Use <a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank">códigos ISO 4217</a>. Array vazio <code>[]</code> aceita todas.</li>
+  <li><strong><code>fiat_currencies_accepted</code>:</strong> Use <a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank" rel="noopener noreferrer">códigos ISO 4217</a>. Array vazio <code>[]</code> aceita todas.</li>
 </ul>
 
 <h3 id="cfg-perfil">4.4 Perfil do nó (Opcional mas recomendado)</h3>
@@ -885,7 +885,7 @@ sqlite3 /caminho/para/mostro.db "SELECT id, fiat_amount, fiat_code, amount, stat
 <div class="callout warning">
   <div class="callout-title">⚠️ Aviso de software em estágio inicial</div>
   <p><strong>Mostro está em estágio inicial de desenvolvimento.</strong> Podem existir bugs não descobertos, incluindo bugs de segurança que podem resultar em perda de fundos. <strong>Os desenvolvedores não são responsáveis por perdas de dinheiro devido a bugs do software.</strong></p>
-  <p>O <strong>mecanismo central de custódia usando hold invoices Lightning foi testado em batalha desde 2021</strong>, quando <a href="https://github.com/lnp2pBot/bot" target="_blank">@lnp2pBot</a> implementou pela primeira vez este tipo de custódia.</p>
+  <p>O <strong>mecanismo central de custódia usando hold invoices Lightning foi testado em batalha desde 2021</strong>, quando <a href="https://github.com/lnp2pBot/bot" target="_blank" rel="noopener noreferrer">@lnp2pBot</a> implementou pela primeira vez este tipo de custódia.</p>
 </div>
 
 <h3>Operando sob regimes autoritários</h3>
@@ -921,9 +921,9 @@ sqlite3 /caminho/para/mostro.db "SELECT id, fiat_amount, fiat_code, amount, stat
 <h3>Obtendo ajuda</h3>
 <ol>
   <li><strong>Verifique os logs primeiro</strong></li>
-  <li><strong>Telegram (Desenvolvedores):</strong> <a href="https://t.me/mostro_dev" target="_blank">@mostro_dev</a></li>
-  <li><strong>Telegram (Comunidade):</strong> <a href="https://t.me/MostroP2P" target="_blank">@MostroP2P</a></li>
-  <li><strong>GitHub Issues:</strong> <a href="https://github.com/MostroP2P/mostro/issues" target="_blank">github.com/MostroP2P/mostro/issues</a></li>
+  <li><strong>Telegram (Desenvolvedores):</strong> <a href="https://t.me/mostro_dev" target="_blank" rel="noopener noreferrer">@mostro_dev</a></li>
+  <li><strong>Telegram (Comunidade):</strong> <a href="https://t.me/MostroP2P" target="_blank" rel="noopener noreferrer">@MostroP2P</a></li>
+  <li><strong>GitHub Issues:</strong> <a href="https://github.com/MostroP2P/mostro/issues" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro/issues</a></li>
 </ol>
 
 <hr>
@@ -986,7 +986,7 @@ relays = [
 
 <div class="guide-footer">
   <p>Este guia é mantido pela comunidade Mostro. Encontrou um erro ou quer melhorar?<br>
-  Contribuições são bem-vindas em <a href="https://github.com/MostroP2P/mostro" target="_blank">github.com/MostroP2P/mostro</a></p>
+  Contribuições são bem-vindas em <a href="https://github.com/MostroP2P/mostro" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro</a></p>
   <p style="margin-top:12px;">Última atualização: Fevereiro 2026 · Mostro v0.16.2</p>
 </div>
 
