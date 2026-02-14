@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guia de Configuração do Nó | Mostro P2P</title>
+  <meta name="description" content="Guia completo para executar seu próprio nó Mostro P2P de troca de Bitcoin. Configuração passo a passo para Docker e compilação nativa.">
+  <link rel="stylesheet" href="guide-styles.css">
+  <link rel="icon" href="../assets/images/favicon.png" type="image/png">
+</head>
+<body>
+
+<header class="guide-header">
+  <a href="../index.pt.html" class="header-logo">
+    <img src="../assets/images/logo.svg" alt="Mostro">
+    <span>Guia do Nó</span>
+  </a>
+  <div class="header-right">
+    <div class="lang-switcher">
+      <a href="index.html">EN</a>
+      <a href="index.es.html">ES</a>
+      <a href="index.it.html">IT</a>
+      <a href="index.pt.html" class="active">PT</a>
+    </div>
+    <button class="toc-toggle" onclick="toggleSidebar()">☰ Menu</button>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<aside class="guide-sidebar" id="sidebar">
+  <div class="toc-title">Índice</div>
+  <ul class="toc-list">
+    <li><a href="#o-que-e-mostro">1. O que é Mostro?</a></li>
+    <li class="toc-sub"><a href="#por-que-no">Por que um nó?</a></li>
+    <li class="toc-sub"><a href="#como-funciona">Como funciona</a></li>
+    <li><a href="#prerequisitos">2. Pré-requisitos</a></li>
+    <li class="toc-sub"><a href="#vps">Servidor (VPS)</a></li>
+    <li class="toc-sub"><a href="#lnd">Nó Lightning (LND)</a></li>
+    <li class="toc-sub"><a href="#liquidez">Liquidez</a></li>
+    <li class="toc-sub"><a href="#chaves-nostr">Chaves Nostr</a></li>
+    <li class="toc-sub"><a href="#nivel-tecnico">Nível técnico</a></li>
+    <li><a href="#instalacao">3. Instalação</a></li>
+    <li class="toc-sub"><a href="#caminho-a-docker">Caminho A: Docker</a></li>
+    <li class="toc-sub"><a href="#caminho-b-nativo">Caminho B: Nativo</a></li>
+    <li><a href="#configuracao">4. Configuração</a></li>
+    <li class="toc-sub"><a href="#cfg-nostr">Chaves Nostr</a></li>
+    <li class="toc-sub"><a href="#cfg-taxas">Taxas</a></li>
+    <li class="toc-sub"><a href="#cfg-limites">Limites</a></li>
+    <li class="toc-sub"><a href="#cfg-perfil">Perfil do nó</a></li>
+    <li class="toc-sub"><a href="#cfg-tempos">Tempos</a></li>
+    <li class="toc-sub"><a href="#cfg-antispam">Anti-Spam</a></li>
+    <li class="toc-sub"><a href="#cfg-rpc">RPC Admin</a></li>
+    <li><a href="#operacao">5. Operação do nó</a></li>
+    <li class="toc-sub"><a href="#disputas">Disputas</a></li>
+    <li class="toc-sub"><a href="#monitoramento">Monitoramento</a></li>
+    <li class="toc-sub"><a href="#atualizacao">Atualização</a></li>
+    <li class="toc-sub"><a href="#backups">Backups</a></li>
+    <li class="toc-sub"><a href="#atividade">Atividade</a></li>
+    <li><a href="#custos">6. Análise de custos</a></li>
+    <li><a href="#perguntas">7. Perguntas frequentes</a></li>
+    <li><a href="#seguranca">8. Segurança</a></li>
+    <li><a href="#solucao-problemas">9. Solução de problemas</a></li>
+    <li><a href="#apendice">Apêndice</a></li>
+  </ul>
+</aside>
+
+<main class="guide-content">
+
+<h1>Executando Seu Próprio Nó Mostro</h1>
+<p class="guide-version">Mostro v0.16.2 — Guia da Comunidade · Fevereiro 2026</p>
+
+<h2 id="o-que-e-mostro">1. O que é Mostro e por que sua comunidade deveria executar um?</h2>
+
+<h3 id="o-que-e-mostro-sub">O que é Mostro?</h3>
+
+<p>Mostro é uma <strong>exchange peer-to-peer de Bitcoin</strong> que permite que pessoas comprem e vendam Bitcoin usando moedas locais (dólares, euros, reais — qualquer moeda) sem precisar fornecer documentos de identidade (KYC). Pense nele como um marketplace descentralizado onde compradores e vendedores podem negociar diretamente.</p>
+
+<p>Funciona usando duas tecnologias:</p>
+<ul>
+  <li><strong>Lightning Network</strong> — uma camada de pagamentos rápidos e de baixo custo para Bitcoin (pense nela como a via expressa do Bitcoin para pagamentos pequenos e ágeis)</li>
+  <li><strong>Nostr</strong> — um protocolo de comunicação resistente à censura (pense nele como um sistema de mensagens que ninguém pode derrubar)</li>
+</ul>
+
+<p>Mostro atua como um <strong>coordenador de custódia</strong> — retém os Bitcoin do vendedor em um "cofre" temporário (chamado hold invoice) até que o comprador confirme que enviou o pagamento em moeda local. O Mostro nunca controla os fundos de ninguém; apenas os retém brevemente durante a negociação.</p>
+
+<h3 id="por-que-no">Por que sua comunidade quereria executar um nó Mostro?</h3>
+
+<ol>
+  <li><strong>Renda com taxas</strong> — Cada negociação gera uma taxa (0,6% por padrão). Se sua comunidade faz $10.000 em negociações mensais, são ~$60/mês em taxas.</li>
+  <li><strong>Trading P2P sem KYC</strong> — Os membros da sua comunidade podem comprar e vender Bitcoin sem fornecer documentos de identidade. Especialmente importante em regiões com moedas instáveis ou regulamentações restritivas.</li>
+  <li><strong>Disputas no seu idioma</strong> — Quando uma negociação dá errado, a <em>sua</em> comunidade resolve, no <em>seu</em> idioma, entendendo os <em>seus</em> métodos de pagamento locais.</li>
+  <li><strong>Independência</strong> — Nenhuma empresa pode fechar sua exchange. Nenhum governo pode pressionar um único operador para fechá-la.</li>
+  <li><strong>Personalização</strong> — Você escolhe quais moedas suportar, quais métodos de pagamento permitir e quais taxas cobrar.</li>
+</ol>
+
+<h3 id="como-funciona">Como o Mostro Funciona (Simplificado)</h3>
+
+<div class="flow-diagram"><span class="step-num">1.</span> Alice quer VENDER Bitcoin por $50 USD
+   <span class="arrow">→</span> Ela cria uma ordem no Mostro
+
+<span class="step-num">2.</span> Bob quer COMPRAR Bitcoin com $50 USD
+   <span class="arrow">→</span> Ele vê a ordem da Alice e a aceita
+
+<span class="step-num">3.</span> Mostro cria um "cofre" (hold invoice)
+   <span class="arrow">→</span> Alice envia seus Bitcoin para o cofre
+
+<span class="step-num">4.</span> Bob envia $50 para Alice via transferência, PIX, dinheiro, etc.
+   <span class="arrow">→</span> Bob pressiona "Fiat Enviado" no seu app
+
+<span class="step-num">5.</span> Alice confirma que recebeu os $50
+   <span class="arrow">→</span> Ela pressiona "Liberar"
+
+<span class="step-num">6.</span> Mostro libera os Bitcoin do cofre para Bob
+   <span class="arrow">→</span> Negociação concluída! <span class="check">✓</span></div>
+
+<p>Se algo der errado (ex: Bob diz que pagou mas Alice não recebeu), qualquer uma das partes pode abrir uma <strong>disputa</strong>, e os árbitros designados da sua comunidade investigam e resolvem.</p>
+
+<hr>
+
+<h2 id="prerequisitos">2. Pré-requisitos — O que você precisa antes de começar</h2>
+
+<h3 id="vps">2.1 Um Servidor (VPS)</h3>
+
+<p>Um <strong>VPS</strong> (Servidor Virtual Privado) é um computador em um data center que funciona 24/7. Você vai alugar um para hospedar seu nó Mostro.</p>
+
+<p><strong>Especificações mínimas:</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Recurso</th><th>Mínimo</th><th>Recomendado</th></tr></thead>
+  <tbody>
+    <tr><td>CPU</td><td>2 vCPUs (compartilhadas)</td><td>2+ vCPUs</td></tr>
+    <tr><td>RAM</td><td>2 GB</td><td>4 GB</td></tr>
+    <tr><td>Armazenamento</td><td>60 GB SSD</td><td>100 GB SSD</td></tr>
+    <tr><td>Largura de banda</td><td>3 TB/mês</td><td>3+ TB/mês</td></tr>
+    <tr><td>SO</td><td>Ubuntu 22.04+ LTS</td><td>Ubuntu 24.04 LTS</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>Custo mensal estimado:</strong> $10–$24/mês.</p>
+
+<p><strong>Provedores VPS populares:</strong></p>
+<ul>
+  <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $12/mês</li>
+  <li><a href="https://www.hetzner.com/" target="_blank" rel="noopener noreferrer">Hetzner</a> — ~€4-8/mês (bom custo-benefício, baseado na UE)</li>
+  <li><a href="https://www.ovhcloud.com/" target="_blank" rel="noopener noreferrer">OVH</a> — ~$6-12/mês</li>
+  <li><a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode/Akamai</a> — $12/mês</li>
+  <li><a href="https://www.lunanode.com/" target="_blank" rel="noopener noreferrer">Lunanode</a> — Aceita pagamentos em Bitcoin</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Dica</div>
+  Muitos provedores VPS aceitam pagamentos em Bitcoin. Procure essa opção se quiser manter coerência com a filosofia Bitcoin.
+</div>
+
+<p>Você precisa estar confortável conectando-se a um servidor via SSH. Se nunca fez isso, procure um tutorial sobre "conectar via SSH a um VPS" — é mais simples do que parece.</p>
+
+<h3 id="lnd">2.2 Um Nó Lightning Network (LND)</h3>
+
+<p>A Lightning Network é um sistema "camada 2" construído sobre o Bitcoin que permite pagamentos rápidos e baratos. Para executar o Mostro, você precisa de um <strong>nó LND</strong> (Lightning Network Daemon) — o software Lightning específico com que o Mostro funciona.</p>
+
+<p><strong>Suas opções:</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Opção</th><th>Dificuldade</th><th>Custo</th><th>Notas</th></tr></thead>
+  <tbody>
+    <tr><td>Usar um nó LND existente</td><td><span class="badge badge-easy">Fácil</span></td><td>Grátis (se você já tem um)</td><td>Melhor se alguém já tem um</td></tr>
+    <tr><td>Executar LND no mesmo VPS</td><td><span class="badge badge-hard">Difícil</span></td><td>Mesmo VPS + liquidez</td><td>Requer VPS com 4GB+ RAM</td></tr>
+    <tr><td>Solução nó-na-caixa</td><td><span class="badge badge-medium">Médio</span></td><td>$200-600 + liquidez</td><td><a href="https://start9.com/" target="_blank" rel="noopener noreferrer">Start9</a>, <a href="https://umbrel.com/" target="_blank" rel="noopener noreferrer">Umbrel</a>, <a href="https://raspiblitz.org/" target="_blank" rel="noopener noreferrer">RaspiBlitz</a></td></tr>
+    <tr><td>StartOS com pacote Mostro</td><td><span class="badge badge-easy">Mais fácil</span></td><td>$300-600 + liquidez</td><td>Start9 tem um pacote Mostro com instalação em um clique</td></tr>
+    <tr><td>Usar Voltage.cloud</td><td><span class="badge badge-easy">Fácil</span></td><td>A partir de ~$20/mês + liquidez</td><td><a href="https://voltage.cloud/" target="_blank" rel="noopener noreferrer">Voltage</a> — LND hospedado com infraestrutura gerenciada</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Importante</div>
+  Mostro requer especificamente <strong>LND</strong> (não CLN/Core Lightning, não Eclair, não LDK). Certifique-se de que seu nó Lightning execute LND.
+</div>
+
+<p><strong>O que você precisa do seu nó LND:</strong></p>
+<ul>
+  <li>O arquivo <code>tls.cert</code> (um certificado de segurança)</li>
+  <li>O arquivo <code>admin.macaroon</code> (um token de autenticação)</li>
+  <li>O endereço gRPC (tipicamente <code>https://127.0.0.1:10009</code> se na mesma máquina)</li>
+</ul>
+
+<h3 id="liquidez">2.3 Liquidez Lightning</h3>
+
+<p>Para facilitar negociações, seu nó Lightning precisa de <strong>canais</strong> com Bitcoin neles. Pense nos canais Lightning como túneis de pagamento pré-financiados. O Bitcoin dentro desses canais é sua "liquidez".</p>
+
+<p><strong>Quanto você precisa?</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Volume de trading alvo</th><th>Liquidez sugerida</th><th>BTC aproximado</th></tr></thead>
+  <tbody>
+    <tr><td>Comunidade pequena (poucas negociações/dia)</td><td>1–5 milhões de sats</td><td>0,01–0,05 BTC</td></tr>
+    <tr><td>Comunidade média</td><td>5–20 milhões de sats</td><td>0,05–0,20 BTC</td></tr>
+    <tr><td>Comunidade ativa</td><td>20–100 milhões de sats</td><td>0,20–1,0 BTC</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Aviso: Liquidez é capital imobilizado</div>
+  O Bitcoin nos seus canais Lightning está bloqueado — você não pode gastá-lo em outro lugar até fechar os canais. Pense nisso como um investimento empresarial: você precisa de capital de giro para operar.
+</div>
+
+<p><strong>Comece pequeno, cresça gradualmente.</strong> Comece com o suficiente para as necessidades iniciais da sua comunidade e monitore o feedback. Quando traders reportarem que ordens falham por capacidade insuficiente, esse é o sinal para adicionar mais.</p>
+
+<p><strong>Obtendo liquidez:</strong></p>
+<ul>
+  <li>Abra canais para nós bem conectados (use <a href="https://1ml.com/" target="_blank" rel="noopener noreferrer">1ML</a> ou <a href="https://amboss.space/" target="_blank" rel="noopener noreferrer">Amboss</a> para encontrar bons pares)</li>
+  <li>Você precisa de capacidade <strong>de saída</strong> (para pagar compradores) e capacidade <strong>de entrada</strong> (para receber de vendedores)</li>
+  <li>Obter liquidez de entrada é geralmente mais difícil — considere <a href="https://lightning.engineering/loop/" target="_blank" rel="noopener noreferrer">Lightning Loop</a>, <a href="https://amboss.space/magma" target="_blank" rel="noopener noreferrer">Magma</a>, ou serviços de swap de canais</li>
+</ul>
+
+<h3 id="chaves-nostr">2.4 Chaves Nostr</h3>
+
+<p>Seu nó Mostro precisa de sua própria identidade na rede Nostr — um par de chaves criptográficas com uma chave pública (o endereço do seu nó) e uma chave privada (seu segredo).</p>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Importante</div>
+  Nunca reutilize chaves Nostr entre instâncias do Mostro. Cada nó precisa de sua própria identidade única.
+</div>
+
+<h3 id="nivel-tecnico">2.5 Nível de conhecimento técnico</h3>
+
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Tarefa</th><th>Dificuldade</th><th>Conhecimentos necessários</th></tr></thead>
+  <tbody>
+    <tr><td>Alugar um VPS</td><td><span class="badge badge-easy">Fácil</span></td><td>Cartão de crédito, navegação web básica</td></tr>
+    <tr><td>Conectar via SSH</td><td><span class="badge badge-easy">Fácil</span></td><td>Seguir instruções, digitar comandos</td></tr>
+    <tr><td>Instalar Docker</td><td><span class="badge badge-medium">Médio</span></td><td>Copiar e colar comandos, resolução básica de problemas</td></tr>
+    <tr><td>Executar Mostro (Docker)</td><td><span class="badge badge-medium">Médio</span></td><td>Editar arquivos de configuração, entender caminhos</td></tr>
+    <tr><td>Executar Mostro (nativo)</td><td><span class="badge badge-hard">Difícil</span></td><td>Administração Linux, compilação de software, systemd</td></tr>
+    <tr><td>Configurar LND do zero</td><td><span class="badge badge-hard">Difícil</span></td><td>Conhecimento significativo de Linux e redes</td></tr>
+    <tr><td>Gerenciar liquidez Lightning</td><td><span class="badge badge-hard">Difícil</span></td><td>Entender a economia de canais Lightning</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>Nossa recomendação:</strong> Se sua comunidade tem alguém confortável com a linha de comando Linux, essa pessoa pode lidar com a instalação Docker (Caminho A). Para o Caminho B, é necessário alguém com experiência em administração de sistemas. A configuração do nó Lightning é a parte mais complexa — considere pedir ajuda a alguém experiente, ou usar uma solução nó-na-caixa.</p>
+
+<hr>
+
+<h2 id="instalacao">3. Instalação Passo a Passo</h2>
+
+<p>Escolha seu caminho:</p>
+<ul>
+  <li><strong>Caminho A (Docker):</strong> Mais simples, menos passos, atualizações mais fáceis. Recomendado para a maioria.</li>
+  <li><strong>Caminho B (Compilação nativa):</strong> Mais controle, melhor para sysadmins experientes.</li>
+</ul>
+
+<p>Ambos os caminhos assumem que você já tem: ✅ Um VPS com Ubuntu · ✅ Acesso SSH · ✅ Um nó LND funcionando.</p>
+
+<details class="collapsible" id="caminho-a-docker" open>
+<summary>Caminho A: Instalação Docker (Recomendada para iniciantes)</summary>
+<div class="collapsible-content">
+
+<h4>Passo 1: Conecte-se ao seu VPS</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>ssh root@ENDERECO_IP_DO_SEU_VPS</code></pre>
+</div>
+
+<h4>Passo 2: Atualize o sistema</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Baixar as informações mais recentes dos pacotes</span>
+apt update
+
+<span class="cm"># Instalar todas as atualizações disponíveis</span>
+apt upgrade -y</code></pre>
+</div>
+
+<h4>Passo 3: Instalar Docker e Docker Compose</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Instalar Docker com o script oficial</span>
+curl -fsSL https://get.docker.com | sh
+
+<span class="cm"># Verificar que o Docker está instalado</span>
+docker --version
+
+<span class="cm"># Verificar Docker Compose</span>
+docker compose version</code></pre>
+</div>
+
+<h4>Passo 4: Instalar ferramentas adicionais</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>apt install -y git make</code></pre>
+</div>
+
+<h4>Passo 5: Baixar o Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cd /opt
+git clone https://github.com/MostroP2P/mostro.git
+cd mostro</code></pre>
+</div>
+
+<h4>Passo 6: Configurar os arquivos</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>mkdir -p docker/config
+cp docker/settings.docker.toml docker/config/settings.toml
+cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
+</div>
+
+<h4>Passo 7: Editar o arquivo de configuração</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>nano docker/config/settings.toml</code></pre>
+</div>
+
+<p>Você <strong>deve</strong> alterar estas três coisas:</p>
+<ol>
+  <li><strong><code>lnd_grpc_host</code></strong> — O endereço do seu nó LND:
+    <ul>
+      <li>Mesma máquina: <code>'https://host.docker.internal:10009'</code></li>
+      <li>Máquina diferente: <code>'https://SEU_IP_LND:10009'</code></li>
+    </ul>
+  </li>
+  <li><strong><code>nsec_privkey</code></strong> — A chave privada Nostr do seu Mostro. Use <a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a> para gerar uma. <strong>Salve tanto a nsec quanto a npub com segurança!</strong></li>
+  <li><strong><code>relays</code></strong> — Os relays Nostr aos quais seu nó se conectará.</li>
+</ol>
+
+<p><strong>Outras configurações que provavelmente vai querer alterar:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+fee = 0.006                    <span class="cm"># 0,6% taxa por negociação</span>
+max_order_amount = 1000000     <span class="cm"># Ordem máxima em sats (~$400-500)</span>
+min_payment_amount = 100       <span class="cm"># Ordem mínima em sats</span>
+fiat_currencies_accepted = ['USD', 'BRL']  <span class="cm"># Suas moedas</span></code></pre>
+</div>
+
+<p>Salvar: <code>Ctrl+X</code>, depois <code>Y</code>, depois <code>Enter</code>.</p>
+
+<h4>Passo 8: Configurar credenciais LND</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>nano docker/.env</code></pre>
+</div>
+
+<p>Adicione estas linhas com as localizações reais dos seus arquivos LND:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>env</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>LND_CERT_FILE=/caminho/para/seu/lnd/tls.cert
+LND_MACAROON_FILE=/caminho/para/seu/lnd/admin.macaroon</code></pre>
+</div>
+
+<p>Se LND está na <strong>mesma máquina</strong>, os caminhos típicos são:</p>
+<ul>
+  <li><code>/root/.lnd/tls.cert</code></li>
+  <li><code>/root/.lnd/data/chain/bitcoin/mainnet/admin.macaroon</code></li>
+</ul>
+
+<p>Se LND está em uma <strong>máquina diferente</strong>, copie os arquivos primeiro:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>mkdir -p /opt/mostro/docker/config/lnd
+scp seu-servidor-lnd:/caminho/para/tls.cert /opt/mostro/docker/config/lnd/
+scp seu-servidor-lnd:/caminho/para/admin.macaroon /opt/mostro/docker/config/lnd/</code></pre>
+</div>
+
+<h4>Passo 9: Construir e iniciar o Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Construir a imagem Docker (5-15 minutos na primeira vez)</span>
+make docker-build
+
+<span class="cm"># Iniciar Mostro e o relay Nostr local</span>
+make docker-up</code></pre>
+</div>
+
+<p>Verifique se tudo está funcionando:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker compose -f docker/compose.yml ps</code></pre>
+</div>
+
+<h4>Passo 10: Verificar os logs</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
+</div>
+
+<p>Procure estas mensagens:</p>
+<ul>
+  <li><code>Settings correctly loaded</code> — Configuração válida</li>
+  <li><code>Connected to LND</code> — Conexão Lightning bem-sucedida</li>
+  <li><code>Connected to relay</code> — Relay Nostr estabelecido</li>
+</ul>
+
+<h4>Parar e reiniciar</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>make docker-down   <span class="cm"># Parar</span>
+make docker-up     <span class="cm"># Iniciar</span></code></pre>
+</div>
+
+<p>🎉 <strong>Parabéns!</strong> Se você vê conexões bem-sucedidas nos logs, seu nó Mostro está funcionando!</p>
+
+</div>
+</details>
+
+<details class="collapsible" id="caminho-b-nativo">
+<summary>Caminho B: Compilação Nativa (Para operadores técnicos)</summary>
+<div class="collapsible-content">
+
+<h4>Passo 1: Conectar e atualizar</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>ssh root@ENDERECO_IP_DO_SEU_VPS
+apt update
+apt upgrade -y</code></pre>
+</div>
+
+<h4>Passo 2: Instalar Rust</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Instalar Rust (pressione 1 quando solicitado)</span>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+<span class="cm"># Tornar Rust disponível na sessão atual</span>
+source /root/.cargo/env
+
+<span class="cm"># Verificar</span>
+rustc --version   <span class="cm"># Esperado: rustc 1.86.0+</span>
+cargo --version   <span class="cm"># Esperado: cargo 1.86.0+</span></code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Importante</div>
+  NÃO instale Rust via <code>apt install rustc</code>. Sempre use <code>rustup</code> como mostrado acima. O pacote do sistema geralmente está desatualizado e causará erros de compilação.
+</div>
+
+<h4>Passo 3: Instalar dependências de compilação</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>apt install -y cmake build-essential libsqlite3-dev libssl-dev pkg-config git sqlite3 protobuf-compiler</code></pre>
+</div>
+
+<h4>Passo 4: Baixar e compilar o Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cd /opt
+git clone https://github.com/MostroP2P/mostro.git
+cd mostro
+cargo build --release</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Dica</div>
+  Se a compilação falhar por falta de RAM, adicione espaço swap:
+  <div class="code-block" style="margin-top:10px">
+    <pre><code>fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile</code></pre>
+  </div>
+</div>
+
+<h4>Passo 5: Instalar o binário</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>install target/release/mostrod /usr/local/bin
+mostrod --version</code></pre>
+</div>
+
+<h4>Passo 6: Inicializar o banco de dados</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cargo install sqlx-cli --version 0.6.2
+./init_db.sh</code></pre>
+</div>
+
+<h4>Passo 7: Limpar arquivos de compilação</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cargo clean</code></pre>
+</div>
+
+<h4>Passo 8: Criar um usuário dedicado</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>adduser --disabled-login mostro</code></pre>
+</div>
+
+<h4>Passo 9: Configurar o Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>mkdir -p /opt/mostro
+cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+nano /opt/mostro/settings.toml</code></pre>
+</div>
+
+<p>Edite as mesmas configurações do Caminho A, Passo 7.</p>
+
+<h4>Passo 10: Teste de execução</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>/usr/local/bin/mostrod -d /opt/mostro</code></pre>
+</div>
+<p>Se conectar ao LND e aos relays, pressione <code>Ctrl+C</code> para parar.</p>
+
+<h4>Passo 11: Definir permissões</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>chown -R mostro:mostro /opt/mostro</code></pre>
+</div>
+
+<h4>Passo 12: Configurar como serviço do sistema</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>nano /etc/systemd/system/mostro.service</code></pre>
+</div>
+
+<p>Cole este conteúdo:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>ini</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[Unit]
+Description=Mostro daemon
+After=network.target
+
+[Service]
+Type=simple
+User=mostro
+WorkingDirectory=/home/mostro
+Environment=RUST_LOG=info
+ExecStart=/usr/local/bin/mostrod -d /opt/mostro
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>systemctl daemon-reload
+systemctl enable mostro.service
+systemctl start mostro.service
+systemctl status mostro.service</code></pre>
+</div>
+
+<h4>Passo 13: Verificar</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>ps aux | grep mostrod
+journalctl -u mostro -f</code></pre>
+</div>
+
+<p>🎉 <strong>Parabéns!</strong> Seu nó Mostro está funcionando como serviço do sistema e reiniciará automaticamente após reinicializações.</p>
+
+</div>
+</details>
+
+<hr>
+
+<h2 id="configuracao">4. Configuração em Detalhe</h2>
+
+<p>O arquivo <code>settings.toml</code> controla tudo sobre seu nó Mostro.</p>
+
+<h3 id="cfg-nostr">4.1 Chaves Nostr — A identidade do seu nó</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[nostr]
+nsec_privkey = 'YOUR_NSEC_PRIVATE_KEY'
+relays = [
+  'wss://relay.damus.io',
+  'wss://relay.mostro.network',
+  'wss://nos.lol',
+  'wss://relay.nostr.band'
+]</code></pre>
+</div>
+
+<p><strong>Gerando chaves Nostr:</strong></p>
+<ul>
+  <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — suporta geração de chaves vanity</li>
+  <li><strong><a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a></strong> — Rápido e fácil, mas menos seguro</li>
+  <li>Qualquer cliente Nostr (Damus, Amethyst, etc.)</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Dica</div>
+  Você também pode executar seu próprio relay Nostr junto ao Mostro (a instalação Docker inclui um por padrão).
+</div>
+
+<h3 id="cfg-taxas">4.2 Taxas — Como você gera receita</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+fee = 0.006
+dev_fee_percentage = 0.30</code></pre>
+</div>
+
+<p><strong>Taxa de negociação (<code>fee</code>):</strong> Percentual cobrado por negociação, dividido entre comprador e vendedor.</p>
+<ul>
+  <li><code>0.006</code> = 0,6% (cada parte paga 0,3%)</li>
+  <li><code>0.01</code> = 1,0% (cada parte paga 0,5%)</li>
+  <li><code>0</code> = grátis (bom para crescer sua base de usuários)</li>
+</ul>
+
+<p><strong>Taxa de desenvolvimento (<code>dev_fee_percentage</code>):</strong> Um percentual dos <em>seus</em> ganhos que vai para o desenvolvimento do Mostro.</p>
+<ul>
+  <li><code>0.30</code> = 30% (padrão) — dos 600 sats, 180 vão para o fundo de desenvolvimento</li>
+  <li>Mínimo: 10% (<code>0.10</code>), Máximo: 100% (<code>1.0</code>)</li>
+</ul>
+
+<div class="callout note">
+  <div class="callout-title">📝 Nota</div>
+  Definir <code>dev_fee_percentage</code> abaixo de <code>0.10</code> impedirá o Mostro de iniciar.
+</div>
+
+<h3 id="cfg-limites">4.3 Limites de ordens e moedas</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+max_order_amount = 1000000
+min_payment_amount = 100
+fiat_currencies_accepted = ['USD', 'BRL', 'EUR']</code></pre>
+</div>
+
+<ul>
+  <li><strong><code>max_order_amount</code>:</strong> Maior negociação em satoshis. Configure baseado na capacidade dos seus canais.</li>
+  <li><strong><code>min_payment_amount</code>:</strong> Negociação mínima em satoshis.</li>
+  <li><strong><code>fiat_currencies_accepted</code>:</strong> Use <a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank" rel="noopener noreferrer">códigos ISO 4217</a>. Array vazio <code>[]</code> aceita todas.</li>
+</ul>
+
+<h3 id="cfg-perfil">4.4 Perfil do nó (Opcional mas recomendado)</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+name = "Brasil Mostro"
+about = "Exchange P2P de Bitcoin para o Brasil. Suporte em português."
+picture = "https://exemplo.com/seu-logo.png"
+website = "https://site-da-sua-comunidade.com"</code></pre>
+</div>
+
+<h3 id="cfg-tempos">4.5 Tempos e expiração</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+expiration_hours = 24
+expiration_seconds = 900
+hold_invoice_expiration_window = 300</code></pre>
+</div>
+
+<ul>
+  <li><strong><code>expiration_hours</code>:</strong> Quanto tempo uma ordem fica aberta (24h padrão)</li>
+  <li><strong><code>expiration_seconds</code>:</strong> Tempo para completar a ação (900s = 15 min)</li>
+  <li><strong><code>hold_invoice_expiration_window</code>:</strong> Validade da hold invoice (300s = 5 min)</li>
+</ul>
+
+<h3 id="cfg-antispam">4.6 Anti-Spam</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+pow = 0</code></pre>
+</div>
+
+<p><strong>Proof of Work:</strong> <code>0</code> = desabilitado; <code>10-20</code> = moderado. Comece com <code>0</code>.</p>
+
+<h3 id="cfg-rpc">4.7 Interface RPC Admin (Opcional)</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[rpc]
+enabled = false
+listen_address = "127.0.0.1"
+port = 50051</code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Segurança</div>
+  Se habilitar RPC, mantenha <code>listen_address</code> como <code>"127.0.0.1"</code>. Nunca exponha isso à internet.
+</div>
+
+<hr>
+
+<h2 id="operacao">5. Operando Seu Nó Mostro</h2>
+
+<h3 id="disputas">5.1 Como funcionam as disputas</h3>
+
+<p>As disputas são sua responsabilidade operacional mais importante.</p>
+
+<p><strong>O processo de disputa:</strong></p>
+<ol>
+  <li><strong>Um usuário abre uma disputa</strong> — Qualquer parte pressiona "Disputa"</li>
+  <li><strong>Mostro marca a ordem</strong> — O status muda para "Disputa", os fundos permanecem bloqueados</li>
+  <li><strong>Um árbitro assume o caso</strong> — Um admin investiga</li>
+  <li><strong>Investigação</strong> — Comunica-se com ambas as partes, solicita evidências</li>
+  <li><strong>Resolução</strong> — O árbitro decide: liquidar ao vendedor, ou cancelar/reembolsar ao comprador</li>
+</ol>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Importante</div>
+  Escolha os árbitros com cuidado. Eles têm poder de decidir para onde vão os fundos bloqueados. Escolha membros confiáveis e imparciais. Recomenda-se 2–3 árbitros.
+</div>
+
+<h3 id="monitoramento">5.2 Monitoramento de uptime</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>systemctl status mostro.service
+journalctl -u mostro -f</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker compose -f /opt/mostro/docker/compose.yml ps
+docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
+</div>
+
+<h3 id="atualizacao">5.3 Atualizando o Mostro</h3>
+
+<details class="collapsible">
+<summary>Atualização Docker</summary>
+<div class="collapsible-content">
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cd /opt/mostro
+git pull origin main
+make docker-build
+make docker-down
+make docker-up</code></pre>
+</div>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Atualização nativa</summary>
+<div class="collapsible-content">
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cd /opt/mostro
+git pull origin main
+cargo build --release
+install target/release/mostrod /usr/local/bin
+cargo clean
+cargo install sqlx-cli --version 0.6.2
+sqlx migrate run
+systemctl restart mostro.service</code></pre>
+</div>
+</div>
+</details>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Dica</div>
+  Sempre faça backup do banco de dados antes de atualizar.
+</div>
+
+<h3 id="backups">5.4 Backups</h3>
+
+<p>Arquivos críticos: <code>settings.toml</code> (contém sua chave privada Nostr!) e <code>mostro.db</code> (histórico de ordens, reputações).</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Backup manual — Docker:</span>
+mkdir -p /root/mostro-backups
+cp /opt/mostro/docker/config/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
+cp /opt/mostro/docker/config/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)
+
+<span class="cm"># Backup manual — Nativo:</span>
+cp /opt/mostro/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
+cp /opt/mostro/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)</code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Crítico</div>
+  Sua <code>nsec_privkey</code> no <code>settings.toml</code> É a identidade do seu nó. Se perdê-la, perde sua reputação. <strong>Guarde uma cópia offline.</strong>
+</div>
+
+<h3 id="atividade">5.5 Verificando a atividade de negociações</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>sqlite3 /caminho/para/mostro.db "SELECT COUNT(*) FROM orders;"
+sqlite3 /caminho/para/mostro.db "SELECT id, fiat_amount, fiat_code, amount, status, created_at FROM orders WHERE status = 'success' ORDER BY created_at DESC LIMIT 10;"</code></pre>
+</div>
+
+<hr>
+
+<h2 id="custos">6. Análise de Custos</h2>
+
+<h3>Custos operacionais mensais</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Item</th><th>Custo mensal</th><th>Notas</th></tr></thead>
+  <tbody>
+    <tr><td>VPS (servidor)</td><td>$10–24</td><td>Depende do provedor e especificações</td></tr>
+    <tr><td>Nome de domínio (opcional)</td><td>$1–2</td><td>Para um site/identidade</td></tr>
+    <tr><td>Taxas on-chain de canais Lightning</td><td>Variável</td><td>Abertura/fechamento de canais</td></tr>
+    <tr><td><strong>Total mensal</strong></td><td><strong>$11–26</strong></td><td>Excluindo liquidez Lightning</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Potencial de receita</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Volume mensal</th><th>Taxa (0,6%)</th><th>Taxa dev (30%)</th><th>Receita líquida</th></tr></thead>
+  <tbody>
+    <tr><td>$1.000</td><td>~$6</td><td>~$1,80</td><td>~$4,20</td></tr>
+    <tr><td>$10.000</td><td>~$60</td><td>~$18</td><td>~$42</td></tr>
+    <tr><td>$50.000</td><td>~$300</td><td>~$90</td><td>~$210</td></tr>
+    <tr><td>$100.000</td><td>~$600</td><td>~$180</td><td>~$420</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout note">
+  <div class="callout-title">📝 Realidade</div>
+  A maioria dos novos nós leva meses para construir volume. Não espere lucratividade imediata. O valor real muitas vezes vem de fornecer um serviço à sua comunidade.
+</div>
+
+<hr>
+
+<h2 id="perguntas">7. Perguntas Frequentes</h2>
+
+<details class="collapsible">
+<summary>Preciso ser desenvolvedor para executar um nó Mostro?</summary>
+<div class="collapsible-content">
+<p>Não, mas precisa estar confortável com operações básicas de linha de comando. O caminho Docker (Caminho A) é projetado para ser acessível.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Posso executar Mostro em um Raspberry Pi?</summary>
+<div class="collapsible-content">
+<p>Tecnicamente sim (usando Start9 ou similar), mas não é recomendado para produção por limitações de CPU e RAM.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Posso usar Core Lightning (CLN) em vez de LND?</summary>
+<div class="collapsible-content">
+<p>Não. Mostro atualmente suporta apenas LND. Suporte para outras implementações pode vir no futuro.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Como os usuários se conectam ao meu Mostro?</summary>
+<div class="collapsible-content">
+<p>Precisam de um app cliente Mostro e a chave pública do seu nó (npub). Comunicam-se via relays Nostr, sem conexão direta necessária.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>É legal?</summary>
+<div class="collapsible-content">
+<p>Depende da sua jurisdição. Mostro é software para trading peer-to-peer. Em algumas jurisdições pode exigir licenças. <strong>Consulte as regulamentações locais e assessoria jurídica.</strong></p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Posso perder dinheiro executando um nó?</summary>
+<div class="collapsible-content">
+<p>Sim, é possível: fundos de canais em risco por bugs (raro); fechamentos forçados caros; custos de VPS contínuos; investimento real de tempo.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Quando vou atingir o ponto de equilíbrio?</summary>
+<div class="collapsible-content">
+<p>Com $20/mês de custos e 0,6% de taxa, precisa de ~$5.000/mês em negociações. A maioria das comunidades leva 3–6 meses.</p>
+</div>
+</details>
+
+<hr>
+
+<h2 id="seguranca">8. Considerações de Segurança</h2>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Aviso de software em estágio inicial</div>
+  <p><strong>Mostro está em estágio inicial de desenvolvimento.</strong> Podem existir bugs não descobertos, incluindo bugs de segurança que podem resultar em perda de fundos. <strong>Os desenvolvedores não são responsáveis por perdas de dinheiro devido a bugs do software.</strong></p>
+  <p>O <strong>mecanismo central de custódia usando hold invoices Lightning foi testado em batalha desde 2021</strong>, quando <a href="https://github.com/lnp2pBot/bot" target="_blank" rel="noopener noreferrer">@lnp2pBot</a> implementou pela primeira vez este tipo de custódia.</p>
+</div>
+
+<h3>Operando sob regimes autoritários</h3>
+
+<p>Se você opera em um país com um governo autoritário, <strong>a privacidade não é opcional — é um requisito de segurança.</strong></p>
+
+<ol>
+  <li><strong>Execute seu nó Mostro atrás de Tor e/ou uma VPN.</strong></li>
+  <li><strong>Se Tor/VPN não for possível</strong>, publique eventos apenas em relays que você controla ou confia.</li>
+  <li><strong>Tenha muito cuidado com quais relays usa.</strong> No futuro, governos podem criar relays Nostr para coletar endereços IP.</li>
+  <li><strong>Considere também a privacidade do seu nó Lightning.</strong></li>
+</ol>
+
+<hr>
+
+<h2 id="solucao-problemas">9. Solução de Problemas</h2>
+
+<h3>Mostro não inicia</h3>
+
+<h4>"Failed to connect to LND"</h4>
+<ul>
+  <li>Verifique que LND está funcionando: <code>lncli getinfo</code></li>
+  <li>Confira <code>lnd_grpc_host</code></li>
+  <li>Verifique os caminhos de <code>tls.cert</code> e <code>admin.macaroon</code></li>
+</ul>
+
+<h3>Problemas de conexão</h3>
+<ul>
+  <li>Verifique as URLs dos relays (devem começar com <code>wss://</code>)</li>
+  <li>Certifique-se de que o firewall permite conexões de saída na porta 443</li>
+</ul>
+
+<h3>Obtendo ajuda</h3>
+<ol>
+  <li><strong>Verifique os logs primeiro</strong></li>
+  <li><strong>Telegram (Desenvolvedores):</strong> <a href="https://t.me/mostro_dev" target="_blank" rel="noopener noreferrer">@mostro_dev</a></li>
+  <li><strong>Telegram (Comunidade):</strong> <a href="https://t.me/MostroP2P" target="_blank" rel="noopener noreferrer">@MostroP2P</a></li>
+  <li><strong>GitHub Issues:</strong> <a href="https://github.com/MostroP2P/mostro/issues" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro/issues</a></li>
+</ol>
+
+<hr>
+
+<h2 id="apendice">Apêndice: Referência Rápida</h2>
+
+<h3>Localizações importantes de arquivos</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Arquivo</th><th>Caminho Docker</th><th>Caminho nativo</th></tr></thead>
+  <tbody>
+    <tr><td>Configuração</td><td><code>/opt/mostro/docker/config/settings.toml</code></td><td><code>/opt/mostro/settings.toml</code></td></tr>
+    <tr><td>Banco de dados</td><td><code>/opt/mostro/docker/config/mostro.db</code></td><td><code>/opt/mostro/mostro.db</code></td></tr>
+    <tr><td>Cert LND</td><td><code>/opt/mostro/docker/config/lnd/tls.cert</code></td><td>Varia</td></tr>
+    <tr><td>Macaroon LND</td><td><code>/opt/mostro/docker/config/lnd/admin.macaroon</code></td><td>Varia</td></tr>
+    <tr><td>Arquivo de serviço</td><td>N/A</td><td><code>/etc/systemd/system/mostro.service</code></td></tr>
+    <tr><td>Logs</td><td><code>docker compose logs</code></td><td><code>journalctl -u mostro</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Comandos essenciais</h3>
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>make docker-build          <span class="cm"># Construir</span>
+make docker-up             <span class="cm"># Iniciar</span>
+make docker-down           <span class="cm"># Parar</span>
+docker compose logs -f     <span class="cm"># Ver logs</span></code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>systemctl start mostro     <span class="cm"># Iniciar</span>
+systemctl stop mostro      <span class="cm"># Parar</span>
+systemctl restart mostro   <span class="cm"># Reiniciar</span>
+systemctl status mostro    <span class="cm"># Status</span>
+journalctl -u mostro -f    <span class="cm"># Ver logs</span></code></pre>
+</div>
+
+<h3>Configurações recomendadas para novos nós</h3>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[mostro]
+fee = 0.006
+max_order_amount = 500000
+min_payment_amount = 1000
+expiration_hours = 24
+expiration_seconds = 900
+pow = 0
+dev_fee_percentage = 0.30
+fiat_currencies_accepted = ['BRL']  <span class="cm"># Mude para sua moeda local</span>
+
+[nostr]
+relays = [
+  'wss://relay.mostro.network',
+  'wss://relay.damus.io',
+  'wss://nos.lol'
+]</code></pre>
+</div>
+
+<div class="guide-footer">
+  <p>Este guia é mantido pela comunidade Mostro. Encontrou um erro ou quer melhorar?<br>
+  Contribuições são bem-vindas em <a href="https://github.com/MostroP2P/mostro" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro</a></p>
+  <p style="margin-top:12px;">Última atualização: Fevereiro 2026 · Mostro v0.16.2</p>
+</div>
+
+</main>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script src="guide.js"></script>
+
+</body>
+</html>
