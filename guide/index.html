@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Node Setup Guide | Mostro P2P</title>
+  <meta name="description" content="Complete guide to running your own Mostro P2P Bitcoin exchange node. Step-by-step setup for Docker and native builds.">
+  <link rel="stylesheet" href="guide-styles.css">
+  <link rel="icon" href="../assets/images/favicon.png" type="image/png">
+</head>
+<body>
+
+<!-- Header -->
+<header class="guide-header">
+  <a href="../index.html" class="header-logo">
+    <img src="../assets/images/logo.svg" alt="Mostro">
+    <span>Node Guide</span>
+  </a>
+  <div class="header-right">
+    <div class="lang-switcher">
+      <a href="index.html" class="active">EN</a>
+      <a href="index.es.html">ES</a>
+      <a href="index.it.html">IT</a>
+      <a href="index.pt.html">PT</a>
+    </div>
+    <button class="toc-toggle" onclick="toggleSidebar()">☰ Menu</button>
+  </div>
+</header>
+
+<!-- Sidebar overlay for mobile -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar TOC -->
+<aside class="guide-sidebar" id="sidebar">
+  <div class="toc-title">Table of Contents</div>
+  <ul class="toc-list">
+    <li><a href="#what-is-mostro">1. What is Mostro?</a></li>
+    <li class="toc-sub"><a href="#why-run">Why Run a Node?</a></li>
+    <li class="toc-sub"><a href="#how-it-works">How It Works</a></li>
+    <li><a href="#prerequisites">2. Prerequisites</a></li>
+    <li class="toc-sub"><a href="#vps">Server (VPS)</a></li>
+    <li class="toc-sub"><a href="#lnd">Lightning Node (LND)</a></li>
+    <li class="toc-sub"><a href="#liquidity">Liquidity</a></li>
+    <li class="toc-sub"><a href="#nostr-keys">Nostr Keys</a></li>
+    <li class="toc-sub"><a href="#skill-level">Skill Level</a></li>
+    <li><a href="#setup">3. Step-by-Step Setup</a></li>
+    <li class="toc-sub"><a href="#path-a-docker">Path A: Docker</a></li>
+    <li class="toc-sub"><a href="#path-b-native">Path B: Native Build</a></li>
+    <li><a href="#configuration">4. Configuration</a></li>
+    <li class="toc-sub"><a href="#cfg-nostr">Nostr Keys</a></li>
+    <li class="toc-sub"><a href="#cfg-fees">Fees</a></li>
+    <li class="toc-sub"><a href="#cfg-limits">Order Limits</a></li>
+    <li class="toc-sub"><a href="#cfg-profile">Node Profile</a></li>
+    <li class="toc-sub"><a href="#cfg-timing">Timing</a></li>
+    <li class="toc-sub"><a href="#cfg-antispam">Anti-Spam</a></li>
+    <li class="toc-sub"><a href="#cfg-rpc">RPC Admin</a></li>
+    <li><a href="#operating">5. Operating Your Node</a></li>
+    <li class="toc-sub"><a href="#disputes">Disputes</a></li>
+    <li class="toc-sub"><a href="#monitoring">Monitoring</a></li>
+    <li class="toc-sub"><a href="#updating">Updating</a></li>
+    <li class="toc-sub"><a href="#backups">Backups</a></li>
+    <li class="toc-sub"><a href="#trade-activity">Trade Activity</a></li>
+    <li><a href="#costs">6. Costs Breakdown</a></li>
+    <li><a href="#faq">7. FAQ</a></li>
+    <li><a href="#security">8. Security</a></li>
+    <li><a href="#troubleshooting">9. Troubleshooting</a></li>
+    <li><a href="#appendix">Appendix</a></li>
+  </ul>
+</aside>
+
+<!-- Main Content -->
+<main class="guide-content">
+
+<h1>Running Your Own Mostro Node</h1>
+<p class="guide-version">Mostro v0.16.2 — Community Guide · February 2026</p>
+
+<!-- ============================================================ -->
+<h2 id="what-is-mostro">1. What is Mostro and Why Should Your Community Run One?</h2>
+
+<h3 id="what-is-mostro-sub">What is Mostro?</h3>
+
+<p>Mostro is a <strong>peer-to-peer Bitcoin exchange</strong> that lets people buy and sell Bitcoin using local currencies (dollars, euros, pesos — any currency) without needing to provide identity documents (KYC). Think of it as a decentralized marketplace where buyers and sellers can trade directly.</p>
+
+<p>It works using two technologies:</p>
+<ul>
+  <li><strong>Lightning Network</strong> — a fast, low-cost Bitcoin payment layer (think of it as Bitcoin's express lane for small, quick payments)</li>
+  <li><strong>Nostr</strong> — a censorship-resistant communication protocol (think of it as a messaging system that nobody can shut down)</li>
+</ul>
+
+<p>Mostro acts as an <strong>escrow coordinator</strong> — it holds the seller's Bitcoin in a temporary "lock box" (called a hold invoice) until the buyer confirms they've sent the local currency payment. Mostro never actually controls anyone's funds; it just holds them briefly during the trade.</p>
+
+<h3 id="why-run">Why Would Your Community Want to Run a Mostro Node?</h3>
+
+<ol>
+  <li><strong>Fee Income</strong> — Every trade earns you a fee (default 0.6%). If your community does $10,000 in monthly trades, that's ~$60/month in fees.</li>
+  <li><strong>P2P Trading Without KYC</strong> — Your community members can buy and sell Bitcoin without providing identity documents. Especially important in regions with unstable currencies or restrictive regulations.</li>
+  <li><strong>Disputes in Your Language</strong> — When a trade goes wrong, <em>your</em> community resolves it, in <em>your</em> language, understanding <em>your</em> local payment methods.</li>
+  <li><strong>Independence</strong> — No company can shut down your exchange. No government can pressure a single operator to close it.</li>
+  <li><strong>Customization</strong> — You choose which currencies to support, what payment methods to allow, and what fees to charge.</li>
+</ol>
+
+<h3 id="how-it-works">How Mostro Works (Simplified)</h3>
+
+<div class="flow-diagram"><span class="step-num">1.</span> Alice wants to SELL Bitcoin for $50 USD
+   <span class="arrow">→</span> She creates an order on Mostro
+
+<span class="step-num">2.</span> Bob wants to BUY Bitcoin with $50 USD
+   <span class="arrow">→</span> He sees Alice's order and takes it
+
+<span class="step-num">3.</span> Mostro creates a "lock box" (hold invoice)
+   <span class="arrow">→</span> Alice sends her Bitcoin into the lock box
+
+<span class="step-num">4.</span> Bob sends $50 to Alice via bank transfer, Zelle, cash, etc.
+   <span class="arrow">→</span> Bob clicks "Fiat Sent" in his client app
+
+<span class="step-num">5.</span> Alice confirms she received the $50
+   <span class="arrow">→</span> She clicks "Release"
+
+<span class="step-num">6.</span> Mostro releases the Bitcoin from the lock box to Bob
+   <span class="arrow">→</span> Trade complete! <span class="check">✓</span></div>
+
+<p>If something goes wrong (e.g., Bob says he paid but Alice didn't receive it), either party can open a <strong>dispute</strong>, and your community's assigned arbiters investigate and resolve it.</p>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="prerequisites">2. Prerequisites — What You Need Before Starting</h2>
+
+<h3 id="vps">2.1 A Server (VPS)</h3>
+
+<p>A <strong>VPS</strong> (Virtual Private Server) is a computer in a data center that runs 24/7. You'll rent one to host your Mostro node.</p>
+
+<p><strong>Minimum specifications:</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Resource</th><th>Minimum</th><th>Recommended</th></tr></thead>
+  <tbody>
+    <tr><td>CPU</td><td>2 vCPUs (shared)</td><td>2+ vCPUs</td></tr>
+    <tr><td>RAM</td><td>2 GB</td><td>4 GB</td></tr>
+    <tr><td>Storage</td><td>60 GB SSD</td><td>100 GB SSD</td></tr>
+    <tr><td>Bandwidth</td><td>3 TB/month</td><td>3+ TB/month</td></tr>
+    <tr><td>OS</td><td>Ubuntu 22.04+ LTS</td><td>Ubuntu 24.04 LTS</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>Estimated monthly cost:</strong> $10–$24/month.</p>
+
+<p><strong>Popular VPS providers:</strong></p>
+<ul>
+  <li><a href="https://www.digitalocean.com/" target="_blank">Digital Ocean</a> — $12/month</li>
+  <li><a href="https://www.hetzner.com/" target="_blank">Hetzner</a> — ~€4-8/month (good value, EU-based)</li>
+  <li><a href="https://www.ovhcloud.com/" target="_blank">OVH</a> — ~$6-12/month</li>
+  <li><a href="https://www.linode.com/" target="_blank">Linode/Akamai</a> — $12/month</li>
+  <li><a href="https://www.lunanode.com/" target="_blank">Lunanode</a> — Accepts Bitcoin payments</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Tip</div>
+  Many VPS providers accept Bitcoin payments. Look for that option if you want to keep things consistent with the Bitcoin ethos.
+</div>
+
+<p>You need to be comfortable connecting to a server via SSH. If you've never done this, look for a tutorial on "SSH into a VPS" — it's simpler than it sounds.</p>
+
+<h3 id="lnd">2.2 A Lightning Network Node (LND)</h3>
+
+<p>The Lightning Network is a "layer 2" system built on top of Bitcoin enabling fast, cheap payments. To run Mostro, you need an <strong>LND node</strong> (Lightning Network Daemon) — the specific Lightning software that Mostro works with.</p>
+
+<p><strong>Your options:</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Option</th><th>Difficulty</th><th>Cost</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Use an existing LND node</td><td><span class="badge badge-easy">Easy</span></td><td>Free (if you have one)</td><td>Best if someone already runs one</td></tr>
+    <tr><td>Run LND on the same VPS</td><td><span class="badge badge-hard">Hard</span></td><td>Same VPS + liquidity</td><td>Requires 4GB+ RAM VPS</td></tr>
+    <tr><td>Node-in-a-box solution</td><td><span class="badge badge-medium">Medium</span></td><td>$200-600 + liquidity</td><td><a href="https://start9.com/" target="_blank">Start9</a>, <a href="https://umbrel.com/" target="_blank">Umbrel</a>, <a href="https://raspiblitz.org/" target="_blank">RaspiBlitz</a></td></tr>
+    <tr><td>StartOS with Mostro package</td><td><span class="badge badge-easy">Easiest</span></td><td>$300-600 + liquidity</td><td>Start9 has a one-click Mostro package</td></tr>
+    <tr><td>Use Voltage.cloud</td><td><span class="badge badge-easy">Easy</span></td><td>From ~$20/month + liquidity</td><td><a href="https://voltage.cloud/" target="_blank">Voltage</a> — hosted LND with managed infrastructure</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Important</div>
+  Mostro specifically requires <strong>LND</strong> (not CLN/Core Lightning, not Eclair, not LDK). Make sure your Lightning node runs LND.
+</div>
+
+<p><strong>What you need from your LND node:</strong></p>
+<ul>
+  <li>The <code>tls.cert</code> file (a security certificate)</li>
+  <li>The <code>admin.macaroon</code> file (an authentication token)</li>
+  <li>The gRPC address (typically <code>https://127.0.0.1:10009</code> if on the same machine)</li>
+</ul>
+
+<h3 id="liquidity">2.3 Lightning Liquidity</h3>
+
+<p>To facilitate trades, your Lightning node needs <strong>channels</strong> with Bitcoin in them. Think of Lightning channels as pre-funded payment tunnels. The Bitcoin inside these channels is your "liquidity."</p>
+
+<p><strong>How much do you need?</strong></p>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Trading Volume Target</th><th>Suggested Liquidity</th><th>Approximate BTC</th></tr></thead>
+  <tbody>
+    <tr><td>Small community (few trades/day)</td><td>1–5 million sats</td><td>0.01–0.05 BTC</td></tr>
+    <tr><td>Medium community</td><td>5–20 million sats</td><td>0.05–0.20 BTC</td></tr>
+    <tr><td>Active community</td><td>20–100 million sats</td><td>0.20–1.0 BTC</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Warning: Liquidity is capital lock-up</div>
+  The Bitcoin in your Lightning channels is locked there — you can't spend it elsewhere until you close the channels. Think of it as a business investment: you need working capital to operate.
+</div>
+
+<p><strong>Start small, grow incrementally.</strong> Begin with enough for your community's initial needs and monitor feedback. When traders report orders failing due to insufficient capacity, that's your signal to add more. Listen to your community.</p>
+
+<p><strong>Getting liquidity:</strong></p>
+<ul>
+  <li>Open channels to well-connected nodes (use <a href="https://1ml.com/" target="_blank">1ML</a> or <a href="https://amboss.space/" target="_blank">Amboss</a> to find good peers)</li>
+  <li>You need both <strong>outbound</strong> capacity (to pay buyers) and <strong>inbound</strong> capacity (to receive from sellers)</li>
+  <li>Getting inbound liquidity is often harder — consider <a href="https://lightning.engineering/loop/" target="_blank">Lightning Loop</a>, <a href="https://amboss.space/magma" target="_blank">Magma</a>, or channel swap services</li>
+</ul>
+
+<h3 id="nostr-keys">2.4 Nostr Keys</h3>
+
+<p>Your Mostro node needs its own identity on the Nostr network — a cryptographic key pair with a public key (your node's address) and a private key (your secret).</p>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Important</div>
+  Never reuse Nostr keys between Mostro instances. Each node needs its own unique identity.
+</div>
+
+<h3 id="skill-level">2.5 Technical Knowledge Level</h3>
+
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Task</th><th>Difficulty</th><th>Skills Needed</th></tr></thead>
+  <tbody>
+    <tr><td>Renting a VPS</td><td><span class="badge badge-easy">Easy</span></td><td>Credit card, basic web navigation</td></tr>
+    <tr><td>Connecting via SSH</td><td><span class="badge badge-easy">Easy</span></td><td>Following instructions, typing commands</td></tr>
+    <tr><td>Installing Docker</td><td><span class="badge badge-medium">Medium</span></td><td>Copy-pasting commands, basic troubleshooting</td></tr>
+    <tr><td>Running Mostro (Docker)</td><td><span class="badge badge-medium">Medium</span></td><td>Editing config files, understanding paths</td></tr>
+    <tr><td>Running Mostro (native)</td><td><span class="badge badge-hard">Hard</span></td><td>Linux sysadmin, compiling software, systemd</td></tr>
+    <tr><td>Setting up LND from scratch</td><td><span class="badge badge-hard">Hard</span></td><td>Significant Linux and networking knowledge</td></tr>
+    <tr><td>Managing Lightning liquidity</td><td><span class="badge badge-hard">Hard</span></td><td>Understanding Lightning channel economics</td></tr>
+  </tbody>
+</table>
+</div>
+
+<p><strong>Our recommendation:</strong> If your community has someone comfortable with the Linux command line, they can handle the Docker setup (Path A). For Path B, you want someone with sysadmin experience. The Lightning node setup is the most complex part — consider having someone experienced help, or using a node-in-a-box solution.</p>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="setup">3. Step-by-Step Setup</h2>
+
+<p>Choose your path:</p>
+<ul>
+  <li><strong>Path A (Docker):</strong> Simpler, fewer steps, easier updates. Recommended for most communities.</li>
+  <li><strong>Path B (Native Build):</strong> More control, better for experienced sysadmins. Slightly better performance.</li>
+</ul>
+
+<p>Both paths assume you already have: ✅ A VPS with Ubuntu running · ✅ SSH access · ✅ An LND node running.</p>
+
+<!-- Path A: Docker -->
+<details class="collapsible" id="path-a-docker" open>
+<summary>Path A: Docker Setup (Recommended for Beginners)</summary>
+<div class="collapsible-content">
+
+<h4>Step 1: Connect to your VPS</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>ssh root@YOUR_VPS_IP_ADDRESS</code></pre>
+</div>
+
+<h4>Step 2: Update the system</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Download the latest package information</span>
+apt update
+
+<span class="cm"># Install all available updates</span>
+apt upgrade -y</code></pre>
+</div>
+
+<h4>Step 3: Install Docker and Docker Compose</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Install Docker using the official convenience script</span>
+curl -fsSL https://get.docker.com | sh
+
+<span class="cm"># Verify Docker is installed</span>
+docker --version
+<span class="cm"># Expected: Docker version 24.x.x or newer</span>
+
+<span class="cm"># Verify Docker Compose</span>
+docker compose version
+<span class="cm"># Expected: Docker Compose version v2.x.x</span></code></pre>
+</div>
+
+<h4>Step 4: Install additional tools</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>apt install -y git make</code></pre>
+</div>
+
+<h4>Step 5: Download Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cd /opt
+git clone https://github.com/MostroP2P/mostro.git
+cd mostro</code></pre>
+</div>
+
+<h4>Step 6: Set up configuration files</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>mkdir -p docker/config
+cp docker/settings.docker.toml docker/config/settings.toml
+cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
+</div>
+
+<h4>Step 7: Edit the configuration file</h4>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>nano docker/config/settings.toml</code></pre>
+</div>
+
+<p>You <strong>must</strong> change these three things:</p>
+<ol>
+  <li><strong><code>lnd_grpc_host</code></strong> — The address of your LND node:
+    <ul>
+      <li>Same machine: <code>'https://host.docker.internal:10009'</code></li>
+      <li>Different machine: <code>'https://YOUR_LND_IP:10009'</code></li>
+    </ul>
+  </li>
+  <li><strong><code>nsec_privkey</code></strong> — Your Mostro's Nostr private key (e.g., <code>nsec1abc123def456...</code>). Use <a href="https://nostrtool.com/" target="_blank">nostrtool.com</a> to generate one. <strong>Save both nsec and npub keys safely!</strong></li>
+  <li><strong><code>relays</code></strong> — The Nostr relays your node connects to.</li>
+</ol>
+
+<p><strong>Other settings you'll likely want to change:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+fee = 0.006                    <span class="cm"># 0.6% trading fee</span>
+max_order_amount = 1000000     <span class="cm"># Max order in sats (~$400-500)</span>
+min_payment_amount = 100       <span class="cm"># Min order in sats</span>
+fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Your currencies</span></code></pre>
+</div>
+
+<p>Save: <code>Ctrl+X</code>, then <code>Y</code>, then <code>Enter</code>.</p>
+
+<h4>Step 8: Configure LND credentials</h4>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>nano docker/.env</code></pre>
+</div>
+
+<p>Add these lines with your actual LND file locations:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>env</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>LND_CERT_FILE=/path/to/your/lnd/tls.cert
+LND_MACAROON_FILE=/path/to/your/lnd/admin.macaroon</code></pre>
+</div>
+
+<p>If LND is on the <strong>same machine</strong>, typical paths are:</p>
+<ul>
+  <li><code>/root/.lnd/tls.cert</code></li>
+  <li><code>/root/.lnd/data/chain/bitcoin/mainnet/admin.macaroon</code></li>
+</ul>
+
+<p>If LND is on a <strong>different machine</strong>, copy the files first:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>mkdir -p /opt/mostro/docker/config/lnd
+scp your-lnd-server:/path/to/tls.cert /opt/mostro/docker/config/lnd/
+scp your-lnd-server:/path/to/admin.macaroon /opt/mostro/docker/config/lnd/</code></pre>
+</div>
+
+<h4>Step 9: Build and start Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Build the Docker image (5-15 minutes first time)</span>
+make docker-build
+
+<span class="cm"># Start Mostro and local Nostr relay</span>
+make docker-up</code></pre>
+</div>
+
+<p>Check if everything is running:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>docker compose -f docker/compose.yml ps</code></pre>
+</div>
+
+<h4>Step 10: Check the logs</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
+</div>
+
+<p>Look for these messages:</p>
+<ul>
+  <li><code>Settings correctly loaded</code> — Configuration is valid</li>
+  <li><code>Connected to LND</code> — Lightning connection successful</li>
+  <li><code>Connected to relay</code> — Nostr relay established</li>
+</ul>
+
+<h4>Stopping and restarting</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>make docker-down   <span class="cm"># Stop</span>
+make docker-up     <span class="cm"># Start</span></code></pre>
+</div>
+
+<p>🎉 <strong>Congratulations!</strong> If you see successful connections in the logs, your Mostro node is running!</p>
+
+</div>
+</details>
+
+<!-- Path B: Native -->
+<details class="collapsible" id="path-b-native">
+<summary>Path B: Native Build (For Technical Operators)</summary>
+<div class="collapsible-content">
+
+<h4>Step 1: Connect and update</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>ssh root@YOUR_VPS_IP_ADDRESS
+apt update
+apt upgrade -y</code></pre>
+</div>
+
+<h4>Step 2: Install Rust</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Install Rust (press 1 when asked)</span>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+<span class="cm"># Make Rust available in current session</span>
+source /root/.cargo/env
+
+<span class="cm"># Verify</span>
+rustc --version   <span class="cm"># Expected: rustc 1.86.0+</span>
+cargo --version   <span class="cm"># Expected: cargo 1.86.0+</span></code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Important</div>
+  Do NOT install Rust via <code>apt install rustc</code>. Always use <code>rustup</code> as shown above. The system package is often outdated and will cause compilation errors.
+</div>
+
+<h4>Step 3: Install build dependencies</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>apt install -y cmake build-essential libsqlite3-dev libssl-dev pkg-config git sqlite3 protobuf-compiler</code></pre>
+</div>
+
+<h4>Step 4: Download and compile Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cd /opt
+git clone https://github.com/MostroP2P/mostro.git
+cd mostro
+
+<span class="cm"># Compile in release mode (10-20 minutes on a small VPS)</span>
+cargo build --release</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Tip</div>
+  If compilation fails due to low RAM, add swap space:
+  <div class="code-block" style="margin-top:10px">
+    <pre><code>fallocate -l 2G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile</code></pre>
+  </div>
+</div>
+
+<h4>Step 5: Install the binary</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>install target/release/mostrod /usr/local/bin
+mostrod --version</code></pre>
+</div>
+
+<h4>Step 6: Initialize the database</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cargo install sqlx-cli --version 0.6.2
+./init_db.sh</code></pre>
+</div>
+
+<h4>Step 7: Clean up build files</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cargo clean  <span class="cm"># Saves 2+ GB of disk space</span></code></pre>
+</div>
+
+<h4>Step 8: Create a dedicated user</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>adduser --disabled-login mostro</code></pre>
+</div>
+
+<h4>Step 9: Configure Mostro</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>mkdir -p /opt/mostro
+cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+nano /opt/mostro/settings.toml</code></pre>
+</div>
+
+<p>Edit the same settings as Path A Step 7: <code>lnd_cert_file</code>, <code>lnd_macaroon_file</code>, <code>lnd_grpc_host</code>, <code>nsec_privkey</code>, <code>relays</code>, <code>fee</code>, <code>fiat_currencies_accepted</code>, etc.</p>
+
+<h4>Step 10: Test run</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>/usr/local/bin/mostrod -d /opt/mostro</code></pre>
+</div>
+<p>If it connects to LND and relays successfully, press <code>Ctrl+C</code> to stop.</p>
+
+<h4>Step 11: Set file permissions</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>chown -R mostro:mostro /opt/mostro</code></pre>
+</div>
+
+<h4>Step 12: Set up as a system service</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>nano /etc/systemd/system/mostro.service</code></pre>
+</div>
+
+<p>Paste this content:</p>
+<div class="code-block">
+  <div class="code-block-header"><span>ini</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[Unit]
+Description=Mostro daemon
+After=network.target
+
+[Service]
+Type=simple
+User=mostro
+WorkingDirectory=/home/mostro
+Environment=RUST_LOG=info
+ExecStart=/usr/local/bin/mostrod -d /opt/mostro
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>systemctl daemon-reload
+systemctl enable mostro.service
+systemctl start mostro.service
+systemctl status mostro.service</code></pre>
+</div>
+
+<h4>Step 13: Verify</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>ps aux | grep mostrod
+journalctl -u mostro -f</code></pre>
+</div>
+
+<p>🎉 <strong>Congratulations!</strong> Your Mostro node is running as a system service and will automatically restart after reboots.</p>
+
+</div>
+</details>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="configuration">4. Configuration In Depth</h2>
+
+<p>The <code>settings.toml</code> file controls everything about your Mostro node.</p>
+
+<h3 id="cfg-nostr">4.1 Nostr Keys — Your Node's Identity</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[nostr]
+nsec_privkey = 'nsec1your_private_key_here'
+relays = [
+  'wss://relay.damus.io',
+  'wss://relay.mostro.network',
+  'wss://nos.lol',
+  'wss://relay.nostr.band'
+]</code></pre>
+</div>
+
+<p><strong>Generating Nostr keys:</strong></p>
+<ul>
+  <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — supports vanity key generation</li>
+  <li><strong><a href="https://nostrtool.com/" target="_blank">nostrtool.com</a></strong> — Quick and easy, but less secure (browser-generated)</li>
+  <li>Any Nostr client (Damus, Amethyst, etc.)</li>
+</ul>
+
+<p><strong>Which relays to use?</strong></p>
+<ul>
+  <li><code>wss://relay.mostro.network</code> — Mostro's own relay, recommended</li>
+  <li><code>wss://relay.damus.io</code> — Large, popular relay</li>
+  <li><code>wss://nos.lol</code> — Well-connected relay</li>
+  <li>Add 3–5 relays for reliability. More relays = better availability but more bandwidth.</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Tip</div>
+  You can also run your own Nostr relay alongside Mostro (Docker setup includes one by default).
+</div>
+
+<h3 id="cfg-fees">4.2 Fees — How You Earn Revenue</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+fee = 0.006
+dev_fee_percentage = 0.30</code></pre>
+</div>
+
+<p><strong>Trading fee (<code>fee</code>):</strong> Percentage charged per trade, split between buyer and seller.</p>
+<ul>
+  <li><code>0.006</code> = 0.6% (each party pays 0.3%)</li>
+  <li><code>0.01</code> = 1.0% (each party pays 0.5%)</li>
+  <li><code>0</code> = free (good for growing your user base)</li>
+</ul>
+
+<p><strong>Example:</strong> On a 100,000 sat trade with <code>fee = 0.006</code>: Buyer pays 300 sats, Seller pays 300 sats, your node earns 600 sats total.</p>
+
+<p><strong>Development fee (<code>dev_fee_percentage</code>):</strong> A percentage of <em>your</em> fee earnings that goes to Mostro development.</p>
+<ul>
+  <li><code>0.30</code> = 30% (default) — out of 600 sats, 180 go to Mostro dev fund</li>
+  <li>Minimum: 10% (<code>0.10</code>), Maximum: 100% (<code>1.0</code>)</li>
+  <li>Paid by your node from its earnings, not charged to users</li>
+  <li>All dev fee payments are publicly auditable via Nostr events (kind 8383)</li>
+</ul>
+
+<div class="callout note">
+  <div class="callout-title">📝 Note</div>
+  Setting <code>dev_fee_percentage</code> below <code>0.10</code> will prevent Mostro from starting. This minimum ensures sustainable development funding.
+</div>
+
+<h3 id="cfg-limits">4.3 Order Limits and Currencies</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+max_order_amount = 1000000
+min_payment_amount = 100
+fiat_currencies_accepted = ['USD', 'EUR', 'ARS', 'CUP']</code></pre>
+</div>
+
+<ul>
+  <li><strong><code>max_order_amount</code>:</strong> Largest trade in satoshis. Set based on your Lightning channel capacity. Start conservative.</li>
+  <li><strong><code>min_payment_amount</code>:</strong> Minimum trade in satoshis. 1,000 or 10,000 is more practical than 100.</li>
+  <li><strong><code>fiat_currencies_accepted</code>:</strong> Use <a href="https://en.wikipedia.org/wiki/ISO_4217" target="_blank">ISO 4217 codes</a>. Empty array <code>[]</code> accepts all currencies.</li>
+</ul>
+
+<h3 id="cfg-profile">4.4 Node Profile (Optional but Recommended)</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+name = "LatAm Mostro"
+about = "P2P Bitcoin exchange for Latin America. Spanish support."
+picture = "https://example.com/your-logo.png"
+website = "https://your-community-site.com"</code></pre>
+</div>
+
+<p>These set your Mostro's profile on Nostr (NIP-01 kind 0 metadata). Clients display this so users know which Mostro they're trading on.</p>
+
+<h3 id="cfg-timing">4.5 Timing and Expiration</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+expiration_hours = 24
+expiration_seconds = 900
+hold_invoice_expiration_window = 300</code></pre>
+</div>
+
+<ul>
+  <li><strong><code>expiration_hours</code>:</strong> How long an order stays open (24h default)</li>
+  <li><strong><code>expiration_seconds</code>:</strong> Time for taker to complete action (900s = 15 min)</li>
+  <li><strong><code>hold_invoice_expiration_window</code>:</strong> Hold invoice validity (300s = 5 min)</li>
+</ul>
+
+<h3 id="cfg-antispam">4.6 Anti-Spam</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+pow = 0</code></pre>
+</div>
+
+<p><strong>Proof of Work:</strong> <code>0</code> = disabled; <code>10-20</code> = moderate (recommended if you experience spam). Start with <code>0</code>.</p>
+
+<h3 id="cfg-rpc">4.7 RPC Admin Interface (Optional)</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[rpc]
+enabled = false
+listen_address = "127.0.0.1"
+port = 50051</code></pre>
+</div>
+
+<p>Enable for admin tools like MostriX (terminal UI) for dispute resolution.</p>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Security</div>
+  If you enable RPC, keep <code>listen_address</code> as <code>"127.0.0.1"</code> (localhost only). Never expose this to the public internet.
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="operating">5. Operating Your Mostro Node</h2>
+
+<h3 id="disputes">5.1 How Disputes Work</h3>
+
+<p>Disputes are your most important operational responsibility.</p>
+
+<p><strong>When do disputes happen?</strong></p>
+<ul>
+  <li>Buyer claims they sent payment, seller says they didn't receive it</li>
+  <li>Seller refuses to release Bitcoin after receiving payment</li>
+  <li>Either party becomes unresponsive</li>
+</ul>
+
+<p><strong>The dispute process:</strong></p>
+<ol>
+  <li><strong>User opens a dispute</strong> — Either party clicks "Dispute" in their client</li>
+  <li><strong>Mostro flags the order</strong> — Status changes to "Dispute", funds remain locked</li>
+  <li><strong>Arbiter takes the case</strong> — An admin (arbiter/solver) assigned to your node investigates</li>
+  <li><strong>Investigation</strong> — Communicates with both parties, requests evidence</li>
+  <li><strong>Resolution</strong> — Arbiter decides: settle to seller, or cancel/refund to buyer</li>
+</ol>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Important</div>
+  Choose arbiters carefully. They have power to decide where locked funds go. Pick trusted, impartial community members. Having 2–3 arbiters is recommended.
+</div>
+
+<h3 id="monitoring">5.2 Monitoring Uptime</h3>
+
+<p>Your node needs to be running 24/7.</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Native</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>systemctl status mostro.service
+journalctl -u mostro -f
+journalctl -u mostro | grep -E "(error|warn|connected)" --ignore-case</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>docker compose -f /opt/mostro/docker/compose.yml ps
+docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
+</div>
+
+<p><strong>Verify from outside:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cargo install nostreq nostcat
+nostreq --kinds 38383 --limit 1 --authors YOUR_MOSTRO_NPUB | nostcat --stream wss://relay.damus.io | jq</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Pro tip</div>
+  Set up a simple uptime monitor using <a href="https://uptimerobot.com/" target="_blank">UptimeRobot</a> (free tier) or a cron job that alerts you if Mostro goes down.
+</div>
+
+<h3 id="updating">5.3 Updating Mostro</h3>
+
+<details class="collapsible">
+<summary>Docker update</summary>
+<div class="collapsible-content">
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cd /opt/mostro
+git pull origin main
+make docker-build
+make docker-down
+make docker-up</code></pre>
+</div>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Native build update</summary>
+<div class="collapsible-content">
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>cd /opt/mostro
+git pull origin main
+cargo build --release
+install target/release/mostrod /usr/local/bin
+cargo clean
+cargo install sqlx-cli --version 0.6.2
+sqlx migrate run
+systemctl restart mostro.service</code></pre>
+</div>
+</div>
+</details>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Tip</div>
+  Always backup your database before updating.
+</div>
+
+<h3 id="backups">5.4 Backups</h3>
+
+<p>Critical files to back up: <code>settings.toml</code> (contains your Nostr private key!) and <code>mostro.db</code> (order history, reputations).</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Manual backup — Docker:</span>
+mkdir -p /root/mostro-backups
+cp /opt/mostro/docker/config/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
+cp /opt/mostro/docker/config/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)
+
+<span class="cm"># Manual backup — Native:</span>
+cp /opt/mostro/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
+cp /opt/mostro/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)</code></pre>
+</div>
+
+<p><strong>Automated daily backup</strong> (add to crontab with <code>crontab -e</code>):</p>
+<div class="code-block">
+  <div class="code-block-header"><span>cron</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>0 3 * * * cp /opt/mostro/mostro.db /root/mostro-backups/mostro.db.$(date +\%Y\%m\%d)</code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Critical</div>
+  Your <code>nsec_privkey</code> in <code>settings.toml</code> IS your node's identity. If you lose it, you lose your reputation and all users must reconnect to a new identity. <strong>Store a copy offline.</strong>
+</div>
+
+<h3 id="trade-activity">5.5 Checking Trade Activity</h3>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code><span class="cm"># Count all orders</span>
+sqlite3 /path/to/mostro.db "SELECT COUNT(*) FROM orders;"
+
+<span class="cm"># Recent successful trades</span>
+sqlite3 /path/to/mostro.db "SELECT id, fiat_amount, fiat_code, amount, status, created_at FROM orders WHERE status = 'success' ORDER BY created_at DESC LIMIT 10;"
+
+<span class="cm"># Pending orders</span>
+sqlite3 /path/to/mostro.db "SELECT id, fiat_amount, fiat_code, status FROM orders WHERE status = 'pending';"
+
+<span class="cm"># Total fee revenue</span>
+sqlite3 /path/to/mostro.db "SELECT SUM(fee * 2) as total_fees_sats FROM orders WHERE status = 'success';"</code></pre>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="costs">6. Costs Breakdown</h2>
+
+<h3>Monthly Operating Costs</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Item</th><th>Monthly Cost</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>VPS (server)</td><td>$10–24</td><td>Depends on provider and specs</td></tr>
+    <tr><td>Domain name (optional)</td><td>$1–2</td><td>For a website/identity</td></tr>
+    <tr><td>Lightning channel on-chain fees</td><td>Variable</td><td>Opening/closing channels</td></tr>
+    <tr><td><strong>Total monthly</strong></td><td><strong>$11–26</strong></td><td>Excluding Lightning liquidity</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>One-Time / Capital Costs</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Item</th><th>Cost</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td>Lightning liquidity</td><td>0.01–1.0+ BTC</td><td>Locked in channels; recovered on close</td></tr>
+    <tr><td>Node hardware (if self-hosting)</td><td>$0–600</td><td>Free if using VPS; $300-600 for Start9/Umbrel</td></tr>
+    <tr><td>Time to set up</td><td>4–16 hours</td><td>Depending on experience level</td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Revenue Potential</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Monthly Trade Volume</th><th>Fee (0.6%)</th><th>Dev Fee (30%)</th><th>Your Net Revenue</th></tr></thead>
+  <tbody>
+    <tr><td>$1,000</td><td>~$6</td><td>~$1.80</td><td>~$4.20</td></tr>
+    <tr><td>$10,000</td><td>~$60</td><td>~$18</td><td>~$42</td></tr>
+    <tr><td>$50,000</td><td>~$300</td><td>~$90</td><td>~$210</td></tr>
+    <tr><td>$100,000</td><td>~$600</td><td>~$180</td><td>~$420</td></tr>
+  </tbody>
+</table>
+</div>
+
+<div class="callout note">
+  <div class="callout-title">📝 Reality check</div>
+  Most new nodes take months to build up trade volume. Don't expect immediate profitability. The real value often comes from providing a service to your community, with fees as a bonus.
+</div>
+
+<h3>Time Commitment</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>Task</th><th>Frequency</th><th>Time</th></tr></thead>
+  <tbody>
+    <tr><td>Monitoring (check logs, status)</td><td>Daily</td><td>5–10 min</td></tr>
+    <tr><td>Dispute resolution</td><td>As needed</td><td>15–60 min per dispute</td></tr>
+    <tr><td>Updates</td><td>Monthly</td><td>15–30 min</td></tr>
+    <tr><td>Liquidity management</td><td>Weekly</td><td>15–30 min</td></tr>
+    <tr><td><strong>Total weekly estimate</strong></td><td></td><td><strong>1–3 hours</strong></td></tr>
+  </tbody>
+</table>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="faq">7. FAQ</h2>
+
+<h3>General Questions</h3>
+
+<details class="collapsible">
+<summary>Do I need to be a developer to run a Mostro node?</summary>
+<div class="collapsible-content">
+<p>No, but you need to be comfortable with basic command-line operations (typing commands, editing text files). The Docker path (Path A) is designed to be accessible. Having someone technical in your community helps a lot though.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Can I run Mostro on a Raspberry Pi?</summary>
+<div class="collapsible-content">
+<p>Technically yes (using Start9 or similar), but it's not recommended for production due to limited CPU and RAM. A VPS is more reliable.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Can I use Core Lightning (CLN) instead of LND?</summary>
+<div class="collapsible-content">
+<p>No. Mostro currently only supports LND, because it relies on LND's specific hold invoice implementation. Support for other implementations may come in the future.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>How do users connect to my Mostro?</summary>
+<div class="collapsible-content">
+<p>Users need a Mostro client app (like Mostro Mobile or mostro-cli) and your Mostro's public key (npub). They add your npub to their client, and the client communicates via Nostr relays. No direct connection needed.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Can I run multiple Mostro instances?</summary>
+<div class="collapsible-content">
+<p>Yes, but each needs its own Nostr key pair, LND node (or at least separate channels/liquidity), and configuration.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Is this legal?</summary>
+<div class="collapsible-content">
+<p>This depends heavily on your jurisdiction. Mostro is software for peer-to-peer trading. In some jurisdictions, operating a P2P exchange may require licenses. <strong>Consult local regulations and legal counsel.</strong> The Mostro project does not provide legal advice.</p>
+</div>
+</details>
+
+<h3>Technical Questions</h3>
+
+<details class="collapsible">
+<summary>How much bandwidth does Mostro use?</summary>
+<div class="collapsible-content">
+<p>Very little — mostly small Nostr events. A few GB per month is typical even with moderate trade volume.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>What happens if my node goes offline?</summary>
+<div class="collapsible-content">
+<p>Pending orders eventually expire. Active trades with locked funds continue once you come back online (hold invoices have their own expiration). If down too long, users may lose trust and trades could expire unfavorably.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Can I change my Nostr key later?</summary>
+<div class="collapsible-content">
+<p>You can, but you'll lose your node's identity and reputation. Users will see it as a brand new Mostro. Treat your key like your brand identity.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>How do I see my node's public key (npub)?</summary>
+<div class="collapsible-content">
+<p>Derive it from your nsec using any Nostr tool. For example, with <code>mostro-cli</code> or by checking your node's logs at startup (it usually prints the public key).</p>
+</div>
+</details>
+
+<h3>Financial Questions</h3>
+
+<details class="collapsible">
+<summary>Can I lose money running a Mostro node?</summary>
+<div class="collapsible-content">
+<p>Yes, it's possible: Lightning channel funds could be at risk from bugs (rare); force-closing channels during high-fee periods is expensive; VPS costs are ongoing; time investment is real.</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Is the Lightning liquidity "at risk"?</summary>
+<div class="collapsible-content">
+<p>Your Lightning liquidity is yours. It's not at risk from Mostro itself — hold invoices are temporary locks. However, standard Lightning Network risks apply (force closes, stuck channels, bugs).</p>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>When will I break even?</summary>
+<div class="collapsible-content">
+<p>Depends on your costs and trade volume. With $20/month costs and 0.6% fee, you need ~$5,000/month in trades to cover costs (before dev fee). Most communities take 3–6 months to reach meaningful volume.</p>
+</div>
+</details>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="security">8. Security Considerations</h2>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Early-Stage Software Disclaimer</div>
+  <p><strong>Mostro is in an early stage of development.</strong> While the team works hard to ensure reliability, there may be undiscovered bugs — including security bugs that could result in loss of funds. <strong>The developers are not responsible for any loss of money due to software bugs.</strong></p>
+  <p>Mostro is open-source and its code is open to audits. We encourage communities to promote and fund independent security audits.</p>
+  <p>That said, <strong>the core escrow mechanism using Lightning hold invoices has been battle-tested since 2021</strong>, when <a href="https://github.com/lnp2pBot/bot" target="_blank">@lnp2pBot</a> first implemented this escrow type. Thousands of trades have been completed using this same logic.</p>
+</div>
+
+<h3>Running Under Authoritarian Regimes</h3>
+
+<p>If you operate in a country with an authoritarian government, <strong>privacy is not optional — it's a safety requirement.</strong></p>
+
+<ol>
+  <li><strong>Run your Mostro node behind Tor and/or a VPN.</strong> This hides your server's IP from Nostr relays.</li>
+  <li><strong>If Tor/VPN is not possible</strong> (common in developing countries with slow internet), <strong>only publish events to relays you own or trust.</strong></li>
+  <li><strong>Be extremely careful about which relays you use.</strong> In the future, governments may create Nostr relays specifically to collect IP addresses.</li>
+  <li><strong>Consider your Lightning node's privacy too.</strong> Running LND behind Tor is possible and recommended in sensitive environments.</li>
+</ol>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Tip</div>
+  The beauty of Mostro being decentralized is that even if one node is shut down, others keep running. But prevention is always better than recovery. Take privacy seriously from day one.
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="troubleshooting">9. Troubleshooting</h2>
+
+<h3>Mostro Won't Start</h3>
+
+<h4>"Configuration error: dev_fee_percentage below minimum"</h4>
+<p>Set <code>dev_fee_percentage</code> to at least <code>0.10</code> in settings.toml.</p>
+
+<h4>Settings or database file not found</h4>
+<p>Make sure the <code>-d</code> flag points to the directory containing <code>settings.toml</code>. For Docker: check <code>docker/config/settings.toml</code> exists.</p>
+
+<h4>"Failed to connect to LND"</h4>
+<ul>
+  <li>Verify LND is running: <code>lncli getinfo</code></li>
+  <li>Check <code>lnd_grpc_host</code> matches your LND's address</li>
+  <li>Verify <code>tls.cert</code> and <code>admin.macaroon</code> paths are correct</li>
+  <li>Docker + LND on host: use <code>host.docker.internal</code></li>
+</ul>
+
+<h3>Connection Issues</h3>
+
+<h4>Mostro starts but doesn't connect to relays</h4>
+<ul>
+  <li>Check relay URLs (should start with <code>wss://</code>)</li>
+  <li>Ensure your VPS firewall allows outbound on port 443</li>
+  <li>Try different relays — some may be temporarily down</li>
+</ul>
+
+<h3>Trade Issues</h3>
+
+<h4>Orders aren't showing up on clients</h4>
+<ul>
+  <li>Verify relay connections in logs</li>
+  <li>Make sure clients use the same relays as your node</li>
+  <li>Check info event is publishing:</li>
+</ul>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>nostreq --kinds 38383 --limit 1 --authors YOUR_PUBKEY | nostcat --stream wss://relay.damus.io</code></pre>
+</div>
+
+<h4>Payments failing</h4>
+<ul>
+  <li>Check liquidity: <code>lncli listchannels</code></li>
+  <li>Ensure enough outbound capacity</li>
+  <li>Check <code>max_routing_fee</code> — if too low, payments may fail to route</li>
+</ul>
+
+<h3>Database Issues</h3>
+
+<h4>Database locked errors</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>ps aux | grep mostrod
+<span class="cm"># If multiple processes, kill extras:</span>
+kill &lt;PID&gt;</code></pre>
+</div>
+
+<h3>Docker-Specific Issues</h3>
+
+<h4>"Cannot connect to Docker daemon"</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>systemctl start docker</code></pre>
+</div>
+
+<h4>Build fails with out-of-memory</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>fallocate -l 2G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile</code></pre>
+</div>
+
+<h3>Getting Help</h3>
+
+<ol>
+  <li><strong>Check the logs first</strong> — most errors explain what went wrong</li>
+  <li><strong>Telegram (Developers):</strong> <a href="https://t.me/mostro_dev" target="_blank">@mostro_dev</a></li>
+  <li><strong>Telegram (Community):</strong> <a href="https://t.me/MostroP2P" target="_blank">@MostroP2P</a></li>
+  <li><strong>GitHub Issues:</strong> <a href="https://github.com/MostroP2P/mostro/issues" target="_blank">github.com/MostroP2P/mostro/issues</a></li>
+  <li><strong>DeepWiki:</strong> <a href="https://deepwiki.com/MostroP2P/mostro" target="_blank">deepwiki.com/MostroP2P/mostro</a></li>
+</ol>
+
+<p>When asking for help, always include: your Mostro version, the relevant log output, and what you've already tried.</p>
+
+<hr>
+
+<!-- ============================================================ -->
+<h2 id="appendix">Appendix: Quick Reference</h2>
+
+<h3>Important File Locations</h3>
+<div class="table-wrapper">
+<table>
+  <thead><tr><th>File</th><th>Docker Path</th><th>Native Path</th></tr></thead>
+  <tbody>
+    <tr><td>Configuration</td><td><code>/opt/mostro/docker/config/settings.toml</code></td><td><code>/opt/mostro/settings.toml</code></td></tr>
+    <tr><td>Database</td><td><code>/opt/mostro/docker/config/mostro.db</code></td><td><code>/opt/mostro/mostro.db</code></td></tr>
+    <tr><td>LND cert</td><td><code>/opt/mostro/docker/config/lnd/tls.cert</code></td><td>Varies (check LND config)</td></tr>
+    <tr><td>LND macaroon</td><td><code>/opt/mostro/docker/config/lnd/admin.macaroon</code></td><td>Varies (check LND config)</td></tr>
+    <tr><td>Service file</td><td>N/A</td><td><code>/etc/systemd/system/mostro.service</code></td></tr>
+    <tr><td>Logs</td><td><code>docker compose logs</code></td><td><code>journalctl -u mostro</code></td></tr>
+  </tbody>
+</table>
+</div>
+
+<h3>Essential Commands</h3>
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>make docker-build          <span class="cm"># Build/rebuild</span>
+make docker-up             <span class="cm"># Start</span>
+make docker-down           <span class="cm"># Stop</span>
+docker compose logs -f     <span class="cm"># View logs</span></code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Native</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>systemctl start mostro     <span class="cm"># Start</span>
+systemctl stop mostro      <span class="cm"># Stop</span>
+systemctl restart mostro   <span class="cm"># Restart</span>
+systemctl status mostro    <span class="cm"># Check status</span>
+journalctl -u mostro -f    <span class="cm"># View logs</span></code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash — Database</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>sqlite3 mostro.db "SELECT COUNT(*) FROM orders;"                           <span class="cm"># Total orders</span>
+sqlite3 mostro.db "SELECT COUNT(*) FROM orders WHERE status='success';"    <span class="cm"># Successful trades</span>
+sqlite3 mostro.db "SELECT SUM(fee*2) FROM orders WHERE status='success';"  <span class="cm"># Total fees earned</span></code></pre>
+</div>
+
+<h3>Recommended Settings for New Nodes</h3>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copy</button></div>
+  <pre><code>[mostro]
+fee = 0.006
+max_order_amount = 500000
+min_payment_amount = 1000
+expiration_hours = 24
+expiration_seconds = 900
+pow = 0
+dev_fee_percentage = 0.30
+fiat_currencies_accepted = ['USD']  <span class="cm"># Change to your local currency</span>
+
+[nostr]
+relays = [
+  'wss://relay.mostro.network',
+  'wss://relay.damus.io',
+  'wss://nos.lol'
+]</code></pre>
+</div>
+
+<!-- Footer -->
+<div class="guide-footer">
+  <p>This guide is maintained by the Mostro community. Found an error or want to improve it?<br>
+  Contributions welcome at <a href="https://github.com/MostroP2P/mostro" target="_blank">github.com/MostroP2P/mostro</a></p>
+  <p style="margin-top:12px;">Last updated: February 2026 · Mostro v0.16.2</p>
+</div>
+
+</main>
+
+<!-- Back to top button -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Copy code button
+function copyCode(btn) {
+  const code = btn.closest('.code-block').querySelector('code');
+  const text = code.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+// Sidebar toggle (mobile)
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+}
+
+// Back to top visibility
+window.addEventListener('scroll', () => {
+  document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
+});
+
+// Active TOC highlighting
+const tocLinks = document.querySelectorAll('.toc-list a');
+const sections = [];
+tocLinks.forEach(link => {
+  const id = link.getAttribute('href').slice(1);
+  const el = document.getElementById(id);
+  if (el) sections.push({ id, el, link });
+});
+
+function updateActiveToc() {
+  let current = '';
+  for (const s of sections) {
+    if (s.el.getBoundingClientRect().top <= 100) current = s.id;
+  }
+  tocLinks.forEach(l => l.classList.remove('active'));
+  if (current) {
+    const active = document.querySelector(`.toc-list a[href="#${current}"]`);
+    if (active) active.classList.add('active');
+  }
+}
+window.addEventListener('scroll', updateActiveToc);
+updateActiveToc();
+</script>
+
+</body>
+</html>
