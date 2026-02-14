@@ -763,6 +763,10 @@ port = 50051</code></pre>
 </ul>
 
 <h4>Installing Mostrix</h4>
+<div class="callout warning">
+  <div class="callout-title">⚠️ Prerequisite: Rust/Cargo required</div>
+  Mostrix must be compiled from source. If you followed Path A (Docker), you may not have Rust installed. Follow <a href="#step-2-install-rust">Path B, Step 2</a> to install Rust via rustup before proceeding.
+</div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code><span class="cm"># Install dependencies (Ubuntu/Debian)</span>
@@ -860,6 +864,10 @@ user_mode = "admin"</code></pre>
 </div>
 
 <h4>Installing mostro-watchdog</h4>
+<div class="callout warning">
+  <div class="callout-title">⚠️ Prerequisite: Rust/Cargo required</div>
+  Like Mostrix, mostro-watchdog must be compiled from source. Ensure Rust is installed (<a href="#step-2-install-rust">Path B, Step 2</a>).
+</div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>git clone https://github.com/MostroP2P/mostro-watchdog.git
