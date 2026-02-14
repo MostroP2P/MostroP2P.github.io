@@ -262,13 +262,13 @@
 
 <h4>Passo 1: Connettiti al tuo VPS</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>ssh root@INDIRIZZO_IP_DEL_TUO_VPS</code></pre>
 </div>
 
 <h4>Passo 2: Aggiorna il sistema</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code><span class="cm"># Scarica le ultime informazioni sui pacchetti</span>
 apt update
 
@@ -278,7 +278,7 @@ apt upgrade -y</code></pre>
 
 <h4>Passo 3: Installare Docker e Docker Compose</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code><span class="cm"># Installa Docker con lo script ufficiale</span>
 curl -fsSL https://get.docker.com | sh
 
@@ -291,13 +291,13 @@ docker compose version</code></pre>
 
 <h4>Passo 4: Installare strumenti aggiuntivi</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>apt install -y git make</code></pre>
 </div>
 
 <h4>Passo 5: Scaricare Mostro</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cd /opt
 git clone https://github.com/MostroP2P/mostro.git
 cd mostro</code></pre>
@@ -305,7 +305,7 @@ cd mostro</code></pre>
 
 <h4>Passo 6: Configurare i file</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>mkdir -p docker/config
 cp docker/settings.docker.toml docker/config/settings.toml
 cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
@@ -313,7 +313,7 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
 
 <h4>Passo 7: Modificare il file di configurazione</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>nano docker/config/settings.toml</code></pre>
 </div>
 
@@ -331,7 +331,7 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
 
 <p><strong>Altre impostazioni che probabilmente vorrai cambiare:</strong></p>
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 fee = 0.006                    <span class="cm"># 0,6% commissione per scambio</span>
 max_order_amount = 1000000     <span class="cm"># Ordine massimo in sats (~$400-500)</span>
@@ -343,13 +343,13 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Le tue valute</spa
 
 <h4>Passo 8: Configurare le credenziali LND</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>nano docker/.env</code></pre>
 </div>
 
 <p>Aggiungi queste righe con le posizioni reali dei tuoi file LND:</p>
 <div class="code-block">
-  <div class="code-block-header"><span>env</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>env</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>LND_CERT_FILE=/percorso/al/tuo/lnd/tls.cert
 LND_MACAROON_FILE=/percorso/al/tuo/lnd/admin.macaroon</code></pre>
 </div>
@@ -362,7 +362,7 @@ LND_MACAROON_FILE=/percorso/al/tuo/lnd/admin.macaroon</code></pre>
 
 <p>Se LND è su una <strong>macchina diversa</strong>, copia prima i file:</p>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>mkdir -p /opt/mostro/docker/config/lnd
 scp tuo-server-lnd:/percorso/a/tls.cert /opt/mostro/docker/config/lnd/
 scp tuo-server-lnd:/percorso/a/admin.macaroon /opt/mostro/docker/config/lnd/</code></pre>
@@ -370,7 +370,7 @@ scp tuo-server-lnd:/percorso/a/admin.macaroon /opt/mostro/docker/config/lnd/</co
 
 <h4>Passo 9: Costruire e avviare Mostro</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code><span class="cm"># Costruisci l'immagine Docker (5-15 minuti la prima volta)</span>
 make docker-build
 
@@ -380,13 +380,13 @@ make docker-up</code></pre>
 
 <p>Verifica che tutto funzioni:</p>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>docker compose -f docker/compose.yml ps</code></pre>
 </div>
 
 <h4>Passo 10: Controllare i log</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
 </div>
 
@@ -399,7 +399,7 @@ make docker-up</code></pre>
 
 <h4>Arrestare e riavviare</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>make docker-down   <span class="cm"># Arresta</span>
 make docker-up     <span class="cm"># Avvia</span></code></pre>
 </div>
@@ -415,7 +415,7 @@ make docker-up     <span class="cm"># Avvia</span></code></pre>
 
 <h4>Passo 1: Connettiti e aggiorna</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>ssh root@INDIRIZZO_IP_DEL_TUO_VPS
 apt update
 apt upgrade -y</code></pre>
@@ -423,7 +423,7 @@ apt upgrade -y</code></pre>
 
 <h4>Passo 2: Installare Rust</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code><span class="cm"># Installa Rust (premi 1 quando richiesto)</span>
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
@@ -442,13 +442,13 @@ cargo --version   <span class="cm"># Atteso: cargo 1.86.0+</span></code></pre>
 
 <h4>Passo 3: Installare le dipendenze</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>apt install -y cmake build-essential libsqlite3-dev libssl-dev pkg-config git sqlite3 protobuf-compiler</code></pre>
 </div>
 
 <h4>Passo 4: Scaricare e compilare Mostro</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cd /opt
 git clone https://github.com/MostroP2P/mostro.git
 cd mostro
@@ -468,33 +468,33 @@ swapon /swapfile</code></pre>
 
 <h4>Passo 5: Installare il binario</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>install target/release/mostrod /usr/local/bin
 mostrod --version</code></pre>
 </div>
 
 <h4>Passo 6: Inizializzare il database</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cargo install sqlx-cli --version 0.6.2
 ./init_db.sh</code></pre>
 </div>
 
 <h4>Passo 7: Pulire i file di compilazione</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cargo clean</code></pre>
 </div>
 
 <h4>Passo 8: Creare un utente dedicato</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>adduser --disabled-login mostro</code></pre>
 </div>
 
 <h4>Passo 9: Configurare Mostro</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>mkdir -p /opt/mostro
 cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
@@ -504,26 +504,26 @@ nano /opt/mostro/settings.toml</code></pre>
 
 <h4>Passo 10: Test di esecuzione</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>/usr/local/bin/mostrod -d /opt/mostro</code></pre>
 </div>
 <p>Se si connette a LND e ai relay, premi <code>Ctrl+C</code> per fermarlo.</p>
 
 <h4>Passo 11: Impostare i permessi</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>chown -R mostro:mostro /opt/mostro</code></pre>
 </div>
 
 <h4>Passo 12: Configurare come servizio di sistema</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>nano /etc/systemd/system/mostro.service</code></pre>
 </div>
 
 <p>Incolla questo contenuto:</p>
 <div class="code-block">
-  <div class="code-block-header"><span>ini</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>ini</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[Unit]
 Description=Mostro daemon
 After=network.target
@@ -541,7 +541,7 @@ WantedBy=multi-user.target</code></pre>
 </div>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>systemctl daemon-reload
 systemctl enable mostro.service
 systemctl start mostro.service
@@ -550,7 +550,7 @@ systemctl status mostro.service</code></pre>
 
 <h4>Passo 13: Verifica</h4>
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>ps aux | grep mostrod
 journalctl -u mostro -f</code></pre>
 </div>
@@ -569,7 +569,7 @@ journalctl -u mostro -f</code></pre>
 <h3 id="cfg-nostr">4.1 Chiavi Nostr — L'identità del tuo nodo</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[nostr]
 nsec_privkey = 'nsec1la_tua_chiave_privata_qui'
 relays = [
@@ -595,7 +595,7 @@ relays = [
 <h3 id="cfg-commissioni">4.2 Commissioni — Come generi entrate</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 fee = 0.006
 dev_fee_percentage = 0.30</code></pre>
@@ -622,7 +622,7 @@ dev_fee_percentage = 0.30</code></pre>
 <h3 id="cfg-limiti">4.3 Limiti degli ordini e valute</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 max_order_amount = 1000000
 min_payment_amount = 100
@@ -638,7 +638,7 @@ fiat_currencies_accepted = ['USD', 'EUR', 'ARS', 'CUP']</code></pre>
 <h3 id="cfg-profilo">4.4 Profilo del nodo (Opzionale ma consigliato)</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 name = "Italia Mostro"
 about = "Exchange P2P di Bitcoin per l'Italia. Supporto in italiano."
@@ -649,7 +649,7 @@ website = "https://sito-della-tua-comunita.com"</code></pre>
 <h3 id="cfg-tempi">4.5 Tempi e scadenze</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 expiration_hours = 24
 expiration_seconds = 900
@@ -665,7 +665,7 @@ hold_invoice_expiration_window = 300</code></pre>
 <h3 id="cfg-antispam">4.6 Anti-Spam</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 pow = 0</code></pre>
 </div>
@@ -675,7 +675,7 @@ pow = 0</code></pre>
 <h3 id="cfg-rpc">4.7 Interfaccia RPC Admin (Opzionale)</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[rpc]
 enabled = false
 listen_address = "127.0.0.1"
@@ -712,13 +712,13 @@ port = 50051</code></pre>
 <h3 id="monitoraggio">5.2 Monitoraggio dell'uptime</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>systemctl status mostro.service
 journalctl -u mostro -f</code></pre>
 </div>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>docker compose -f /opt/mostro/docker/compose.yml ps
 docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
 </div>
@@ -729,7 +729,7 @@ docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
 <summary>Aggiornamento Docker</summary>
 <div class="collapsible-content">
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cd /opt/mostro
 git pull origin main
 make docker-build
@@ -743,7 +743,7 @@ make docker-up</code></pre>
 <summary>Aggiornamento nativo</summary>
 <div class="collapsible-content">
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>cd /opt/mostro
 git pull origin main
 cargo build --release
@@ -766,7 +766,7 @@ systemctl restart mostro.service</code></pre>
 <p>File critici: <code>settings.toml</code> (contiene la tua chiave privata Nostr!) e <code>mostro.db</code> (storico ordini, reputazioni).</p>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code><span class="cm"># Backup manuale — Docker:</span>
 mkdir -p /root/mostro-backups
 cp /opt/mostro/docker/config/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
@@ -785,7 +785,7 @@ cp /opt/mostro/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)</code></
 <h3 id="attivita">5.5 Controllare l'attività di scambio</h3>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>sqlite3 /percorso/a/mostro.db "SELECT COUNT(*) FROM orders;"
 sqlite3 /percorso/a/mostro.db "SELECT id, fiat_amount, fiat_code, amount, status, created_at FROM orders WHERE status = 'success' ORDER BY created_at DESC LIMIT 10;"</code></pre>
 </div>
@@ -947,7 +947,7 @@ sqlite3 /percorso/a/mostro.db "SELECT id, fiat_amount, fiat_code, amount, status
 
 <h3>Comandi essenziali</h3>
 <div class="code-block">
-  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>make docker-build          <span class="cm"># Costruisci</span>
 make docker-up             <span class="cm"># Avvia</span>
 make docker-down           <span class="cm"># Arresta</span>
@@ -955,7 +955,7 @@ docker compose logs -f     <span class="cm"># Vedi log</span></code></pre>
 </div>
 
 <div class="code-block">
-  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>bash — Nativo</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>systemctl start mostro     <span class="cm"># Avvia</span>
 systemctl stop mostro      <span class="cm"># Arresta</span>
 systemctl restart mostro   <span class="cm"># Riavvia</span>
@@ -965,7 +965,7 @@ journalctl -u mostro -f    <span class="cm"># Vedi log</span></code></pre>
 
 <h3>Impostazioni consigliate per nuovi nodi</h3>
 <div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)">Copia</button></div>
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
   <pre><code>[mostro]
 fee = 0.006
 max_order_amount = 500000
@@ -994,42 +994,7 @@ relays = [
 
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
-<script>
-function copyCode(btn) {
-  const code = btn.closest('.code-block').querySelector('code');
-  navigator.clipboard.writeText(code.innerText).then(() => {
-    btn.textContent = 'Copiato!';
-    setTimeout(() => btn.textContent = 'Copia', 2000);
-  });
-}
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-  document.getElementById('sidebarOverlay').classList.toggle('open');
-}
-window.addEventListener('scroll', () => {
-  document.getElementById('backToTop').classList.toggle('visible', window.scrollY > 400);
-});
-const tocLinks = document.querySelectorAll('.toc-list a');
-const sections = [];
-tocLinks.forEach(link => {
-  const id = link.getAttribute('href').slice(1);
-  const el = document.getElementById(id);
-  if (el) sections.push({ id, el, link });
-});
-function updateActiveToc() {
-  let current = '';
-  for (const s of sections) {
-    if (s.el.getBoundingClientRect().top <= 100) current = s.id;
-  }
-  tocLinks.forEach(l => l.classList.remove('active'));
-  if (current) {
-    const active = document.querySelector(`.toc-list a[href="#${current}"]`);
-    if (active) active.classList.add('active');
-  }
-}
-window.addEventListener('scroll', updateActiveToc);
-updateActiveToc();
-</script>
+<script src="guide.js"></script>
 
 </body>
 </html>
