@@ -91,7 +91,7 @@
         può installare e gestire.</li>
     </ul>
 
-    <p>Mostro si interpone tra compratore e venditore, garantendo i Bitcoin del venditore in una "cassaforte" temporanea
+    <p>Mostro fa da garante tra compratore e venditore, mantenendo i Bitcoin del venditore in una "cassaforte" temporanea
       (chiamata hold invoice) fino a quando l'acquirente conferma di aver inviato il pagamento in valuta locale. Mostro
       non controlla mai i fondi di nessuno; li trattiene solo brevemente durante lo scambio.</p>
 
@@ -99,7 +99,7 @@
 
     <ol>
       <li><strong>Entrate dalle commissioni</strong> — Ogni scambio completato richiede una piccola commissione (0,6% di
-        default). Se la tua comunità effettua $10.000 di scambi mensili, avrete circa ~$60/mese in commissioni.</li>
+        default). Se la tua comunità effettua $10.000 di scambi mensili, avrete circa $60/mese in commissioni.</li>
       <li><strong>Trading P2P senza KYC</strong> — I membri della tua comunità possono comprare e vendere Bitcoin senza
         fornire documenti d'identità. Particolarmente importante in regioni con valute instabili o regolamentazioni
         restrittive.</li>
@@ -113,7 +113,8 @@
 
     <h3 id="come-funziona">Come funziona Mostro (Semplificato)</h3>
 
-    <div class="flow-diagram"><span class="step-num">1.</span> Alice vuole VENDERE Bitcoin per $50 USD
+    <div class="flow-diagram">
+      <span class="step-num">1.</span> Alice vuole VENDERE Bitcoin per $50 USD
       <span class="arrow">→</span> Crea un ordine su Mostro
 
       <span class="step-num">2.</span> Bob vuole COMPRARE Bitcoin con $50 USD
@@ -281,7 +282,7 @@
 
     <h3 id="liquidita">2.3 Liquidità Lightning</h3>
 
-    <p>Per facilitare gli scambi, il tuo nodo Lightning ha bisogno di <strong>canali</strong> con Bitcoin al loro
+    <p>Per facilitare gli scambi, il tuo nodo Lightning ha bisogno di <strong>canali</strong> con dei Bitcoin al loro
       interno. Pensa ai canali Lightning come tunnel di pagamento pre-finanziati. I Bitcoin all'interno di questi canali
       sono la tua "liquidità".</p>
 
@@ -340,7 +341,7 @@
 
     <h3 id="chiavi-nostr">2.4 Chiavi Nostr</h3>
 
-    <p>Il tuo nodo Mostro ha bisogno di una propria identità sulla rete Nostr — una coppia di chiavi crittografiche con
+    <p>Il tuo nodo Mostro ha bisogno di una propria identità sulla rete di Nostr — una coppia di chiavi crittografiche con
       una chiave pubblica (l'indirizzo del tuo nodo) e una chiave privata (il tuo segreto).</p>
 
     <div class="callout warning">
@@ -402,17 +403,17 @@
     <p><strong>Il nostro consiglio:</strong> Se la tua comunità ha qualcuno a proprio agio con la riga di comando Linux,
       può gestire l'installazione Docker (Percorso A). Per il Percorso B, serve qualcuno con esperienza di
       amministrazione di sistema. La configurazione del nodo Lightning è la parte più complessa — considera di farti
-      aiutare da qualcuno esperto, o di usare una soluzione nodo-in-scatola.</p>
+      aiutare da qualcuno esperto, o di usare una soluzione pronta all'uso.</p>
 
     <hr>
 
-    <h2 id="installazione">3. Installazione Passo per Passo</h2>
+    <h2 id="installazione">3. Installazione guidata</h2>
 
     <p>Scegli il tuo percorso:</p>
     <ul>
       <li><strong>Percorso A (Docker):</strong> Più semplice, meno passaggi, aggiornamenti più facili. Consigliato per
         la maggior parte.</li>
-      <li><strong>Percorso B (Compilazione nativa):</strong> Più controllo, meglio per sysadmin esperti.</li>
+      <li><strong>Percorso B (Compilazione nativa):</strong> Più controllo, meglio per amministratori di sistema esperti.</li>
     </ul>
 
     <p>Entrambi i percorsi presuppongono che tu abbia già: ✅ Un VPS con Ubuntu · ✅ Accesso SSH · ✅ Un nodo LND
@@ -486,7 +487,7 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
           <pre><code>nano docker/config/settings.toml</code></pre>
         </div>
 
-        <p><strong>Devi</strong> cambiare queste tre cose:</p>
+        <p><strong>Devi</strong> configurare questi tre campi:</p>
         <ol>
           <li><strong><code>lnd_grpc_host</code></strong> — L'indirizzo del tuo nodo LND:
             <ul>
@@ -500,7 +501,7 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
           <li><strong><code>relays</code></strong> — I relay Nostr a cui il tuo nodo si connetterà.</li>
         </ol>
 
-        <p><strong>Altre impostazioni che probabilmente vorrai cambiare:</strong></p>
+        <p><strong>Altre personalizzazioni che puoi fare al tuo nodo:</strong></p>
         <div class="code-block">
           <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
