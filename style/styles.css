@@ -1,5 +1,5 @@
 /* ===================================================================
-   CSS VARIABLES FOR CONSISTENT THEMING
+  CSS VARIABLES FOR CONSISTENT THEMING
    =================================================================== */
 :root {
   /* === COLOR PALETTE === */
@@ -22,7 +22,12 @@
   /* Accent colors */
   --purple-accent: #9747FF;
 
-  /* Transitions */
+  /* Transitions - FIXED: Split into duration variables */
+  --transition-duration-fast: .13s;
+  --transition-duration-normal: .3s;
+  --transition-duration-slow: 1s;
+  
+  /* Keep original for backward compatibility where all properties are needed */
   --transition-fast: all .13s;
   --transition-normal: all .3s;
   --transition-slow: all 1s;
@@ -112,40 +117,6 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-}
-
-p {
-  margin: 0 0 20px 0;
-}
-
-h1 {
-  font-size: 58px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  line-height: 1.2;
-}
-
-h2 {
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 20px;
-}
-
-h3 {
-  position: relative;
-  font-size: 38px;
-  font-weight: 700;
-  line-height: 1.2;
 }
 
 /* ===================================================================
@@ -243,7 +214,8 @@ nav a:hover {
   position: absolute;
   top: 30px;
   right: 17px;
-  transition: background var(--transition-normal);
+  /* FIXED: Use duration variable instead of all */
+  transition: background var(--transition-duration-normal);
 }
 
 .menu-button span:before,
@@ -316,14 +288,7 @@ nav a:hover {
 /* ===================================================================
    UTILITY CLASSES
    =================================================================== */
-.margin-top {
-  margin-top: 20px;
-}
-
-.margin-bottom {
-  margin-bottom: 20px;
-}
-
+/* FIXED: Removed unused .margin-top and .margin-bottom */
 .text-center {
   text-align: center;
 }
@@ -472,7 +437,7 @@ nav a:hover {
   padding-top: 160px;
   font-size: 16px;
   color: var(--text-gray);
-  background: -webkit-linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
+  /* FIXED: Removed vendor-prefixed gradient */
   background: linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
 }
 
@@ -520,7 +485,7 @@ nav a:hover {
   left: 0;
   right: 0;
   height: 200px;
-  background: -webkit-linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
+  /* FIXED: Removed vendor-prefixed gradient */
   background: linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
 }
 
@@ -624,7 +589,8 @@ nav a:hover {
   font-weight: 700;
   cursor: pointer;
   list-style: none;
-  transition: color var(--transition-fast);
+  /* FIXED: Use duration variable instead of all */
+  transition: color var(--transition-duration-fast);
 }
 
 .faq-question::-webkit-details-marker {
