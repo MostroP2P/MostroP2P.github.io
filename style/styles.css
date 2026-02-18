@@ -1,4 +1,36 @@
-/* Reset some default styles for consistent rendering across browsers */
+/* ===================================================================
+   CSS VARIABLES FOR CONSISTENT THEMING
+   =================================================================== */
+:root {
+  /* === COLOR PALETTE === */
+  /* Primary brand colors */
+  --green-primary: #8CC63F;
+  --green-secondary: #9CD84F;
+  --green-dark: #304F00;
+  --green-hover: #739C3D;
+  --green-sponsor: #8CC541;
+
+  /* Background colors */
+  --bg-dark: #1D212C;
+  --bg-darker: #101219;
+
+  /* Text colors */
+  --text-light: #fff;
+  --text-gray: #92949A;
+  --text-dark: #373737;
+
+  /* Accent colors */
+  --purple-accent: #9747FF;
+
+  /* Transitions */
+  --transition-fast: all .13s;
+  --transition-normal: all .3s;
+  --transition-slow: all 1s;
+}
+
+/* ===================================================================
+   RESET & BASE STYLES
+   =================================================================== */
 * {
   margin: 0;
   padding: 0;
@@ -16,16 +48,16 @@ body::-webkit-scrollbar-track-piece {
 }
 
 body::-webkit-scrollbar-thumb {
-  background: #739C3D;
+  background: var(--green-hover);
   border-radius: 3px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
-  background: #9CD84F;
+  background: var(--green-secondary);
 }
 
 ::selection {
-  background: #8CC63F;
+  background: var(--green-primary);
   color: #000;
 }
 
@@ -33,12 +65,13 @@ body::-webkit-scrollbar-thumb:hover {
   clear: both;
 }
 
+/* ===================================================================
+   FONT FACES
+   =================================================================== */
 @font-face {
   font-family: 'Roboto Condensed';
   src: url('../assets/fonts/RobotoCondensed-Regular.woff2') format('woff2'),
-    /* Modern Browsers */
     url('../assets/fonts/RobotoCondensed-Regular.woff') format('woff');
-  /* Legacy Browsers */
   font-weight: normal;
   font-style: normal;
 }
@@ -46,9 +79,7 @@ body::-webkit-scrollbar-thumb:hover {
 @font-face {
   font-family: 'Roboto Condensed';
   src: url('../assets/fonts/RobotoCondensed-Italic.woff2') format('woff2'),
-    /* Modern Browsers */
     url('../assets/fonts/RobotoCondensed-Italic.woff') format('woff');
-  /* Legacy Browsers */
   font-weight: normal;
   font-style: italic;
 }
@@ -56,9 +87,7 @@ body::-webkit-scrollbar-thumb:hover {
 @font-face {
   font-family: 'Roboto Condensed';
   src: url('../assets/fonts/RobotoCondensed-BoldItalic.woff2') format('woff2'),
-    /* Modern Browsers */
     url('../assets/fonts/RobotoCondensed-BoldItalic.woff') format('woff');
-  /* Legacy Browsers */
   font-weight: bold;
   font-style: italic;
 }
@@ -66,18 +95,18 @@ body::-webkit-scrollbar-thumb:hover {
 @font-face {
   font-family: 'Roboto Condensed';
   src: url('../assets/fonts/RobotoCondensed-Bold.woff2') format('woff2'),
-    /* Modern Browsers */
     url('../assets/fonts/RobotoCondensed-Bold.woff') format('woff');
-  /* Legacy Browsers */
   font-weight: bold;
   font-style: normal;
 }
 
-/* Apply basic styling to the body */
+/* ===================================================================
+   BODY & TYPOGRAPHY
+   =================================================================== */
 body {
   font-family: 'Roboto Condensed', sans-serif;
-  background-color: #1D212C;
-  color: #fff;
+  background-color: var(--bg-dark);
+  color: var(--text-light);
   line-height: 1.6;
   font-size: 18px;
   margin: 0;
@@ -85,13 +114,43 @@ body {
   scroll-behavior: smooth;
 }
 
-@media screen and (max-width: 1024px) {
-  body {
-    font-size: 16px;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
 }
 
-/* Style the header */
+p {
+  margin: 0 0 20px 0;
+}
+
+h1 {
+  font-size: 58px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+h3 {
+  position: relative;
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ===================================================================
+   HEADER & NAVIGATION
+   =================================================================== */
 header {
   position: fixed;
   top: 0;
@@ -105,20 +164,10 @@ header {
   z-index: 1;
 }
 
-@media screen and (max-width: 1024px) {
-  header {
-    height: 80px;
-    padding: 0;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-  }
-}
-
 header .container {
   position: relative;
 }
 
-/* Style the navigation menu */
 nav ul {
   list-style: none;
 }
@@ -131,7 +180,7 @@ nav ul li {
 nav ul li a {
   position: relative;
   text-decoration: none;
-  color: #fff;
+  color: var(--text-light);
   font-weight: 400;
   text-transform: uppercase;
   font-size: 16px;
@@ -145,25 +194,15 @@ nav ul li a.active::after {
   left: 0;
   right: 0;
   height: 2px;
-  background: #8CC63F;
+  background: var(--green-primary);
 }
 
-@media screen and (max-width: 1024px) {
-  nav ul li {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .navMenu ul li a.active::after {
-    display: none;
-  }
+nav a {
+  transition: var(--transition-fast);
 }
 
-@media screen and (max-width: 480px) {
-  nav ul li {
-    padding: 10px 5px;
-    font-size: 13px;
-  }
+nav a:hover {
+  color: var(--green-primary);
 }
 
 .navMenu {
@@ -172,71 +211,15 @@ nav ul li a.active::after {
   left: 200px;
 }
 
-@media screen and (max-width: 1024px) {
-  .navMenu {
-    top: 0px;
-    left: auto;
-    right: 0px;
-    width: 280px;
-    z-index: 1;
-    padding-top: 80px;
-  }
-
-  .navMenu .menu-button {
-    display: block;
-  }
-
-  .navMenu ul {
-    display: none;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .navMenu li {
-    display: block;
-    text-align: center;
-    padding: 0;
-    background: #101219;
-  }
-
-  .navMenu li a {
-    display: block;
-    width: 100%;
-    padding: 15px;
-  }
-}
-
 .navLang {
   position: absolute;
   top: 27px;
   right: 0px;
 }
 
-@media screen and (max-width: 1280px) {
-  .navLang {
-    right: 20px;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .navLang {
-    left: auto;
-    right: 75px;
-    z-index: 2;
-  }
-
-  .navLang ul li {
-    text-align: center;
-    padding: 15px 9px;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .navLang ul li {
-    padding: 15px 3px;
-  }
-}
-
+/* ===================================================================
+   MENU BUTTON (HAMBURGER)
+   =================================================================== */
 .menu-button {
   display: none;
   position: absolute;
@@ -244,41 +227,29 @@ nav ul li a.active::after {
   right: 10px;
   width: 60px;
   height: 60px;
-  background: #101219;
+  background: var(--bg-darker);
   border-radius: 10px;
-  transition: all .13s;
-}
-
-@media screen and (max-width: 1024px) {
-  .menu-button {
-    display: block;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  .menu-button {
-    right: 5px;
-  }
+  transition: var(--transition-fast);
 }
 
 .menu-button.expand {
-  background: #8CC63F;
+  background: var(--green-primary);
 }
 
 .menu-button span {
-  background: #fff;
+  background: var(--text-light);
   width: 25px;
   height: 2px;
   position: absolute;
   top: 30px;
   right: 17px;
-  transition: background .3s;
+  transition: background var(--transition-normal);
 }
 
 .menu-button span:before,
 .menu-button span:after {
   content: '';
-  background: #fff;
+  background: var(--text-light);
   width: 25px;
   height: 2px;
   position: absolute;
@@ -328,44 +299,9 @@ nav ul li a.active::after {
   display: block;
 }
 
-nav a {
-  transition: all .13s;
-}
-
-nav a:hover {
-  color: #8CC63F;
-}
-
-
-/* Apply a basic style to headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-}
-
-/* Apply styling to paragraphs */
-p {
-  margin: 0 0 20px 0;
-}
-
-/* Add some spacing to top and bottom of elements */
-.margin-top {
-  margin-top: 20px;
-}
-
-.margin-bottom {
-  margin-bottom: 20px;
-}
-
-/* Center-align text */
-.text-center {
-  text-align: center;
-}
-
+/* ===================================================================
+   LOGO
+   =================================================================== */
 .logo {
   width: 120px;
   position: absolute;
@@ -377,27 +313,24 @@ p {
   width: 100%;
 }
 
-@media screen and (max-width: 1280px) {
-  .logo {
-    left: 20px;
-  }
+/* ===================================================================
+   UTILITY CLASSES
+   =================================================================== */
+.margin-top {
+  margin-top: 20px;
 }
 
-@media screen and (max-width: 1024px) {
-  .logo {
-    top: 17px;
-    width: 100px;
-  }
+.margin-bottom {
+  margin-bottom: 20px;
 }
 
-@media screen and (max-width: 640px) {
-  .logo {
-    top: 20px;
-    left: 13px;
-    width: 90px;
-  }
+.text-center {
+  text-align: center;
 }
 
+/* ===================================================================
+   LAYOUT
+   =================================================================== */
 .section {
   margin-bottom: 100px;
 }
@@ -415,38 +348,17 @@ p {
   padding: 0 40px;
 }
 
-@media screen and (max-width: 1280px) {
-  .container {
-    max-width: 980px;
-    padding: 0 20px;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .container {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-
-  .section {
-    margin-bottom: 50px;
-  }
-}
-
 .body-content {
   background: url('../assets/images/bg-pattern.svg') center left no-repeat;
 }
 
-@media screen and (max-width: 1024px) {
-  .body-content {
-    margin-top: 40px;
-  }
-}
-
 .body-content .container {
-  color: #fff;
+  color: var(--text-light);
 }
 
+/* ===================================================================
+   HERO SECTION
+   =================================================================== */
 .hero-section {
   margin-top: 100px;
   height: 550px;
@@ -462,77 +374,51 @@ p {
   background-size: 60%;
 }
 
-@media screen and (max-width: 1024px) {
-  .hero-section {
-    height: auto;
-    padding-top: 100px;
-    padding-left: 30px;
-    padding-right: 30px;
-    margin-top: 20px;
-    margin-bottom: 80px;
-  }
-
-  .hero-section.hero-top {
-    background-position-y: 40px;
-    background-size: 90%;
-    padding-top: 50%;
-  }
+.main-heading {
+  padding-top: 2em;
 }
 
-@media screen and (max-width: 640px) {
-  .hero-section {
-    min-height: 350px;
-    height: auto;
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-bottom: 0;
-  }
-
-  .hero-section.hero-bottom {
-    min-height: 280px;
-  }
-
-  .hero-section.hero-top {
-    background-position-y: 40px;
-    background-position-x: center;
-    background-size: 110%;
-    padding-top: 57%;
-  }
+.subheading {
+  font-size: 22px;
+  color: var(--text-light);
+  font-weight: 400;
 }
 
 .nostrPurple {
-  color: #9747FF;
+  color: var(--purple-accent);
 }
 
+/* ===================================================================
+   BUTTONS
+   =================================================================== */
 .button {
   display: inline-block;
   padding: 14px 50px;
   text-align: center;
   font-weight: 700;
   font-size: 20px;
-  color: #373737;
-  font-size: 20px;
-  background: #9CD84F;
+  color: var(--text-dark);
+  background: var(--green-secondary);
   text-transform: uppercase;
   cursor: pointer;
   border-radius: 30px;
-  transition: all .13s;
+  transition: var(--transition-fast);
 }
 
 .button:hover {
-  background: #304F00;
-  color: #9CD84F;
+  background: var(--green-dark);
+  color: var(--green-secondary);
 }
 
 .button.secondary {
-  background: #304F00;
-  color: #9CD84F;
+  background: var(--green-dark);
+  color: var(--green-secondary);
   font-size: 18px;
 }
 
 .button.secondary:hover {
-  background: #9CD84F;
-  color: #304F00;
+  background: var(--green-secondary);
+  color: var(--green-dark);
 }
 
 .button.secondary.socials {
@@ -546,137 +432,29 @@ p {
   filter: brightness(40%);
 }
 
-@media screen and (max-width: 1024px) {
-
-  .button,
-  .button.secondary {
-    font-size: 16px;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  .button.secondary.socials {
-    margin: 0 5px;
-  }
-}
-
-h1 {
-  font-size: 58px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  line-height: 1.2;
-}
-
-.main-heading {
-  padding-top: 2em;
-}
-
-@media screen and (max-width: 1280px) {
-  h1 {
-    font-size: 52px;
-  }
-}
-
-@media screen and (max-width: 1024px) {
-  h1 {
-    font-size: 44px;
-  }
-
-  .main-heading {
-    padding-top: 1em;
-    max-width: 70%;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  h1 {
-    font-size: 38px;
-  }
-
-  .main-heading {
-    max-width: 100%;
-  }
-}
-
-h2 {
-  font-size: 64px;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 20px;
-}
-
-@media screen and (max-width: 1280px) {
-  h2 {
-    font-size: 58px;
-  }
-}
-
-
-@media screen and (max-width: 1024px) {
-  h2 {
-    font-size: 48px;
-  }
-}
-
-@media screen and (max-width: 640px) {
-  h2 {
-    font-size: 38px;
-  }
-}
-
-h3 {
-  position: relative;
-  font-size: 38px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-@media screen and (max-width: 1280px) {
-  h3 {
-    font-size: 32px;
-  }
-}
-
-
-@media screen and (max-width: 1024px) {
-  h3 {
-    font-size: 26px;
-  }
-}
-
+/* ===================================================================
+   IMAGES & COLUMNS
+   =================================================================== */
 .column-image {
   margin: 0 auto;
   margin-bottom: 60px;
   max-width: 70%;
 }
 
-@media screen and (max-width: 640px) {
-  .column-image {
-    margin-bottom: 0px;
-    max-width: 60%;
-  }
-}
-
-.subheading {
-  font-size: 22px;
-  color: #fff;
-  font-weight: 400;
-}
-
-@media screen and (max-width: 1024px) {
-  .subheading {
-    font-size: 18px;
-  }
-}
-
+/* ===================================================================
+   LINKS
+   =================================================================== */
 .textLink {
   text-decoration: underline;
 }
 
 .textLink:hover {
-  color: #9CD84F;
+  color: var(--green-secondary);
 }
 
+/* ===================================================================
+   FOOTER
+   =================================================================== */
 #socials {
   text-align: center;
 }
@@ -687,19 +465,13 @@ h3 {
   font-size: 18px;
 }
 
-@media screen and (max-width: 640px) {
-  .footer-menu li {
-    font-size: 15px;
-  }
-}
-
 .copyright {
   position: relative;
   padding: 90px 0;
   margin-top: 80px;
   padding-top: 160px;
   font-size: 16px;
-  color: #92949A;
+  color: var(--text-gray);
   background: -webkit-linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
   background: linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
 }
@@ -712,24 +484,13 @@ h3 {
   width: 65px;
   height: 65px;
   border-radius: 33px;
-  background: #304F00;
-  color: #8CC63F;
+  background: var(--green-dark);
+  color: var(--green-primary);
   text-align: center;
   line-height: 76px;
   font-size: 16px;
   font-weight: 700;
-  transition: all .13s;
-}
-
-@media screen and (max-width: 640px) {
-  .copyright {
-    padding: 60px 0;
-    font-size: 14px;
-  }
-
-  .scroll-up {
-    top: 0px;
-  }
+  transition: var(--transition-fast);
 }
 
 .scroll-up:hover {
@@ -746,24 +507,26 @@ h3 {
   background: url('../assets/images/top-icon.svg');
 }
 
-.animate-me {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 1s;
+#footer {
+  position: relative;
+  padding-top: 60px;
+  background: url('../assets/images/footer-bg.svg') bottom center no-repeat;
 }
 
-/* Add more CSS styles for the animated state as needed */
-.animate-me.animate-in {
-  opacity: 1;
-  transform: translateY(0);
+#footer:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: -webkit-linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
+  background: linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
 }
 
-@media screen and (max-width: 640px) {
-  .flex-second {
-    order: 2
-  }
-}
-
+/* ===================================================================
+   SPONSOR BANNER
+   =================================================================== */
 .sponsor-banner {
   position: relative;
   background: rgb(16 18 25 / 60%);
@@ -790,7 +553,7 @@ h3 {
   left: 50px;
   right: 50px;
   height: 2px;
-  background: #92949A;
+  background: var(--text-gray);
 }
 
 .sponsor-banner .grid {
@@ -817,75 +580,29 @@ h3 {
   left: 54%;
   -webkit-transform: translateY(-50%);
   transform: translateY(-50%);
-  color: #8CC541;
+  color: var(--green-sponsor);
   font-size: 26px;
   text-align: left;
   line-height: 1.2;
 }
 
-
-@media screen and (max-width: 1024px) {
-  .sponsor-banner {
-    width: 90%;
-  }
-
-  .sponsor-text {
-    right: 20px;
-    font-size: 22px;
-  }
-
-  .sponsor-banner .column-image {
-    left: 11%;
-    width: 190px;
-  }
+/* ===================================================================
+   ANIMATIONS
+   =================================================================== */
+.animate-me {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--transition-slow);
 }
 
-@media screen and (max-width: 640px) {
-  .sponsor-banner {
-    height: 500px;
-  }
-
-  .sponsor-banner .column-image {
-    top: 35%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
-  }
-
-  .sponsor-text {
-    top: auto;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-    text-align: center;
-    font-size: 18px;
-  }
+.animate-me.animate-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-#footer {
-  position: relative;
-  padding-top: 60px;
-  background: url('../assets/images/footer-bg.svg') bottom center no-repeat;
-}
-
-#footer:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background: -webkit-linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
-  background: linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
-}
-
-@media screen and (max-width: 640px) {
-  .sponsor-banner::after {
-    display: none;
-  }
-}
-
-/* FAQ Section */
+/* ===================================================================
+   FAQ SECTION
+   =================================================================== */
 .faq-section h2 {
   margin-bottom: 40px;
 }
@@ -907,7 +624,7 @@ h3 {
   font-weight: 700;
   cursor: pointer;
   list-style: none;
-  transition: color .13s;
+  transition: color var(--transition-fast);
 }
 
 .faq-question::-webkit-details-marker {
@@ -926,7 +643,7 @@ h3 {
   transform: translateY(-50%);
   font-size: 28px;
   font-weight: 400;
-  color: #8CC63F;
+  color: var(--green-primary);
 }
 
 details[open] .faq-question::after {
@@ -934,7 +651,7 @@ details[open] .faq-question::after {
 }
 
 .faq-question:hover {
-  color: #8CC63F;
+  color: var(--green-primary);
 }
 
 .faq-answer {
@@ -951,7 +668,270 @@ details[open] .faq-question::after {
   margin-bottom: 0;
 }
 
+/* ===================================================================
+   MEDIA QUERIES
+   =================================================================== */
+
+/* 1280px breakpoint */
+@media screen and (max-width: 1280px) {
+  .navLang {
+    right: 20px;
+  }
+
+  .logo {
+    left: 20px;
+  }
+
+  .container {
+    max-width: 980px;
+    padding: 0 20px;
+  }
+
+  h1 {
+    font-size: 52px;
+  }
+
+  h2 {
+    font-size: 58px;
+  }
+
+  h3 {
+    font-size: 32px;
+  }
+}
+
+/* 1024px breakpoint */
+@media screen and (max-width: 1024px) {
+  body {
+    font-size: 16px;
+  }
+
+  header {
+    height: 80px;
+    padding: 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  nav ul li {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .navMenu ul li a.active::after {
+    display: none;
+  }
+
+  .navMenu {
+    top: 0px;
+    left: auto;
+    right: 0px;
+    width: 280px;
+    z-index: 1;
+    padding-top: 80px;
+  }
+
+  .navMenu .menu-button {
+    display: block;
+  }
+
+  .navMenu ul {
+    display: none;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .navMenu li {
+    display: block;
+    text-align: center;
+    padding: 0;
+    background: var(--bg-darker);
+  }
+
+  .navMenu li a {
+    display: block;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .navLang {
+    left: auto;
+    right: 75px;
+    z-index: 2;
+  }
+
+  .navLang ul li {
+    text-align: center;
+    padding: 15px 9px;
+  }
+
+  .menu-button {
+    display: block;
+  }
+
+  .logo {
+    top: 17px;
+    width: 100px;
+  }
+
+  .container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .section {
+    margin-bottom: 50px;
+  }
+
+  .body-content {
+    margin-top: 40px;
+  }
+
+  .hero-section {
+    height: auto;
+    padding-top: 100px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-top: 20px;
+    margin-bottom: 80px;
+  }
+
+  .hero-section.hero-top {
+    background-position-y: 40px;
+    background-size: 90%;
+    padding-top: 50%;
+  }
+
+  .button,
+  .button.secondary {
+    font-size: 16px;
+  }
+
+  .button.secondary.socials {
+    margin: 0 5px;
+  }
+
+  h1 {
+    font-size: 44px;
+  }
+
+  .main-heading {
+    padding-top: 1em;
+    max-width: 70%;
+  }
+
+  h2 {
+    font-size: 48px;
+  }
+
+  h3 {
+    font-size: 26px;
+  }
+
+  .subheading {
+    font-size: 18px;
+  }
+
+  .sponsor-banner {
+    width: 90%;
+  }
+
+  .sponsor-text {
+    right: 20px;
+    font-size: 22px;
+  }
+
+  .sponsor-banner .column-image {
+    left: 11%;
+    width: 190px;
+  }
+}
+
+/* 640px breakpoint */
 @media screen and (max-width: 640px) {
+  .logo {
+    top: 20px;
+    left: 13px;
+    width: 90px;
+  }
+
+  .hero-section {
+    min-height: 350px;
+    height: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 0;
+  }
+
+  .hero-section.hero-bottom {
+    min-height: 280px;
+  }
+
+  .hero-section.hero-top {
+    background-position-y: 40px;
+    background-position-x: center;
+    background-size: 110%;
+    padding-top: 57%;
+  }
+
+  h1 {
+    font-size: 38px;
+  }
+
+  .main-heading {
+    max-width: 100%;
+  }
+
+  h2 {
+    font-size: 38px;
+  }
+
+  .column-image {
+    margin-bottom: 0px;
+    max-width: 60%;
+  }
+
+  .footer-menu li {
+    font-size: 15px;
+  }
+
+  .copyright {
+    padding: 60px 0;
+    font-size: 14px;
+  }
+
+  .scroll-up {
+    top: 0px;
+  }
+
+  .flex-second {
+    order: 2;
+  }
+
+  .sponsor-banner {
+    height: 500px;
+  }
+
+  .sponsor-banner .column-image {
+    top: 35%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
+
+  .sponsor-text {
+    top: auto;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    text-align: center;
+    font-size: 18px;
+  }
+
+  .sponsor-banner::after {
+    display: none;
+  }
+
   .faq-question {
     font-size: 17px;
     padding: 16px 50px 16px 18px;
@@ -964,5 +944,21 @@ details[open] .faq-question::after {
   .faq-answer {
     padding: 0 18px 16px 18px;
     font-size: 15px;
+  }
+}
+
+/* 480px breakpoint */
+@media screen and (max-width: 480px) {
+  nav ul li {
+    padding: 10px 5px;
+    font-size: 13px;
+  }
+
+  .navLang ul li {
+    padding: 15px 3px;
+  }
+
+  .menu-button {
+    right: 5px;
   }
 }
