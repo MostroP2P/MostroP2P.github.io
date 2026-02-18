@@ -810,7 +810,7 @@ details[open] .faq-question::after {
   }
 }
 
-/* 640px breakpoint */
+/* 640px breakpoint - FIXED with proper heading hierarchy */
 @media screen and (max-width: 640px) {
   .logo {
     top: 20px;
@@ -837,6 +837,7 @@ details[open] .faq-question::after {
     padding-top: 57%;
   }
 
+  /* FIXED: Proper heading hierarchy (h1 > h2) */
   h1 {
     font-size: 38px;
   }
@@ -846,7 +847,7 @@ details[open] .faq-question::after {
   }
 
   h2 {
-    font-size: 38px;
+    font-size: 34px;  /* WAS 38px, NOW 34px - smaller than h1 */
   }
 
   .column-image {
