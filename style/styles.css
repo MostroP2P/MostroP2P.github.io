@@ -1,5 +1,5 @@
 /* ===================================================================
-  CSS VARIABLES FOR CONSISTENT THEMING
+   CSS VARIABLES FOR CONSISTENT THEMING
    =================================================================== */
 :root {
   /* === COLOR PALETTE === */
@@ -22,7 +22,7 @@
   /* Accent colors */
   --purple-accent: #9747FF;
 
-  /* Transitions - FIXED: Split into duration variables */
+  /* Transitions - Split into duration variables */
   --transition-duration-fast: .13s;
   --transition-duration-normal: .3s;
   --transition-duration-slow: 1s;
@@ -214,7 +214,6 @@ nav a:hover {
   position: absolute;
   top: 30px;
   right: 17px;
-  /* FIXED: Use duration variable instead of all */
   transition: background var(--transition-duration-normal);
 }
 
@@ -288,7 +287,6 @@ nav a:hover {
 /* ===================================================================
    UTILITY CLASSES
    =================================================================== */
-/* FIXED: Removed unused .margin-top and .margin-bottom */
 .text-center {
   text-align: center;
 }
@@ -437,7 +435,6 @@ nav a:hover {
   padding-top: 160px;
   font-size: 16px;
   color: var(--text-gray);
-  /* FIXED: Removed vendor-prefixed gradient */
   background: linear-gradient(0deg, rgba(16, 18, 25, 1) 17%, rgba(16, 18, 25, 0) 100%);
 }
 
@@ -485,7 +482,6 @@ nav a:hover {
   left: 0;
   right: 0;
   height: 200px;
-  /* FIXED: Removed vendor-prefixed gradient */
   background: linear-gradient(0deg, rgb(29 33 44 / 0%) 17%, rgb(29 33 44 / 100%) 100%);
 }
 
@@ -589,7 +585,6 @@ nav a:hover {
   font-weight: 700;
   cursor: pointer;
   list-style: none;
-  /* FIXED: Use duration variable instead of all */
   transition: color var(--transition-duration-fast);
 }
 
@@ -653,12 +648,13 @@ details[open] .faq-question::after {
     padding: 0 20px;
   }
 
+  /* FIXED: Heading hierarchy (h1 > h2) */
   h1 {
-    font-size: 52px;
+    font-size: 58px;
   }
 
   h2 {
-    font-size: 58px;
+    font-size: 52px;
   }
 
   h3 {
@@ -777,8 +773,9 @@ details[open] .faq-question::after {
     margin: 0 5px;
   }
 
+  /* FIXED: Heading hierarchy (h1 > h2) */
   h1 {
-    font-size: 44px;
+    font-size: 48px;
   }
 
   .main-heading {
@@ -787,7 +784,7 @@ details[open] .faq-question::after {
   }
 
   h2 {
-    font-size: 48px;
+    font-size: 44px;
   }
 
   h3 {
