@@ -639,6 +639,113 @@ make docker-up     <span class="cm"># Avvia</span></code></pre>
 
         <hr>
 
+        <h4>Risoluzione dei Problemi Comuni di Docker</h4>
+
+        <details class="collapsible" id="risoluzione-problemi-docker">
+          <summary><strong>Problemi Frequenti e Soluzioni</strong></summary>
+          <div class="collapsible-content">
+
+            <h5>❌ Errore: Permission denied (os error 13)</h5>
+
+            <div class="callout warning">
+              <div class="callout-title">🛠️ Problema di Permessi Database</div>
+              SQLite necessita permessi di scrittura sia per il file database che per la directory padre per creare file temporanei (<code>.db-wal</code>, <code>.db-shm</code>).
+            </div>
+
+            <p><strong>Soluzione Veloce:</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code><span class="cm"># Correggere i permessi prima di avviare</span>
+sudo chown -R 1000:1000 ./config/
+sudo chmod -R 755 ./config/
+
+<span class="cm"># Poi avviare normalmente</span>
+make docker-up</code></pre>
+            </div>
+
+            <p><strong>Soluzione Permanente in docker-compose.yml:</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code>services:
+  mostro:
+    # ... configurazione esistente ...
+    user: "1000:1000"  # Eseguire come utente non-root
+    volumes:
+      - ./config:/config:rw  # Assicurare accesso lettura-scrittura</code></pre>
+            </div>
+
+            <h5>❌ Errore: No such device or address (os error 6)</h5>
+
+            <div class="callout warning">
+              <div class="callout-title">🖥️ Problema di Prompt Password</div>
+              Mostro richiede password database interattivamente, ma i container Docker non hanno TTY per default.
+            </div>
+
+            <p><strong>Opzione 1: Saltare Crittografia Database (Più Veloce per Test)</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code><span class="cm"># Impostare password vuota per saltare crittografia</span>
+MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
+            </div>
+
+            <p><strong>Opzione 2: Impostare Password via Variabile Ambiente</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code><span class="cm"># Impostare password in modo sicuro</span>
+MOSTRO_DB_PASSWORD="la-tua-password-sicura" make docker-up</code></pre>
+            </div>
+
+            <p><strong>Opzione 3: Abilitare Modalità Interattiva in docker-compose.yml</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code>services:
+  mostro:
+    # ... configurazione esistente ...
+    tty: true        # Abilitare TTY per prompt interattivi
+    stdin_open: true # Abilitare STDIN
+    environment:
+      - MOSTRO_DB_PASSWORD=${DB_PASSWORD:-}  # Opzionale: impostare via .env</code></pre>
+            </div>
+
+            <h5>❌ Problemi di creazione file database</h5>
+
+            <p><strong>Assicurare struttura directory corretta:</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code><span class="cm"># Creare directory con permessi appropriati</span>
+mkdir -p docker/config
+sudo chown -R $(id -u):$(id -g) docker/config
+chmod 755 docker/config
+
+<span class="cm"># Verificare permessi</span>
+ls -la docker/config/</code></pre>
+            </div>
+
+            <p><strong>Passaggi di debug:</strong></p>
+            <div class="code-block">
+              <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+                  data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+              <pre><code><span class="cm"># Controllare utente del container</span>
+docker compose exec mostro whoami
+
+<span class="cm"># Controllare permessi directory montata dentro il container</span>
+docker compose exec mostro ls -la /config
+
+<span class="cm"># Correggere permessi da host (più sicuro che dentro il container)</span>
+sudo chown -R 1000:1000 ./config/</code></pre>
+            </div>
+
+          </div>
+        </details>
+
+        <hr>
+
         <h4>Alternativa: Esecuzione da Docker Hub (Senza Necessità di Compilazione)</h4>
 
         <div class="callout tip">

@@ -469,6 +469,108 @@ make docker-up     <span class="cm"># Iniciar</span></code></pre>
 
 <hr>
 
+<h4>Solución de Problemas Comunes de Docker</h4>
+
+<details class="collapsible" id="solucion-problemas-docker">
+<summary><strong>Problemas Frecuentes y Soluciones</strong></summary>
+<div class="collapsible-content">
+
+<h5>❌ Error: Permission denied (os error 13)</h5>
+
+<div class="callout warning">
+  <div class="callout-title">🛠️ Problema de Permisos de Base de Datos</div>
+  SQLite necesita permisos de escritura tanto en el archivo de base de datos como en el directorio padre para crear archivos temporales (<code>.db-wal</code>, <code>.db-shm</code>).
+</div>
+
+<p><strong>Arreglo Rápido:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Arreglar permisos antes de iniciar</span>
+sudo chown -R 1000:1000 ./config/
+sudo chmod 700 ./config/
+sudo chmod 600 ./config/settings.toml
+sudo chmod -R 700 ./config/lnd/
+
+<span class="cm"># Luego iniciar normalmente</span>
+make docker-up</code></pre>
+</div>
+
+<p><strong>Arreglo Permanente en docker/compose.yml:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code>services:
+  mostro:
+    # ... configuración existente ...
+    user: "1000:1000"  # Ejecutar como usuario no-root
+    volumes:
+      - ./config:/config:rw  # Asegurar acceso de lectura-escritura</code></pre>
+</div>
+
+<h5>❌ Error: No such device or address (os error 6)</h5>
+
+<div class="callout warning">
+  <div class="callout-title">🖥️ Problema de Prompt de Password</div>
+  Mostro solicita password de base de datos interactivamente, pero los contenedores Docker no tienen TTY por defecto.
+</div>
+
+<p><strong>Opción 1: Omitir Cifrado de Base de Datos (Más Rápido para Testing)</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Establecer password vacía para omitir cifrado</span>
+MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
+</div>
+
+<p><strong>Opción 2: Establecer Password via Variable de Entorno</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Establecer password de forma segura</span>
+MOSTRO_DB_PASSWORD="tu-password-segura" make docker-up</code></pre>
+</div>
+
+<p><strong>Opción 3: Habilitar Modo Interactivo en docker/compose.yml</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code>services:
+  mostro:
+    # ... configuración existente ...
+    tty: true        # Habilitar TTY para prompts interactivos
+    stdin_open: true # Habilitar STDIN
+    environment:
+      - MOSTRO_DB_PASSWORD=${DB_PASSWORD:-}  # Opcional: establecer via .env</code></pre>
+</div>
+
+<h5>❌ Problemas de creación de archivo de base de datos</h5>
+
+<p><strong>Asegurar estructura de directorio correcta:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Crear directorio con permisos apropiados</span>
+mkdir -p docker/config
+sudo chown -R $(id -u):$(id -g) docker/config
+chmod 755 docker/config
+
+<span class="cm"># Verificar permisos</span>
+ls -la docker/config/</code></pre>
+</div>
+
+<p><strong>Pasos de debug:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Verificar usuario del contenedor</span>
+docker compose exec mostro whoami
+
+<span class="cm"># Verificar permisos del directorio montado dentro del contenedor</span>
+docker compose exec mostro ls -la /config
+
+<span class="cm"># Arreglar permisos desde el host (no desde dentro del contenedor)</span>
+sudo chown -R 1000:1000 ./config/</code></pre>
+</div>
+
+</div>
+</details>
+
+<hr>
+
 <h4>Alternativa: Ejecutar desde Docker Hub (Sin Necesidad de Construir)</h4>
 
 <div class="callout tip">
