@@ -462,6 +462,106 @@ make docker-up     <span class="cm"># Iniciar</span></code></pre>
 
 <hr>
 
+<h4>Solução de Problemas Comuns do Docker</h4>
+
+<div class="collapsible" id="solucao-problemas-docker">
+<summary><strong>Problemas Frequentes e Soluções</strong></summary>
+<div class="collapsible-content">
+
+<h5>❌ Erro: Permission denied (os error 13)</h5>
+
+<div class="callout warning">
+  <div class="callout-title">🛠️ Problema de Permissões do Banco de Dados</div>
+  O SQLite precisa de permissões de escrita tanto no arquivo do banco de dados quanto no diretório pai para criar arquivos temporários (<code>.db-wal</code>, <code>.db-shm</code>).
+</div>
+
+<p><strong>Correção Rápida:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Corrigir permissões antes de iniciar</span>
+sudo chown -R 1000:1000 ./config/
+sudo chmod -R 755 ./config/
+
+<span class="cm"># Depois iniciar normalmente</span>
+make docker-up</code></pre>
+</div>
+
+<p><strong>Correção Permanente em docker-compose.yml:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>services:
+  mostro:
+    # ... configuração existente ...
+    user: "1000:1000"  # Executar como usuário não-root
+    volumes:
+      - ./config:/config:rw  # Garantir acesso de leitura-escrita</code></pre>
+</div>
+
+<h5>❌ Erro: No such device or address (os error 6)</h5>
+
+<div class="callout warning">
+  <div class="callout-title">🖥️ Problema de Prompt de Senha</div>
+  O Mostro solicita senha do banco de dados interativamente, mas containers Docker não têm TTY por padrão.
+</div>
+
+<p><strong>Opção 1: Pular Criptografia do Banco de Dados (Mais Rápido para Testes)</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Definir senha vazia para pular criptografia</span>
+MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
+</div>
+
+<p><strong>Opção 2: Definir Senha via Variável de Ambiente</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Definir senha de forma segura</span>
+MOSTRO_DB_PASSWORD="sua-senha-segura" make docker-up</code></pre>
+</div>
+
+<p><strong>Opção 3: Habilitar Modo Interativo em docker-compose.yml</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>services:
+  mostro:
+    # ... configuração existente ...
+    tty: true        # Habilitar TTY para prompts interativos
+    stdin_open: true # Habilitar STDIN
+    environment:
+      - MOSTRO_DB_PASSWORD=${DB_PASSWORD:-}  # Opcional: definir via .env</code></pre>
+</div>
+
+<h5>❌ Problemas de criação de arquivo do banco de dados</h5>
+
+<p><strong>Garantir estrutura de diretório correta:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Criar diretório com permissões apropriadas</span>
+mkdir -p docker/config
+sudo chown -R $(id -u):$(id -g) docker/config
+chmod 755 docker/config
+
+<span class="cm"># Verificar permissões</span>
+ls -la docker/config/</code></pre>
+</div>
+
+<p><strong>Passos de debug:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Verificar usuário do container</span>
+docker exec -it mostro-container whoami
+
+<span class="cm"># Verificar permissões do diretório montado dentro do container</span>
+docker exec -it mostro-container ls -la /config
+
+<span class="cm"># Corrigir permissões de dentro do container se necessário</span>
+docker exec -it mostro-container chown -R $(id -u):$(id -g) /config</code></pre>
+</div>
+
+</div>
+</div>
+
+<hr>
+
 <h4>Alternativa: Execução do Docker Hub (Sem Necessidade de Compilação)</h4>
 
 <div class="callout tip">
