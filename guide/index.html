@@ -435,7 +435,35 @@ make docker-build</code></pre>
 
 <p>If LND is on a <strong>different machine</strong>, copy the files to your local system first, then point the environment variables to those local copies.</p>
 
-<h4>Step 9: Start Mostro</h4>
+<h4>Step 9: Set Database Password (Optional)</h4>
+<p>For non-interactive mode (running <code>docker compose up -d</code>), set <code>MOSTRO_DB_PASSWORD</code> in <code>docker/.env</code>:</p>
+
+<div class="callout warning">
+  <div class="callout-title">🔒 Security Warning</div>
+  Add <code>docker/.env</code> to <code>.gitignore</code> to prevent accidentally committing sensitive credentials to version control.
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code><span class="cm"># Create docker/.env file</span>
+nano docker/.env</code></pre>
+</div>
+
+<p>Add one of these options:</p>
+
+<div class="code-block">
+  <div class="code-block-header"><span>dotenv</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code><span class="cm"># Use a strong password to enable DB encryption</span>
+MOSTRO_DB_PASSWORD='Str0ngPassw0rd!'</code></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>dotenv</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code><span class="cm"># Or set it to empty to skip DB encryption</span>
+MOSTRO_DB_PASSWORD=</code></pre>
+</div>
+
+<h4>Step 10: Start Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code><span class="cm"># Start Mostro and local Nostr relay</span>
@@ -448,7 +476,7 @@ make docker-up</code></pre>
   <pre><code>docker compose -f compose.yml ps</code></pre>
 </div>
 
-<h4>Step 10: Check the logs</h4>
+<h4>Step 11: Check the logs</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>docker compose -f compose.yml logs -f mostro</code></pre>

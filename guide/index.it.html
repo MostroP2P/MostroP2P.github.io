@@ -597,7 +597,38 @@ make docker-build</code></pre>
 
         <p>Se LND è su una <strong>macchina diversa</strong>, copia i file sul tuo sistema locale prima, poi punta le variabili d'ambiente a quelle copie locali.</p>
 
-        <h4>Passo 9: Avviare Mostro</h4>
+        <h4>Passo 9: Impostare Password Database (Opzionale)</h4>
+        <p>Per la modalità non interattiva (eseguendo <code>docker compose up -d</code>), imposta <code>MOSTRO_DB_PASSWORD</code> in <code>docker/.env</code>:</p>
+
+        <div class="callout warning">
+          <div class="callout-title">🔒 Avviso di Sicurezza</div>
+          Aggiungi <code>docker/.env</code> a <code>.gitignore</code> per evitare di committare accidentalmente credenziali sensibili nel controllo versione.
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code><span class="cm"># Crea file docker/.env</span>
+nano docker/.env</code></pre>
+        </div>
+
+        <p>Aggiungi una di queste opzioni:</p>
+
+        <div class="code-block">
+          <div class="code-block-header"><span>dotenv</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code><span class="cm"># Usa una password forte per abilitare la crittografia DB</span>
+MOSTRO_DB_PASSWORD='Str0ngPassw0rd!'</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header"><span>dotenv</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code><span class="cm"># O impostalo vuoto per saltare la crittografia DB</span>
+MOSTRO_DB_PASSWORD=</code></pre>
+        </div>
+
+        <h4>Passo 10: Avviare Mostro</h4>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
@@ -612,7 +643,7 @@ make docker-up</code></pre>
           <pre><code>docker compose -f compose.yml ps</code></pre>
         </div>
 
-        <h4>Passo 10: Controllare i log</h4>
+        <h4>Passo 11: Controllare i log</h4>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
