@@ -190,10 +190,10 @@
 
     <p><strong>Provider VPS popolari:</strong></p>
     <ul>
-      <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $12/mese
-      </li>
-      <li><a href="https://www.hetzner.com/" target="_blank" rel="noopener noreferrer">Hetzner</a> — ~€4-8/mese (ottimo
+      <li><a href="https://www.hostinger.com/" target="_blank" rel="noopener noreferrer">Hostinger</a> — $7/mese (KVM 2: 2 vCPU, 8GB RAM, 100GB NVMe, 8TB bandwidth) · Accetta crypto</li>
+      <li><a href="https://www.hetzner.com/" target="_blank" rel="noopener noreferrer">Hetzner</a> — €3.49-8/mese (CX23 da €3.49, ottimo
         rapporto qualità-prezzo, basato in UE)</li>
+      <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $24/mese (4GB RAM, 2 CPU, 80GB SSD) o $32/mese (4GB RAM, 2 Intel CPU, 120GB NVMe)</li>
       <li><a href="https://www.ovhcloud.com/" target="_blank" rel="noopener noreferrer">OVH</a> — ~$6-12/mese</li>
       <li><a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode/Akamai</a> — $12/mese</li>
       <li><a href="https://www.lunanode.com/" target="_blank" rel="noopener noreferrer">Lunanode</a> — Accetta pagamenti
@@ -316,10 +316,9 @@
       </table>
     </div>
 
-    <div class="callout warning">
-      <div class="callout-title">⚠️ Attenzione: La liquidità è capitale immobilizzato</div>
-      I Bitcoin nei tuoi canali Lightning sono bloccati lì — non puoi spenderli altrove fino a quando non chiudi i
-      canali. Pensa ad esso come a un investimento aziendale: ti serve capitale operativo.
+    <div class="callout tip">
+      <div class="callout-title">💡 Nota sulla Liquidità Lightning</div>
+      I Bitcoin nei tuoi canali Lightning sono bloccati <strong>onchain</strong> ma rimangono altamente spendibili via Lightning Network. Molti servizi accettano pagamenti Lightning — dalle caffetterie ai provider VPS — rendendo la tua liquidità abbastanza flessibile per uso quotidiano.
     </div>
 
     <p><strong>Inizia in piccolo, cresci gradualmente.</strong> Inizia con il necessario per le esigenze iniziali della
@@ -348,6 +347,24 @@
       <div class="callout-title">⚠️ Importante</div>
       Non riutilizzare mai le chiavi Nostr tra istanze di Mostro. Ogni nodo ha bisogno della propria identità unica.
     </div>
+
+    <p><strong>Generare chiavi Nostr sicure localmente con rana:</strong></p>
+
+    <div class="code-block">
+      <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+          data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+      <pre><code><span class="cm"># Installare Rust (se non già installato)</span>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+
+<span class="cm"># Installare rana - generatore locale di chiavi Nostr</span>
+cargo install rana
+
+<span class="cm"># Generare una nuova coppia di chiavi</span>
+rana</code></pre>
+    </div>
+
+    <p>Rana genererà sia la tua chiave privata (nsec) che la tua chiave pubblica (npub). <strong>Salva entrambe in modo sicuro!</strong> Non generare mai chiavi importanti come queste usando servizi online — usa sempre strumenti locali come rana per la sicurezza.</p>
 
     <h3 id="livello-tecnico">2.5 Livello di conoscenza tecnica</h3>
 
@@ -511,9 +528,8 @@ cp ../settings.tpl.toml config/settings.toml</code></pre>
               <li><code>lnd_macaroon_file = '/config/lnd/admin.macaroon'</code></li>
             </ul>
           </li>
-          <li><strong><code>nsec_privkey</code></strong> — La chiave privata Nostr del tuo Mostro. Usa <a
-              href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a> per generarne
-            una. <strong>Salva sia la nsec che la npub in modo sicuro!</strong></li>
+          <li><strong><code>nsec_privkey</code></strong> — La chiave privata Nostr del tuo Mostro. Generala localmente con
+            <code>rana</code> (vedi sezione 2.4). <strong>Salva sia la nsec che la npub in modo sicuro!</strong></li>
           <li><strong><code>relays</code></strong> — I relay Nostr a cui il tuo nodo si connetterà.</li>
           <li><strong><code>url</code></strong> (nella sezione [database]) — Configuralo come: <code>"sqlite:///config/mostro.db"</code></li>
         </ol>
@@ -916,12 +932,14 @@ relays = [
 
     <p><strong>Generare chiavi Nostr:</strong></p>
     <ul>
-      <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — supporta generazione di chiavi vanity
-      </li>
-      <li><strong><a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a></strong>
-        — Rapido e facile, ma meno sicuro</li>
-      <li>Qualsiasi client Nostr (Damus, Amethyst, ecc.)</li>
+      <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — <strong>Raccomandato:</strong> locale, sicuro, supporta generazione di chiavi vanity</li>
+      <li>Qualsiasi client Nostr (Damus, Amethyst, ecc.) — per casi d'uso meno critici</li>
     </ul>
+
+    <div class="callout warning">
+      <div class="callout-title">🔒 Nota di Sicurezza</div>
+      Per applicazioni critiche come i nodi Mostro, genera sempre le chiavi localmente usando strumenti come <code>rana</code>. Non usare mai generatori di chiavi online per infrastrutture importanti.
+    </div>
 
     <div class="callout tip">
       <div class="callout-title">💡 Suggerimento</div>
