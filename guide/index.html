@@ -150,8 +150,9 @@
 
 <p><strong>Popular VPS providers:</strong></p>
 <ul>
-  <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $12/month</li>
+  <li><a href="https://www.hostinger.com/" target="_blank" rel="noopener noreferrer">Hostinger</a> — $7/month (KVM 2: 2 vCPU, 8GB RAM, 100GB NVMe, 8TB bandwidth) · Accepts Bitcoin/Lightning</li>
   <li><a href="https://www.hetzner.com/" target="_blank" rel="noopener noreferrer">Hetzner</a> — ~€4-8/month (good value, EU-based)</li>
+  <li><a href="https://www.digitalocean.com/" target="_blank" rel="noopener noreferrer">Digital Ocean</a> — $24/month (4GB RAM, 2 CPUs, 80GB SSD) or $32/month (4GB RAM, 2 Intel CPUs, 120GB NVMe)</li>
   <li><a href="https://www.ovhcloud.com/" target="_blank" rel="noopener noreferrer">OVH</a> — ~$6-12/month</li>
   <li><a href="https://www.linode.com/" target="_blank" rel="noopener noreferrer">Linode/Akamai</a> — $12/month</li>
   <li><a href="https://www.lunanode.com/" target="_blank" rel="noopener noreferrer">Lunanode</a> — Accepts Bitcoin payments</li>
@@ -210,9 +211,9 @@
 </table>
 </div>
 
-<div class="callout warning">
-  <div class="callout-title">⚠️ Warning: Liquidity is capital lock-up</div>
-  The Bitcoin in your Lightning channels is locked there — you can't spend it elsewhere until you close the channels. Think of it as a business investment: you need working capital to operate.
+<div class="callout tip">
+  <div class="callout-title">💡 Lightning Liquidity Note</div>
+  The Bitcoin in your Lightning channels is locked <strong>onchain</strong> but remains highly spendable via Lightning Network. Many services accept Lightning payments — from coffee shops to VPS providers — making your liquidity quite flexible for everyday use.
 </div>
 
 <p><strong>Start small, grow incrementally.</strong> Begin with enough for your community's initial needs and monitor feedback. When traders report orders failing due to insufficient capacity, that's your signal to add more. Listen to your community.</p>
@@ -232,6 +233,23 @@
   <div class="callout-title">⚠️ Important</div>
   Never reuse Nostr keys between Mostro instances. Each node needs its own unique identity.
 </div>
+
+<p><strong>Generating secure Nostr keys locally with rana:</strong></p>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code><span class="cm"># Install Rust (if not already installed)</span>
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source ~/.cargo/env
+
+<span class="cm"># Install rana - local Nostr key generator</span>
+cargo install rana
+
+<span class="cm"># Generate a new key pair</span>
+rana</code></pre>
+</div>
+
+<p>Rana will generate both your private key (nsec) and public key (npub). <strong>Save both securely!</strong> Never generate important keys like these using online services — always use local tools like rana for security.</p>
 
 <h3 id="skill-level">2.5 Technical Knowledge Level</h3>
 
@@ -353,7 +371,7 @@ cp ../settings.tpl.toml config/settings.toml</code></pre>
       <li><code>lnd_macaroon_file = '/config/lnd/admin.macaroon'</code></li>
     </ul>
   </li>
-  <li><strong><code>nsec_privkey</code></strong> — Your Mostro's Nostr private key (e.g., <code>YOUR_NSEC_KEY</code>). Use <a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a> to generate one. <strong>Save both nsec and npub keys safely!</strong></li>
+  <li><strong><code>nsec_privkey</code></strong> — Your Mostro's Nostr private key (e.g., <code>YOUR_NSEC_KEY</code>). Generate locally using <code>rana</code> (see section 2.4). <strong>Save both nsec and npub keys safely!</strong></li>
   <li><strong><code>relays</code></strong> — The Nostr relays your node connects to.</li>
   <li><strong><code>url</code></strong> (in [database] section) — Set to: <code>"sqlite:///config/mostro.db"</code></li>
 </ol>
@@ -725,10 +743,14 @@ relays = [
 
 <p><strong>Generating Nostr keys:</strong></p>
 <ul>
-  <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — supports vanity key generation</li>
-  <li><strong><a href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a></strong> — Quick and easy, but less secure (browser-generated)</li>
-  <li>Any Nostr client (Damus, Amethyst, etc.)</li>
+  <li><strong>rana</strong> (CLI): <code>cargo install rana && rana</code> — <strong>Recommended:</strong> local, secure, supports vanity key generation</li>
+  <li>Any Nostr client (Damus, Amethyst, etc.) — for less critical use cases</li>
 </ul>
+
+<div class="callout warning">
+  <div class="callout-title">🔒 Security Note</div>
+  For critical applications like Mostro nodes, always generate keys locally using tools like <code>rana</code>. Never use online key generators for important infrastructure.
+</div>
 
 <p><strong>Which relays to use?</strong></p>
 <ul>
@@ -1091,7 +1113,7 @@ docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
 cargo install nostreq nostcat
 apt install -y jq
 
-<span class="cm"># Use your Mostro's 64-char hex pubkey (not npub — decode with nostrtool.com if needed)</span>
+<span class="cm"># Use your Mostro's 64-char hex pubkey (not npub format)</span>
 nostreq --kinds 38383 --limit 1 --authors YOUR_MOSTRO_HEX_PUBKEY | nostcat --stream wss://nos.lol | jq</code></pre>
 </div>
 
