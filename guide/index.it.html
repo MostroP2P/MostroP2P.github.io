@@ -475,19 +475,29 @@ cd mostro</code></pre>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>mkdir -p docker/config
-cp docker/settings.docker.toml docker/config/settings.toml
-cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
+          <pre><code>cd docker
+mkdir -p config
+cp ../settings.tpl.toml config/settings.toml</code></pre>
+</div>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Modifiche in v0.16.2+</div>
+  <ul>
+    <li>Non più <code>empty.mostro.db</code> — Mostro crea il database automaticamente</li>
+    <li><code>settings.docker.toml</code> → <code>settings.tpl.toml</code> (nome del template cambiato)</li>
+    <li>Non più file <code>.env</code> — le variabili d'ambiente vengono passate direttamente al comando di build</li>
+  </ul>
+</div>
         </div>
 
         <h4>Passo 7: Modificare il file di configurazione</h4>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>nano docker/config/settings.toml</code></pre>
+          <pre><code>nano config/settings.toml</code></pre>
         </div>
 
-        <p><strong>Devi</strong> configurare questi tre campi:</p>
+        <p><strong>Devi</strong> configurare questi campi chiave:</p>
         <ol>
           <li><strong><code>lnd_grpc_host</code></strong> — L'indirizzo del tuo nodo LND:
             <ul>
@@ -495,10 +505,17 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
               <li>Macchina diversa: <code>'https://TUO_IP_LND:10009'</code></li>
             </ul>
           </li>
+          <li><strong><code>lnd_cert_file</code></strong> e <strong><code>lnd_macaroon_file</code></strong> — Configurali come:
+            <ul>
+              <li><code>lnd_cert_file = '/config/lnd/tls.cert'</code></li>
+              <li><code>lnd_macaroon_file = '/config/lnd/admin.macaroon'</code></li>
+            </ul>
+          </li>
           <li><strong><code>nsec_privkey</code></strong> — La chiave privata Nostr del tuo Mostro. Usa <a
               href="https://nostrtool.com/" target="_blank" rel="noopener noreferrer">nostrtool.com</a> per generarne
             una. <strong>Salva sia la nsec che la npub in modo sicuro!</strong></li>
           <li><strong><code>relays</code></strong> — I relay Nostr a cui il tuo nodo si connetterà.</li>
+          <li><strong><code>url</code></strong> (nella sezione [database]) — Configuralo come: <code>"sqlite:///config/mostro.db"</code></li>
         </ol>
 
         <p><strong>Altre personalizzazioni che puoi fare al tuo nodo:</strong></p>
@@ -509,24 +526,51 @@ cp docker/empty.mostro.db docker/config/mostro.db</code></pre>
 fee = 0.006                    <span class="cm"># 0,6% commissione per scambio</span>
 max_order_amount = 1000000     <span class="cm"># Ordine massimo in sats (~$400-500)</span>
 min_payment_amount = 100       <span class="cm"># Ordine minimo in sats</span>
-fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Le tue valute</span></code></pre>
+fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Le tue valute</span>
+
+[database]
+url = "sqlite:///config/mostro.db"  <span class="cm"># Percorso database nel container</span></code></pre>
         </div>
 
         <p>Salva: <code>Ctrl+X</code>, poi <code>Y</code>, poi <code>Invio</code>.</p>
 
-        <h4>Passo 8: Configurare le credenziali LND</h4>
+        <h4>Passo 8: Costruire l'immagine Docker</h4>
+
+        <p>Devi fornire le variabili d'ambiente <code>LND_CERT_FILE</code> e <code>LND_MACAROON_FILE</code> che puntano ai tuoi file LND. Questi verranno copiati in <code>config/lnd/</code> durante la costruzione.</p>
+
+        <div class="callout warning">
+          <div class="callout-title">📁 Directory di lavoro</div>
+          Torna alla directory radice del repository prima di eseguire i comandi make:
+        </div>
+
+        <p><strong>Linux/macOS:</strong></p>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>nano docker/.env</code></pre>
+          <pre><code>cd ..
+LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert \
+LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon \
+make docker-build</code></pre>
         </div>
 
-        <p>Aggiungi queste righe con le posizioni reali dei tuoi file LND:</p>
+        <p><strong>Windows PowerShell:</strong></p>
         <div class="code-block">
-          <div class="code-block-header"><span>env</span><button class="copy-btn" onclick="copyCode(this)"
+          <div class="code-block-header"><span>powershell</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>LND_CERT_FILE=/percorso/al/tuo/lnd/tls.cert
-LND_MACAROON_FILE=/percorso/al/tuo/lnd/admin.macaroon</code></pre>
+          <pre><code>cd ..
+$env:LND_CERT_FILE="C:\Users\TuoUtente\.polar\networks\1\volumes\lnd\alice\tls.cert"
+$env:LND_MACAROON_FILE="C:\Users\TuoUtente\.polar\networks\1\volumes\lnd\alice\data\chain\bitcoin\regtest\admin.macaroon"
+make docker-build</code></pre>
+        </div>
+
+        <p><strong>Alternativa:</strong> Esporta le variabili per la tua sessione:</p>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>cd ..
+export LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert
+export LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon
+make docker-build</code></pre>
         </div>
 
         <p>Se LND è sulla <strong>stessa macchina</strong>, i percorsi tipici sono:</p>
@@ -535,23 +579,13 @@ LND_MACAROON_FILE=/percorso/al/tuo/lnd/admin.macaroon</code></pre>
           <li><code>/root/.lnd/data/chain/bitcoin/mainnet/admin.macaroon</code></li>
         </ul>
 
-        <p>Se LND è su una <strong>macchina diversa</strong>, copia prima i file:</p>
+        <p>Se LND è su una <strong>macchina diversa</strong>, copia i file sul tuo sistema locale prima, poi punta le variabili d'ambiente a quelle copie locali.</p>
+
+        <h4>Passo 9: Avviare Mostro</h4>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>mkdir -p /opt/mostro/docker/config/lnd
-scp tuo-server-lnd:/percorso/a/tls.cert /opt/mostro/docker/config/lnd/
-scp tuo-server-lnd:/percorso/a/admin.macaroon /opt/mostro/docker/config/lnd/</code></pre>
-        </div>
-
-        <h4>Passo 9: Costruire e avviare Mostro</h4>
-        <div class="code-block">
-          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
-              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code><span class="cm"># Costruisci l'immagine Docker (5-15 minuti la prima volta)</span>
-make docker-build
-
-<span class="cm"># Avvia Mostro e il relay Nostr locale</span>
+          <pre><code><span class="cm"># Avvia Mostro e il relay Nostr locale</span>
 make docker-up</code></pre>
         </div>
 
@@ -559,14 +593,14 @@ make docker-up</code></pre>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>docker compose -f docker/compose.yml ps</code></pre>
+          <pre><code>docker compose -f compose.yml ps</code></pre>
         </div>
 
         <h4>Passo 10: Controllare i log</h4>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
+          <pre><code>docker compose -f compose.yml logs -f mostro</code></pre>
         </div>
 
         <p>Cerca questi messaggi:</p>
@@ -586,6 +620,108 @@ make docker-up     <span class="cm"># Avvia</span></code></pre>
 
         <p>🎉 <strong>Congratulazioni!</strong> Se vedi connessioni riuscite nei log, il tuo nodo Mostro è in funzione!
         </p>
+
+        <hr>
+
+        <h4>Alternativa: Esecuzione da Docker Hub (Senza Necessità di Compilazione)</h4>
+
+        <div class="callout tip">
+          <div class="callout-title">🚀 Novità in v0.16.2+</div>
+          Ora puoi eseguire Mostro direttamente da Docker Hub senza clonare il repository o compilare localmente. Perfetto per deployment su VPS!
+        </div>
+
+        <p><strong>Passi per deployment su VPS:</strong></p>
+
+        <h5>1. Creare una directory di configurazione</h5>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>mkdir -p ~/mostro-config/lnd</code></pre>
+        </div>
+
+        <h5>2. Ottenere il template di configurazione</h5>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+        </div>
+
+        <h5>3. Copiare le tue credenziali LND</h5>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>cp /percorso/al/tuo/tls.cert ~/mostro-config/lnd/tls.cert
+cp /percorso/al/tuo/admin.macaroon ~/mostro-config/lnd/admin.macaroon</code></pre>
+        </div>
+
+        <h5>4. Modificare la configurazione</h5>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>nano ~/mostro-config/settings.toml</code></pre>
+        </div>
+
+        <p><strong>Modifiche richieste per deployment Docker Hub:</strong></p>
+        <div class="code-block">
+          <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>[lightning]
+lnd_cert_file = '/config/lnd/tls.cert'
+lnd_macaroon_file = '/config/lnd/admin.macaroon'
+lnd_grpc_host = 'https://host.docker.internal:10009'  <span class="cm"># Se LND sullo stesso VPS</span>
+<span class="cm"># Oppure usa 'https://TUO_IP_LND:10009' se LND su server diverso</span>
+
+[database]
+url = "sqlite:///config/mostro.db"
+
+[nostr]
+nsec_privkey = 'TUA_CHIAVE_NSEC_QUI'
+relays = ['wss://relay.mostro.network', 'wss://nos.lol']</code></pre>
+        </div>
+
+        <h5>5. Eseguire il container</h5>
+
+        <p><strong>Se LND è sullo stesso VPS:</strong></p>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:latest</code></pre>
+        </div>
+
+        <p><strong>Se LND è su un server diverso:</strong></p>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:latest</code></pre>
+        </div>
+
+        <h5>6. Controllare i log</h5>
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code>docker logs -f mostro</code></pre>
+        </div>
+
+        <p><strong>Vantaggi del deployment Docker Hub:</strong></p>
+        <ul>
+          <li>✅ Nessun tempo di compilazione (5-15 minuti risparmiati)</li>
+          <li>✅ Non serve clonare il repository</li>
+          <li>✅ Minori requisiti di storage VPS</li>
+          <li>✅ Aggiornamenti automatici con <code>docker pull mostrop2p/mostro:latest</code></li>
+          <li>✅ Perfetto per deployment di produzione su VPS</li>
+        </ul>
+
+        <div class="callout warning">
+          <div class="callout-title">🔒 Nota di Sicurezza</div>
+          Usando un tag di versione specifica (es. <code>mostrop2p/mostro:v0.16.2</code>) invece di <code>:latest</code>, hai un controllo migliore sugli aggiornamenti e puoi testare le nuove versioni prima del deployment.
+        </div>
 
       </div>
     </details>
@@ -1208,10 +1344,14 @@ systemctl restart mostro.service</code></pre>
     <div class="code-block">
       <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
           data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-      <pre><code><span class="cm"># Backup manuale — Docker:</span>
+      <pre><code><span class="cm"># Backup manuale — Docker (build da repo):</span>
 mkdir -p /root/mostro-backups
 cp /opt/mostro/docker/config/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
 cp /opt/mostro/docker/config/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)
+
+<span class="cm"># Backup manuale — Docker Hub deployment:</span>
+cp ~/mostro-config/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
+cp ~/mostro-config/mostro.db /root/mostro-backups/mostro.db.$(date +%Y%m%d)
 
 <span class="cm"># Backup manuale — Nativo:</span>
 cp /opt/mostro/settings.toml /root/mostro-backups/settings.toml.$(date +%Y%m%d)
@@ -1445,39 +1585,46 @@ sqlite3 /percorso/a/mostro.db "SELECT id, fiat_amount, fiat_code, amount, status
         <thead>
           <tr>
             <th>File</th>
-            <th>Percorso Docker</th>
-            <th>Percorso nativo</th>
+            <th>Docker (build repo)</th>
+            <th>Docker Hub</th>
+            <th>Nativo</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>Configurazione</td>
             <td><code>/opt/mostro/docker/config/settings.toml</code></td>
+            <td><code>~/mostro-config/settings.toml</code></td>
             <td><code>/opt/mostro/settings.toml</code></td>
           </tr>
           <tr>
             <td>Database</td>
             <td><code>/opt/mostro/docker/config/mostro.db</code></td>
+            <td><code>~/mostro-config/mostro.db</code></td>
             <td><code>/opt/mostro/mostro.db</code></td>
           </tr>
           <tr>
             <td>Cert LND</td>
             <td><code>/opt/mostro/docker/config/lnd/tls.cert</code></td>
+            <td><code>~/mostro-config/lnd/tls.cert</code></td>
             <td>Varia</td>
           </tr>
           <tr>
             <td>Macaroon LND</td>
             <td><code>/opt/mostro/docker/config/lnd/admin.macaroon</code></td>
+            <td><code>~/mostro-config/lnd/admin.macaroon</code></td>
             <td>Varia</td>
           </tr>
           <tr>
             <td>File servizio</td>
+            <td>N/A</td>
             <td>N/A</td>
             <td><code>/etc/systemd/system/mostro.service</code></td>
           </tr>
           <tr>
             <td>Log</td>
             <td><code>docker compose logs</code></td>
+            <td><code>docker logs -f mostro</code></td>
             <td><code>journalctl -u mostro</code></td>
           </tr>
         </tbody>
