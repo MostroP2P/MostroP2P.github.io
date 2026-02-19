@@ -367,10 +367,16 @@ url = "sqlite:///config/mostro.db"  <span class="cm"># Caminho do banco de dados
 
 <p>Você precisa fornecer as variáveis de ambiente <code>LND_CERT_FILE</code> e <code>LND_MACAROON_FILE</code> apontando para seus arquivos LND. Estes serão copiados para <code>config/lnd/</code> durante a construção.</p>
 
+<div class="callout warning">
+  <div class="callout-title">📁 Diretório de trabalho</div>
+  Volte ao diretório raiz do repositório antes de executar os comandos make:
+</div>
+
 <p><strong>Linux/macOS:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert \
+  <pre><code>cd ..
+LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert \
 LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon \
 make docker-build</code></pre>
 </div>
@@ -378,7 +384,8 @@ make docker-build</code></pre>
 <p><strong>Windows PowerShell:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>powershell</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>$env:LND_CERT_FILE="C:\Users\SeuUsuario\.polar\networks\1\volumes\lnd\alice\tls.cert"
+  <pre><code>cd ..
+$env:LND_CERT_FILE="C:\Users\SeuUsuario\.polar\networks\1\volumes\lnd\alice\tls.cert"
 $env:LND_MACAROON_FILE="C:\Users\SeuUsuario\.polar\networks\1\volumes\lnd\alice\data\chain\bitcoin\regtest\admin.macaroon"
 make docker-build</code></pre>
 </div>
@@ -386,7 +393,8 @@ make docker-build</code></pre>
 <p><strong>Alternativa:</strong> Exporte as variáveis para sua sessão:</p>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>export LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert
+  <pre><code>cd ..
+export LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert
 export LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon
 make docker-build</code></pre>
 </div>
@@ -402,10 +410,7 @@ make docker-build</code></pre>
 <h4>Passo 9: Iniciar o Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code><span class="cm"># Construir a imagem Docker (5-15 minutos na primeira vez)</span>
-make docker-build
-
-<span class="cm"># Iniciar Mostro e o relay Nostr local</span>
+  <pre><code><span class="cm"># Iniciar Mostro e o relay Nostr local</span>
 make docker-up</code></pre>
 </div>
 

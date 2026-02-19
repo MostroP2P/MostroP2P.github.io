@@ -538,11 +538,17 @@ url = "sqlite:///config/mostro.db"  <span class="cm"># Percorso database nel con
 
         <p>Devi fornire le variabili d'ambiente <code>LND_CERT_FILE</code> e <code>LND_MACAROON_FILE</code> che puntano ai tuoi file LND. Questi verranno copiati in <code>config/lnd/</code> durante la costruzione.</p>
 
+        <div class="callout warning">
+          <div class="callout-title">📁 Directory di lavoro</div>
+          Torna alla directory radice del repository prima di eseguire i comandi make:
+        </div>
+
         <p><strong>Linux/macOS:</strong></p>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert \
+          <pre><code>cd ..
+LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert \
 LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon \
 make docker-build</code></pre>
         </div>
@@ -551,7 +557,8 @@ make docker-build</code></pre>
         <div class="code-block">
           <div class="code-block-header"><span>powershell</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>$env:LND_CERT_FILE="C:\Users\TuoUtente\.polar\networks\1\volumes\lnd\alice\tls.cert"
+          <pre><code>cd ..
+$env:LND_CERT_FILE="C:\Users\TuoUtente\.polar\networks\1\volumes\lnd\alice\tls.cert"
 $env:LND_MACAROON_FILE="C:\Users\TuoUtente\.polar\networks\1\volumes\lnd\alice\data\chain\bitcoin\regtest\admin.macaroon"
 make docker-build</code></pre>
         </div>
@@ -560,7 +567,8 @@ make docker-build</code></pre>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>export LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert
+          <pre><code>cd ..
+export LND_CERT_FILE=~/.polar/networks/1/volumes/lnd/alice/tls.cert
 export LND_MACAROON_FILE=~/.polar/networks/1/volumes/lnd/alice/data/chain/bitcoin/regtest/admin.macaroon
 make docker-build</code></pre>
         </div>
