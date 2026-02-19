@@ -535,39 +535,6 @@ make docker-up</code></pre>
       - ./config:/config:rw  # Ensure read-write access</code></pre>
 </div>
 
-<h5>❌ Error: No such device or address (os error 6)</h5>
-
-<div class="callout warning">
-  <div class="callout-title">🖥️ Database Password Prompt Issue</div>
-  Mostro prompts for database password interactively, but Docker containers don't have TTY by default.
-</div>
-
-<p><strong>Option 1: Skip Database Encryption (Fastest for Testing)</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code><span class="cm"># Set empty password to skip encryption</span>
-MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
-</div>
-
-<p><strong>Option 2: Set Database Password via Environment Variable</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code><span class="cm"># Set password securely</span>
-MOSTRO_DB_PASSWORD="your-secure-password" make docker-up</code></pre>
-</div>
-
-<p><strong>Option 3: Enable Interactive Mode in docker-compose.yml</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>services:
-  mostro:
-    # ... existing config ...
-    tty: true        # Enable TTY for interactive prompts
-    stdin_open: true # Enable STDIN
-    environment:
-      - MOSTRO_DB_PASSWORD=${DB_PASSWORD:-}  # Optional: set via .env</code></pre>
-</div>
-
 <h5>❌ Database file creation issues</h5>
 
 <p><strong>Ensure correct directory structure:</strong></p>

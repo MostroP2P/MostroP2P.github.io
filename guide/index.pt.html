@@ -525,39 +525,6 @@ make docker-up</code></pre>
       - ./config:/config:rw  # Garantir acesso de leitura-escrita</code></pre>
 </div>
 
-<h5>❌ Erro: No such device or address (os error 6)</h5>
-
-<div class="callout warning">
-  <div class="callout-title">🖥️ Problema de Prompt de Senha</div>
-  O Mostro solicita senha do banco de dados interativamente, mas containers Docker não têm TTY por padrão.
-</div>
-
-<p><strong>Opção 1: Pular Criptografia do Banco de Dados (Mais Rápido para Testes)</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code><span class="cm"># Definir senha vazia para pular criptografia</span>
-MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
-</div>
-
-<p><strong>Opção 2: Definir Senha via Variável de Ambiente</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code><span class="cm"># Definir senha de forma segura</span>
-MOSTRO_DB_PASSWORD="sua-senha-segura" make docker-up</code></pre>
-</div>
-
-<p><strong>Opção 3: Habilitar Modo Interativo em docker-compose.yml</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>services:
-  mostro:
-    # ... configuração existente ...
-    tty: true        # Habilitar TTY para prompts interativos
-    stdin_open: true # Habilitar STDIN
-    environment:
-      - MOSTRO_DB_PASSWORD=${DB_PASSWORD:-}  # Opcional: definir via .env</code></pre>
-</div>
-
 <h5>❌ Problemas de criação de arquivo do banco de dados</h5>
 
 <p><strong>Garantir estrutura de diretório correta:</strong></p>
