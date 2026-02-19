@@ -437,13 +437,7 @@ make docker-build</code></pre>
 
 <div class="callout warning">
   <div class="callout-title">🔒 Advertencia de Seguridad</div>
-  Agrega <code>docker/.env</code> a <code>.gitignore</code> para evitar comprometer accidentalmente credenciales sensibles en el control de versiones.
-</div>
-
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
-  <pre><code><span class="cm"># Agregar a .gitignore (si no está ya)</span>
-grep -qxF 'docker/.env' .gitignore || echo 'docker/.env' >> .gitignore</code></pre>
+  El repositorio ya incluye <code>docker/.env</code> en <code>.gitignore</code> para evitar comprometer accidentalmente credenciales sensibles en el control de versiones.
 </div>
 
 <div class="code-block">
