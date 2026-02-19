@@ -641,7 +641,7 @@ make docker-up     <span class="cm"># Avvia</span></code></pre>
 
         <h4>Risoluzione dei Problemi Comuni di Docker</h4>
 
-        <div class="collapsible" id="risoluzione-problemi-docker">
+        <details class="collapsible" id="risoluzione-problemi-docker">
           <summary><strong>Problemi Frequenti e Soluzioni</strong></summary>
           <div class="collapsible-content">
 
@@ -732,17 +732,17 @@ ls -la docker/config/</code></pre>
               <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
                   data-copy="Copia" data-copied="Copiato!">Copia</button></div>
               <pre><code><span class="cm"># Controllare utente del container</span>
-docker exec -it mostro-container whoami
+docker compose exec mostro whoami
 
 <span class="cm"># Controllare permessi directory montata dentro il container</span>
-docker exec -it mostro-container ls -la /config
+docker compose exec mostro ls -la /config
 
-<span class="cm"># Correggere permessi da dentro il container se necessario</span>
-docker exec -it mostro-container chown -R $(id -u):$(id -g) /config</code></pre>
+<span class="cm"># Correggere permessi da host (più sicuro che dentro il container)</span>
+sudo chown -R 1000:1000 ./config/</code></pre>
             </div>
 
           </div>
-        </div>
+        </details>
 
         <hr>
 

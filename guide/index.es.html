@@ -471,7 +471,7 @@ make docker-up     <span class="cm"># Iniciar</span></code></pre>
 
 <h4>Solución de Problemas Comunes de Docker</h4>
 
-<div class="collapsible" id="solucion-problemas-docker">
+<details class="collapsible" id="solucion-problemas-docker">
 <summary><strong>Problemas Frecuentes y Soluciones</strong></summary>
 <div class="collapsible-content">
 
@@ -487,13 +487,15 @@ make docker-up     <span class="cm"># Iniciar</span></code></pre>
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
   <pre><code><span class="cm"># Arreglar permisos antes de iniciar</span>
 sudo chown -R 1000:1000 ./config/
-sudo chmod -R 755 ./config/
+sudo chmod 700 ./config/
+sudo chmod 600 ./config/settings.toml
+sudo chmod -R 700 ./config/lnd/
 
 <span class="cm"># Luego iniciar normalmente</span>
 make docker-up</code></pre>
 </div>
 
-<p><strong>Arreglo Permanente en docker-compose.yml:</strong></p>
+<p><strong>Arreglo Permanente en docker/compose.yml:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
   <pre><code>services:
@@ -525,7 +527,7 @@ MOSTRO_DB_PASSWORD="" make docker-up</code></pre>
 MOSTRO_DB_PASSWORD="tu-password-segura" make docker-up</code></pre>
 </div>
 
-<p><strong>Opción 3: Habilitar Modo Interactivo en docker-compose.yml</strong></p>
+<p><strong>Opción 3: Habilitar Modo Interactivo en docker/compose.yml</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
   <pre><code>services:
@@ -555,17 +557,17 @@ ls -la docker/config/</code></pre>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
   <pre><code><span class="cm"># Verificar usuario del contenedor</span>
-docker exec -it mostro-container whoami
+docker compose exec mostro whoami
 
 <span class="cm"># Verificar permisos del directorio montado dentro del contenedor</span>
-docker exec -it mostro-container ls -la /config
+docker compose exec mostro ls -la /config
 
-<span class="cm"># Arreglar permisos desde dentro del contenedor si es necesario</span>
-docker exec -it mostro-container chown -R $(id -u):$(id -g) /config</code></pre>
+<span class="cm"># Arreglar permisos desde el host (no desde dentro del contenedor)</span>
+sudo chown -R 1000:1000 ./config/</code></pre>
 </div>
 
 </div>
-</div>
+</details>
 
 <hr>
 
