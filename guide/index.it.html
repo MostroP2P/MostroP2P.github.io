@@ -608,6 +608,13 @@ make docker-build</code></pre>
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
               data-copy="Copia" data-copied="Copiato!">Copia</button></div>
+          <pre><code><span class="cm"># Aggiungi a .gitignore (se non è già presente)</span>
+grep -qxF 'docker/.env' .gitignore || echo 'docker/.env' >> .gitignore</code></pre>
+        </div>
+
+        <div class="code-block">
+          <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)"
+              data-copy="Copia" data-copied="Copiato!">Copia</button></div>
           <pre><code><span class="cm"># Crea file docker/.env</span>
 nano docker/.env</code></pre>
         </div>
