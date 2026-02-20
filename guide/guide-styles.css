@@ -8,12 +8,19 @@
   --color-bg-sidebar: rgba(16, 18, 25, 0.6);
   --color-bg-sidebar-solid: rgba(16, 18, 25, 0.97);
   --color-bg-header: rgba(29, 33, 44, 0.92);
+  --color-bg-collapsible: rgba(16, 18, 25, 0.5);
   
   /* Accent colors */
+  /* Mapping to style/styles.css:
+     --color-green-primary = --green (main green)
+     --color-green-dark = --green-hover (darker green for hover states)
+     --color-green-darker = --green-dark (darkest green for back-to-top)
+     --color-green-light = --green-light (lighter green for hover effects)
+  */
   --color-green-primary: #8CC63F;
   --color-green-dark: #739C3D;
+  --color-green-darker: #304F00;
   --color-green-light: #9CD84F;
-  --color-green-darker: #304F00; 
   --color-green-bg: rgba(140, 198, 63, 0.1);
   --color-green-border: rgba(140, 198, 63, 0.15);
   --color-green-border-light: rgba(140, 198, 63, 0.3);
@@ -27,6 +34,7 @@
   --color-text-light: #e4e4e7;
   --color-text-lighter: #fff;
   --color-text-muted: #92949A;
+  --color-divider-subtle: rgba(255, 255, 255, 0.05);
   
   /* Utility colors */
   --color-warning: #fbbf24;
@@ -47,6 +55,7 @@
   /* Spacing */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
+  --spacing-sm-plus: 14px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
@@ -59,6 +68,7 @@
   --font-size-md: 15px;
   --font-size-lg: 17px;
   --font-size-xl: 18px;
+  --font-size-xl-bridge: 19px;
   --font-size-2xl: 22px;
   --font-size-3xl: 30px;
   --font-size-4xl: 42px;
@@ -67,6 +77,7 @@
   --header-height: 60px;
   --sidebar-width: 280px;
   --content-max-width: 800px;
+  --guide-area-width: 900px;
   --border-radius-sm: 3px;
   --border-radius-md: 4px;
   --border-radius-lg: 6px;
@@ -81,7 +92,7 @@
   --z-header: 100;
   --z-sidebar: 90;
   --z-overlay: 80;
-  --z-back-to-top: 90;
+  --z-back-to-top: 70;
 }
 
 * {
@@ -195,7 +206,7 @@ body::-webkit-scrollbar-thumb:hover { background: var(--color-green-light); }
   background: var(--color-green-primary);
   color: var(--color-bg-dark);
   border: none;
-  padding: var(--spacing-sm) var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-sm-plus);
   border-radius: var(--border-radius-lg);
   font-family: 'Roboto Condensed', sans-serif;
   font-weight: bold;
@@ -274,7 +285,7 @@ body::-webkit-scrollbar-thumb:hover { background: var(--color-green-light); }
   flex: 1;
   min-width: 0;
   padding: var(--spacing-2xl) var(--spacing-2xl) 120px;
-  max-width: calc(var(--sidebar-width) + 900px);
+  max-width: calc(var(--sidebar-width) + var(--guide-area-width));
 }
 .guide-content > * {
   max-width: var(--content-max-width);
@@ -308,7 +319,7 @@ body::-webkit-scrollbar-thumb:hover { background: var(--color-green-light); }
   font-weight: bold;
   color: var(--color-text-light);
   margin-top: 40px;
-  margin-bottom: var(--font-size-base);
+  margin-bottom: var(--spacing-sm-plus);
   line-height: 1.3;
 }
 .guide-content h4 {
@@ -437,7 +448,7 @@ body::-webkit-scrollbar-thumb:hover { background: var(--color-green-light); }
 }
 .guide-content td {
   padding: 10px var(--spacing-md);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--color-divider-subtle);
 }
 .guide-content tbody tr:hover {
   background: var(--color-green-bg-hover);
@@ -481,7 +492,7 @@ body::-webkit-scrollbar-thumb:hover { background: var(--color-green-light); }
 
 /* ===== COLLAPSIBLE SECTIONS ===== */
 details.collapsible {
-  background: rgba(16, 18, 25, 0.5);
+  background: var(--color-bg-collapsible);
   border: 1px solid var(--color-green-border);
   border-radius: var(--border-radius-xl);
   margin-bottom: 20px;
@@ -621,7 +632,7 @@ details.collapsible .collapsible-content {
   .guide-content { padding: var(--spacing-lg) var(--spacing-md) 80px; }
   .guide-content h1 { font-size: var(--font-size-3xl); }
   .guide-content h2 { font-size: var(--font-size-2xl); margin-top: var(--spacing-2xl); }
-  .guide-content h3 { font-size: 19px; }
+  .guide-content h3 { font-size: var(--font-size-xl-bridge); }
   .guide-header { padding: 0 var(--spacing-sm); }
   .header-logo span { display: none; }
   .lang-switcher a { padding: var(--spacing-xs) 5px; font-size: var(--font-size-sm); }
