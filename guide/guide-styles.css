@@ -13,6 +13,7 @@
   --color-green-primary: #8CC63F;
   --color-green-dark: #739C3D;
   --color-green-light: #9CD84F;
+  --color-green-darker: #304F00; 
   --color-green-bg: rgba(140, 198, 63, 0.1);
   --color-green-border: rgba(140, 198, 63, 0.15);
   --color-green-border-light: rgba(140, 198, 63, 0.3);
@@ -564,7 +565,7 @@ details.collapsible .collapsible-content {
   right: var(--spacing-lg);
   width: 44px;
   height: 44px;
-  background: #304F00;
+  background: var(--color-green-darker);
   color: var(--color-green-primary);
   border: none;
   border-radius: 50%;
