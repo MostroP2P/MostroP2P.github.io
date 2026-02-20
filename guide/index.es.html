@@ -409,9 +409,9 @@ docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -g
 
 <span class="cm"># Reemplaza 1000:1000 por el UID:GID detectado</span>
 sudo chown -R 1000:1000 ~/mostro-config
-chmod 700 ~/mostro-config
-chmod 600 ~/mostro-config/settings.toml
-chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
+sudo chmod 700 ~/mostro-config
+sudo chmod 600 ~/mostro-config/settings.toml
+sudo chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
 </div>
 
 <h4>Paso 10: Ejecutar el contenedor</h4>
@@ -458,12 +458,12 @@ chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
   <li>✅ Sin tiempo de compilación</li>
   <li>✅ No necesita clonar repositorio</li>
   <li>✅ Menores requerimientos de almacenamiento</li>
-  <li>✅ Actualizaciones: <code>docker pull mostrop2p/mostro:latest && docker restart mostro</code></li>
+  <li>✅ Actualizaciones controladas con tags versionados (ej. <code>mostrop2p/mostro:v0.16.3</code>)</li>
 </ul>
 
 <div class="callout warning">
   <div class="callout-title">🔒 Nota de Seguridad</div>
-  Al usar un tag de versión específica (ej. <code>mostrop2p/mostro:v0.16.3</code>) en lugar de <code>:latest</code>, tienes mejor control sobre actualizaciones y puedes probar nuevas versiones antes de deployar.
+  Recomendado: usa siempre un tag de versión específica (ej. <code>mostrop2p/mostro:v0.16.3</code>) para controlar despliegues y probar cambios antes de actualizar producción.
 </div>
 
 <p>🎉 <strong>¡Felicitaciones!</strong> Si ves conexiones exitosas en los logs, ¡tu nodo Mostro está funcionando!</p>
@@ -1271,6 +1271,42 @@ make docker-build
 make docker-down
 make docker-up</code></pre>
 </div>
+</div>
+</details>
+
+<details class="collapsible">
+<summary>Actualización Docker Hub</summary>
+<div class="collapsible-content">
+<p>Para Docker Hub, <code>docker restart</code> no actualiza la imagen. Debes recrear el contenedor después de hacer pull del nuevo tag.</p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># 1) Elegir el tag a desplegar (evitar :latest en producción)</span>
+export MOSTRO_TAG=v0.16.3
+
+<span class="cm"># 2) Detener y remover el contenedor actual</span>
+docker stop mostro
+docker rm mostro
+
+<span class="cm"># 3) Descargar la nueva imagen</span>
+docker pull mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># 4A) Recrear (LND en el mismo VPS)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># 4B) Recrear (LND en servidor diferente)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># Verificar versión en ejecución</span>
+docker inspect --format '{{.Config.Image}}' mostro</code></pre>
+</div>
+<p>Si usas Compose para Docker Hub, el flujo equivalente es: <code>docker compose pull && docker compose up -d</code>.</p>
 </div>
 </details>
 

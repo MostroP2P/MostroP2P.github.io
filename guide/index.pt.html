@@ -263,7 +263,7 @@ rana</code></pre>
 </table>
 </div>
 
-<p><strong>Nossa recomendação:</strong> Se sua comunidade tem alguém confortável com a linha de comando Linux, essa pessoa pode lidar com a instalação Docker (Opção A). Para a Opção C, é necessário alguém com experiência em administração de sistemas. A configuração do nó Lightning é a parte mais complexa — considere pedir ajuda a alguém experiente, ou usar uma solução nó-na-caixa.</p>
+<p><strong>Nossa recomendação:</strong> Se sua comunidade tem alguém confortável com a linha de comando Linux, essa pessoa pode lidar com a instalação Docker (Opção A ou Opção B). Para a Opção C, é necessário alguém com experiência em administração de sistemas. A configuração do nó Lightning é a parte mais complexa — considere pedir ajuda a alguém experiente, ou usar uma solução nó-na-caixa.</p>
 
 <hr>
 
@@ -389,12 +389,20 @@ fiat_currencies_accepted = ['USD', 'EUR']</code></pre>
 
 <div class="callout warning">
   <div class="callout-title">⚠️ Importante</div>
-  O container precisa de permissões de escrita no diretório de configuração para criar o banco de dados SQLite e seus arquivos temporários.
+  Evite <code>chmod 777</code>. Defina proprietário e permissões restritivas no diretório de configuração, pois ele contém arquivos sensíveis como <code>settings.toml</code> e <code>admin.macaroon</code>.
 </div>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>chmod 777 ~/mostro-config/</code></pre>
+  <pre><code><span class="cm"># Descobrir UID/GID do runtime do container</span>
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -u
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -g
+
+<span class="cm"># Substitua 1000:1000 pelo UID:GID detectado</span>
+sudo chown -R 1000:1000 ~/mostro-config
+sudo chmod 700 ~/mostro-config
+sudo chmod 600 ~/mostro-config/settings.toml
+sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
 </div>
 
 <h4>Passo 10: Executar o container</h4>
@@ -433,7 +441,7 @@ fiat_currencies_accepted = ['USD', 'EUR']</code></pre>
 
 <div class="callout tip">
   <div class="callout-title">💡 Solução de problemas</div>
-  Se você vir <code>Permission denied (os error 13)</code>, execute <code>chmod 777 ~/mostro-config/</code> e reinicie: <code>docker restart mostro</code>
+  Se você vir <code>Permission denied (os error 13)</code>, restaure proprietário/permissões corretos com <code>chown -R UID:GID ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code>, <code>chmod 600 ~/mostro-config/settings.toml</code> e <code>chmod 600 ~/mostro-config/lnd/admin.macaroon</code>; depois reinicie: <code>docker restart mostro</code>. Mantenha arquivos sensíveis legíveis apenas pelo proprietário.
 </div>
 
 <p><strong>Vantagens do Docker Hub:</strong></p>

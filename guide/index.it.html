@@ -551,12 +551,20 @@ fiat_currencies_accepted = ['USD', 'EUR']</code></pre>
 
         <div class="callout warning">
           <div class="callout-title">⚠️ Importante</div>
-          Il container ha bisogno di permessi di scrittura sulla directory di configurazione per creare il database SQLite e i suoi file temporanei.
+          Evita <code>chmod 777</code>. Imposta proprietà e permessi minimi sulla directory di configurazione, che contiene file sensibili come <code>settings.toml</code> e <code>admin.macaroon</code>.
         </div>
 
         <div class="code-block">
           <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copia" data-copied="Copiato!">Copia</button></div>
-          <pre><code>chmod 777 ~/mostro-config/</code></pre>
+          <pre><code><span class="cm"># Scopri UID/GID runtime del container</span>
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -u
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -g
+
+<span class="cm"># Sostituisci 1000:1000 con UID:GID rilevato</span>
+sudo chown -R 1000:1000 ~/mostro-config
+sudo chmod 700 ~/mostro-config
+sudo chmod 600 ~/mostro-config/settings.toml
+sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
         </div>
 
         <h4>Passo 10: Eseguire il container</h4>
@@ -595,7 +603,7 @@ fiat_currencies_accepted = ['USD', 'EUR']</code></pre>
 
         <div class="callout tip">
           <div class="callout-title">💡 Risoluzione problemi</div>
-          Se vedi <code>Permission denied (os error 13)</code>, esegui <code>chmod 777 ~/mostro-config/</code> e riavvia: <code>docker restart mostro</code>
+          Se vedi <code>Permission denied (os error 13)</code>, ripristina proprietà/permessi corretti con <code>chown -R UID:GID ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code>, <code>chmod 600 ~/mostro-config/settings.toml</code> e <code>chmod 600 ~/mostro-config/lnd/admin.macaroon</code>; poi riavvia: <code>docker restart mostro</code>.
         </div>
 
         <p><strong>Vantaggi di Docker Hub:</strong></p>
