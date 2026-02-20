@@ -412,7 +412,7 @@ chmod 700 ~/mostro-config
 <span class="cm"># If multiple trusted users need traversal, use 755 instead of 700</span>
 <span class="cm"># chmod 755 ~/mostro-config</span>
 chmod 600 ~/mostro-config/settings.toml
-chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
+chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
 </div>
 
 <h4>Step 10: Run the container</h4>
@@ -451,7 +451,7 @@ chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
 
 <div class="callout tip">
   <div class="callout-title">💡 Troubleshooting</div>
-  If you see <code>Permission denied (os error 13)</code>, verify ownership/perms and re-apply: <code>chown -R 1000:1000 ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code> (or <code>755</code>), <code>chmod 600 ~/mostro-config/settings.toml</code>, <code>chmod 640 ~/mostro-config/lnd/admin.macaroon</code>; then restart: <code>docker restart mostro</code>.
+  If you see <code>Permission denied (os error 13)</code>, verify ownership/perms and re-apply: <code>chown -R 1000:1000 ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code> (or <code>755</code>), <code>chmod 600 ~/mostro-config/settings.toml</code>, <code>chmod 600 ~/mostro-config/lnd/admin.macaroon</code>; then restart: <code>docker restart mostro</code>.
 </div>
 
 <p><strong>Advantages of Docker Hub:</strong></p>
