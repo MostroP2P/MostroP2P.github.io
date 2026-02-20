@@ -576,7 +576,7 @@ sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
   --restart unless-stopped \
   --add-host=host.docker.internal:host-gateway \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
         </div>
 
         <p><strong>Se LND è su un server diverso:</strong></p>
@@ -585,7 +585,7 @@ sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
           <pre><code>docker run -d --name mostro \
   --restart unless-stopped \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
         </div>
 
         <h4>Passo 11: Controllare i log</h4>

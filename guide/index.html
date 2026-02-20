@@ -350,7 +350,7 @@ docker compose version
 <h4>Step 6: Get the configuration template</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/v0.16.3/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
 </div>
 
 <h4>Step 7: Copy LND credentials</h4>
@@ -424,7 +424,7 @@ chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
   --restart unless-stopped \
   --add-host=host.docker.internal:host-gateway \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
 </div>
 
 <p><strong>If LND is on a different server:</strong></p>
@@ -433,7 +433,7 @@ chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
   <pre><code>docker run -d --name mostro \
   --restart unless-stopped \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
 </div>
 
 <h4>Step 11: Check the logs</h4>
@@ -459,12 +459,34 @@ chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
   <li>✅ No compilation time</li>
   <li>✅ No need to clone repository</li>
   <li>✅ Lower storage requirements</li>
-  <li>✅ Updates: <code>docker pull mostrop2p/mostro:latest && docker restart mostro</code></li>
+  <li>✅ Version-controlled updates with pinned tags (e.g., <code>mostrop2p/mostro:v0.16.3</code>)</li>
 </ul>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code><span class="cm"># Docker Hub update with pinned tag</span>
+export MOSTRO_TAG=v0.16.3
+docker pull mostrop2p/mostro:${MOSTRO_TAG}
+docker stop mostro
+docker rm mostro
+
+<span class="cm"># Recreate (LND on same VPS)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># Recreate (LND on different server)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}</code></pre>
+</div>
 
 <div class="callout warning">
   <div class="callout-title">🔒 Security Note</div>
-  When using a specific version tag (e.g., <code>mostrop2p/mostro:v0.16.3</code>) instead of <code>:latest</code>, you have better control over updates and can test new versions before deploying.
+  Prefer explicit version tags (e.g., <code>mostrop2p/mostro:v0.16.3</code>) over <code>:latest</code> for controlled updates and to avoid unexpected changes.
 </div>
 
 <p>🎉 <strong>Congratulations!</strong> If you see successful connections in the logs, your Mostro node is running!</p>
@@ -802,7 +824,7 @@ mostrod --version</code></pre>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>mkdir -p /opt/mostro
-cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+cp /opt/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
 </div>
 
