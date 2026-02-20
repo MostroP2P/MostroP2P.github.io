@@ -44,8 +44,9 @@
     <li class="toc-sub"><a href="#nostr-keys">Nostr Keys</a></li>
     <li class="toc-sub"><a href="#skill-level">Skill Level</a></li>
     <li><a href="#setup">3. Step-by-Step Setup</a></li>
-    <li class="toc-sub"><a href="#path-a-docker">Path A: Docker</a></li>
-    <li class="toc-sub"><a href="#path-b-native">Path B: Native Build</a></li>
+    <li class="toc-sub"><a href="#option-a-dockerhub">Option A: Docker Hub</a></li>
+    <li class="toc-sub"><a href="#option-b-docker-build">Option B: Docker Build</a></li>
+    <li class="toc-sub"><a href="#option-c-native">Option C: Native Build</a></li>
     <li><a href="#configuration">4. Configuration</a></li>
     <li class="toc-sub"><a href="#cfg-nostr">Nostr Keys</a></li>
     <li class="toc-sub"><a href="#cfg-fees">Fees</a></li>
@@ -74,7 +75,7 @@
 <main class="guide-content">
 
 <h1>Running Your Own Mostro Node</h1>
-<p class="guide-version">Mostro v0.16.2 — Community Guide · February 2026</p>
+<p class="guide-version">Mostro v0.16.3 — Community Guide · February 2026</p>
 
 <!-- ============================================================ -->
 <h2 id="what-is-mostro">1. What is Mostro and Why Should Your Community Run One?</h2>
@@ -268,25 +269,23 @@ rana</code></pre>
 </table>
 </div>
 
-<p><strong>Our recommendation:</strong> If your community has someone comfortable with the Linux command line, they can handle the Docker setup (Path A). For Path B, you want someone with sysadmin experience. The Lightning node setup is the most complex part — consider having someone experienced help, or using a node-in-a-box solution.</p>
+<p><strong>Our recommendation:</strong> If your community has someone comfortable with the Linux command line, they can handle the Docker setup (Option A). For Path B, you want someone with sysadmin experience. The Lightning node setup is the most complex part — consider having someone experienced help, or using a node-in-a-box solution.</p>
 
 <hr>
 
 <!-- ============================================================ -->
 <h2 id="setup">3. Step-by-Step Setup</h2>
 
-<p>Choose your path:</p>
+<p>All installation options share the same first steps. Then choose the option you prefer:</p>
 <ul>
-  <li><strong>Path A (Docker):</strong> Simpler, fewer steps, easier updates. Recommended for most communities.</li>
-  <li><strong>Path B (Native Build):</strong> More control, better for experienced sysadmins. Slightly better performance.</li>
+  <li><strong>Option A (Docker Hub):</strong> Fastest. No compiling, no cloning. Recommended for most.</li>
+  <li><strong>Option B (Docker Build):</strong> Build the image locally from the repository.</li>
+  <li><strong>Option C (Native Build):</strong> More control, better for experienced sysadmins.</li>
 </ul>
 
-<p>Both paths assume you already have: ✅ A VPS with Ubuntu running · ✅ SSH access · ✅ An LND node running.</p>
+<p>All options assume you already have: ✅ A VPS with Ubuntu running · ✅ SSH access · ✅ An LND node running.</p>
 
-<!-- Path A: Docker -->
-<details class="collapsible" id="path-a-docker" open>
-<summary>Path A: Docker Setup (Recommended for Beginners)</summary>
-<div class="collapsible-content">
+<h3>Common Steps (for all 3 options)</h3>
 
 <h4>Step 1: Connect to your VPS</h4>
 <div class="code-block">
@@ -305,6 +304,12 @@ apt upgrade -y</code></pre>
 </div>
 
 <h4>Step 3: Install Docker and Docker Compose</h4>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Note</div>
+  Docker is required for options A and B. If you are compiling manually (Option C), you can skip this step.
+</div>
+
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code><span class="cm"># Install Docker using the official convenience script</span>
@@ -325,6 +330,149 @@ docker compose version
   <pre><code>apt install -y git make</code></pre>
 </div>
 
+<p>✅ <strong>Common steps completed.</strong> Now choose your installation option:</p>
+
+<hr>
+
+<!-- Option A: Docker Hub -->
+<details class="collapsible" id="option-a-dockerhub" open>
+<summary>Option A: Docker Hub (Fastest — Recommended)</summary>
+<div class="collapsible-content">
+
+<p>Run Mostro directly from Docker Hub without cloning the repository or compiling. Perfect for VPS deployments.</p>
+
+<h4>Step 5: Create configuration directory</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>mkdir -p ~/mostro-config/lnd</code></pre>
+</div>
+
+<h4>Step 6: Get the configuration template</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+</div>
+
+<h4>Step 7: Copy LND credentials</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>cp /path/to/your/tls.cert ~/mostro-config/lnd/tls.cert
+cp /path/to/your/admin.macaroon ~/mostro-config/lnd/admin.macaroon</code></pre>
+</div>
+
+<p>If LND is on the <strong>same machine</strong>, typical paths are:</p>
+<ul>
+  <li><code>/root/.lnd/tls.cert</code></li>
+  <li><code>/root/.lnd/data/chain/bitcoin/mainnet/admin.macaroon</code></li>
+</ul>
+
+<h4>Step 8: Edit the configuration</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>nano ~/mostro-config/settings.toml</code></pre>
+</div>
+
+<p><strong>Required changes:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>[lightning]
+lnd_cert_file = '/config/lnd/tls.cert'
+lnd_macaroon_file = '/config/lnd/admin.macaroon'
+lnd_grpc_host = 'https://host.docker.internal:10009'  <span class="cm"># If LND on same VPS</span>
+<span class="cm"># Or use 'https://YOUR_LND_IP:10009' if LND on different server</span>
+
+[database]
+url = "sqlite:///config/mostro.db"
+
+[nostr]
+nsec_privkey = 'YOUR_NSEC_KEY_HERE'
+relays = ['wss://relay.mostro.network', 'wss://nos.lol']
+
+[mostro]
+fee = 0.006                    <span class="cm"># 0.6% fee per trade</span>
+max_order_amount = 1000000     <span class="cm"># Max order in sats</span>
+min_payment_amount = 100       <span class="cm"># Min order in sats</span>
+fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Your currencies</span></code></pre>
+</div>
+
+<p>Save: <code>Ctrl+X</code>, then <code>Y</code>, then <code>Enter</code>.</p>
+
+<h4>Step 9: Fix permissions</h4>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Important</div>
+  The container needs write permissions on the configuration directory to create the SQLite database and its temporary files.
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>chmod 777 ~/mostro-config/</code></pre>
+</div>
+
+<h4>Step 10: Run the container</h4>
+
+<p><strong>If LND is on the same VPS:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:latest</code></pre>
+</div>
+
+<p><strong>If LND is on a different server:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:latest</code></pre>
+</div>
+
+<h4>Step 11: Check the logs</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
+  <pre><code>docker logs -f mostro</code></pre>
+</div>
+
+<p>Look for these messages:</p>
+<ul>
+  <li><code>Settings correctly loaded</code> — Configuration is valid</li>
+  <li><code>Connected to LND</code> — Lightning connection successful</li>
+  <li><code>Connected to relay</code> — Nostr relay established</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Troubleshooting</div>
+  If you see <code>Permission denied (os error 13)</code>, run <code>chmod 777 ~/mostro-config/</code> and restart: <code>docker restart mostro</code>
+</div>
+
+<p><strong>Advantages of Docker Hub:</strong></p>
+<ul>
+  <li>✅ No compilation time</li>
+  <li>✅ No need to clone repository</li>
+  <li>✅ Lower storage requirements</li>
+  <li>✅ Updates: <code>docker pull mostrop2p/mostro:latest && docker restart mostro</code></li>
+</ul>
+
+<div class="callout warning">
+  <div class="callout-title">🔒 Security Note</div>
+  When using a specific version tag (e.g., <code>mostrop2p/mostro:v0.16.3</code>) instead of <code>:latest</code>, you have better control over updates and can test new versions before deploying.
+</div>
+
+<p>🎉 <strong>Congratulations!</strong> If you see successful connections in the logs, your Mostro node is running!</p>
+
+</div>
+</details>
+
+<hr>
+
+<!-- Option B: Docker Build -->
+<details class="collapsible" id="option-b-docker-build">
+<summary>Option B: Docker Build (Build image locally)</summary>
+<div class="collapsible-content">
+
 <h4>Step 5: Download Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
@@ -342,7 +490,7 @@ cp ../settings.tpl.toml config/settings.toml</code></pre>
 </div>
 
 <div class="callout tip">
-  <div class="callout-title">💡 Changed in v0.16.2+</div>
+  <div class="callout-title">💡 Changed in v0.16.3+</div>
   <ul>
     <li>No more <code>empty.mostro.db</code> — Mostro creates the database automatically</li>
     <li><code>settings.docker.toml</code> → <code>settings.tpl.toml</code> (template name changed)</li>
@@ -565,117 +713,12 @@ sudo chown -R 1000:1000 ./config/</code></pre>
 </div>
 </details>
 
-<hr>
-
-<h4>Alternative: Running from Docker Hub (No Build Required)</h4>
-
-<div class="callout tip">
-  <div class="callout-title">🚀 New in v0.16.2+</div>
-  You can now run Mostro directly from Docker Hub without cloning the repository or building locally. Perfect for VPS deployments!
-</div>
-
-<p><strong>Step-by-step for VPS deployment:</strong></p>
-
-<h5>1. Create a config directory</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>mkdir -p ~/mostro-config/lnd</code></pre>
-</div>
-
-<h5>2. Get the settings template</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
-</div>
-
-<h5>3. Copy your LND credentials</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>cp /path/to/your/tls.cert ~/mostro-config/lnd/tls.cert
-cp /path/to/your/admin.macaroon ~/mostro-config/lnd/admin.macaroon</code></pre>
-</div>
-
-<h5>4. Edit the configuration</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>nano ~/mostro-config/settings.toml</code></pre>
-</div>
-
-<p><strong>Required changes for Docker Hub deployment:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>[lightning]
-lnd_cert_file = '/config/lnd/tls.cert'
-lnd_macaroon_file = '/config/lnd/admin.macaroon'
-lnd_grpc_host = 'https://host.docker.internal:10009'  <span class="cm"># If LND on same VPS</span>
-<span class="cm"># Or use 'https://YOUR_LND_IP:10009' if LND on different server</span>
-
-[database]
-url = "sqlite:///config/mostro.db"
-
-[nostr]
-nsec_privkey = 'YOUR_NSEC_KEY_HERE'
-relays = ['wss://relay.mostro.network', 'wss://nos.lol']</code></pre>
-</div>
-
-<h5>5. Run the container</h5>
-
-<p><strong>If LND is on the same VPS:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>docker run -d --name mostro \
-  --restart unless-stopped \
-  --add-host=host.docker.internal:host-gateway \
-  -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
-</div>
-
-<p><strong>If LND is on a different server:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>docker run -d --name mostro \
-  --restart unless-stopped \
-  -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
-</div>
-
-<h5>6. Check the logs</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>docker logs -f mostro</code></pre>
-</div>
-
-<p><strong>Advantages of Docker Hub deployment:</strong></p>
-<ul>
-  <li>✅ No build time (5-15 minutes saved)</li>
-  <li>✅ No need to clone repository</li>
-  <li>✅ Smaller VPS storage requirements</li>
-  <li>✅ Automatic updates with <code>docker pull mostrop2p/mostro:latest</code></li>
-  <li>✅ Perfect for production VPS deployments</li>
-</ul>
-
-<div class="callout warning">
-  <div class="callout-title">🔒 Security Note</div>
-  When using a specific version tag (e.g., <code>mostrop2p/mostro:v0.16.2</code>) instead of <code>:latest</code>, you have better control over updates and can test new versions before deploying.
-</div>
-
-</div>
-</details>
-
-<!-- Path B: Native -->
-<details class="collapsible" id="path-b-native">
-<summary>Path B: Native Build (For Technical Operators)</summary>
+<!-- Option C: Native Build -->
+<details class="collapsible" id="option-c-native">
+<summary>Option C: Native Build (For Technical Operators)</summary>
 <div class="collapsible-content">
 
-<h4>Step 1: Connect and update</h4>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>ssh root@YOUR_VPS_IP_ADDRESS
-apt update
-apt upgrade -y</code></pre>
-</div>
-
-<h4>Step 2: Install Rust</h4>
+<h4>Step 5: Install Rust</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code><span class="cm"># Install Rust (press 1 when asked)</span>
@@ -694,13 +737,13 @@ cargo --version   <span class="cm"># Expected: cargo 1.86.0+</span></code></pre>
   Do NOT install Rust via <code>apt install rustc</code>. Always use <code>rustup</code> as shown above. The system package is often outdated and will cause compilation errors.
 </div>
 
-<h4>Step 3: Install build dependencies</h4>
+<h4>Step 6: Install build dependencies</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>apt install -y cmake build-essential libsqlite3-dev libssl-dev pkg-config git sqlite3 protobuf-compiler</code></pre>
 </div>
 
-<h4>Step 4: Download and compile Mostro</h4>
+<h4>Step 7: Download and compile Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>cd /opt
@@ -722,33 +765,33 @@ swapon /swapfile</code></pre>
   </div>
 </div>
 
-<h4>Step 5: Install the binary</h4>
+<h4>Step 8: Install the binary</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>install target/release/mostrod /usr/local/bin
 mostrod --version</code></pre>
 </div>
 
-<h4>Step 6: Initialize the database</h4>
+<h4>Step 9: Initialize the database</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>cargo install sqlx-cli --version 0.6.2
 ./init_db.sh</code></pre>
 </div>
 
-<h4>Step 7: Clean up build files</h4>
+<h4>Step 10: Clean up build files</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>cargo clean  <span class="cm"># Saves 2+ GB of disk space</span></code></pre>
 </div>
 
-<h4>Step 8: Create a dedicated user</h4>
+<h4>Step 11: Create a dedicated user</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>adduser --disabled-login mostro</code></pre>
 </div>
 
-<h4>Step 9: Configure Mostro</h4>
+<h4>Step 12: Configure Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>mkdir -p /opt/mostro
@@ -756,22 +799,22 @@ cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
 </div>
 
-<p>Edit the same settings as Path A Step 7: <code>lnd_cert_file</code>, <code>lnd_macaroon_file</code>, <code>lnd_grpc_host</code>, <code>nsec_privkey</code>, <code>relays</code>, <code>fee</code>, <code>fiat_currencies_accepted</code>, etc.</p>
+<p>Edit the same settings as Option A, Step 8: <code>lnd_cert_file</code>, <code>lnd_macaroon_file</code>, <code>lnd_grpc_host</code>, <code>nsec_privkey</code>, <code>relays</code>, <code>fee</code>, <code>fiat_currencies_accepted</code>, etc.</p>
 
-<h4>Step 10: Test run</h4>
+<h4>Step 13: Test run</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>/usr/local/bin/mostrod -d /opt/mostro</code></pre>
 </div>
 <p>If it connects to LND and relays successfully, press <code>Ctrl+C</code> to stop.</p>
 
-<h4>Step 11: Set file permissions</h4>
+<h4>Step 14: Set file permissions</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>chown -R mostro:mostro /opt/mostro</code></pre>
 </div>
 
-<h4>Step 12: Set up as a system service</h4>
+<h4>Step 15: Set up as a system service</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>nano /etc/systemd/system/mostro.service</code></pre>
@@ -804,7 +847,7 @@ systemctl start mostro.service
 systemctl status mostro.service</code></pre>
 </div>
 
-<h4>Step 13: Verify</h4>
+<h4>Step 16: Verify</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code>ps aux | grep mostrod
@@ -1008,7 +1051,7 @@ port = 50051</code></pre>
 <h4>Installing Mostrix</h4>
 <div class="callout warning">
   <div class="callout-title">⚠️ Prerequisite: Rust/Cargo required</div>
-  Mostrix must be compiled from source. If you followed Path A (Docker), you may not have Rust installed. Follow <a href="#step-2-install-rust">Path B, Step 2</a> to install Rust via rustup before proceeding.
+  Mostrix must be compiled from source. If you followed Option A or B (Docker), you may not have Rust installed. Follow <a href="#option-c-native">Option C, Step 5</a> to install Rust via rustup before proceeding.
 </div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
@@ -1109,7 +1152,7 @@ user_mode = "admin"</code></pre>
 <h4>Installing mostro-watchdog</h4>
 <div class="callout warning">
   <div class="callout-title">⚠️ Prerequisite: Rust/Cargo required</div>
-  Like Mostrix, mostro-watchdog must be compiled from source. Ensure Rust is installed (<a href="#step-2-install-rust">Path B, Step 2</a>).
+  Like Mostrix, mostro-watchdog must be compiled from source. Ensure Rust is installed (<a href="#option-c-native">Option C, Step 5</a>).
 </div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
@@ -1651,7 +1694,7 @@ relays = [
 <div class="guide-footer">
   <p>This guide is maintained by the Mostro community. Found an error or want to improve it?<br>
   Contributions welcome at <a href="https://github.com/MostroP2P/mostro" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro</a></p>
-  <p style="margin-top:12px;">Last updated: February 2026 · Mostro v0.16.2</p>
+  <p style="margin-top:12px;">Last updated: February 2026 · Mostro v0.16.3</p>
 </div>
 
 </main>
