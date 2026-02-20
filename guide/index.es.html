@@ -347,7 +347,7 @@ docker compose version
 <h4>Paso 6: Obtener el template de configuración</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
-  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/v0.16.3/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
 </div>
 
 <h4>Paso 7: Copiar credenciales LND</h4>
@@ -398,12 +398,20 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Tus monedas</span>
 
 <div class="callout warning">
   <div class="callout-title">⚠️ Importante</div>
-  El contenedor necesita permisos de escritura en el directorio de configuración para crear la base de datos SQLite y sus archivos temporales.
+  Evita <code>chmod 777</code>. Usa permisos mínimos: asigna el directorio al UID:GID del runtime del contenedor y protege los archivos sensibles.
 </div>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
-  <pre><code>chmod 777 ~/mostro-config/</code></pre>
+  <pre><code><span class="cm"># Descubrir UID/GID del runtime del contenedor</span>
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -u
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -g
+
+<span class="cm"># Reemplaza 1000:1000 por el UID:GID detectado</span>
+sudo chown -R 1000:1000 ~/mostro-config
+chmod 700 ~/mostro-config
+chmod 600 ~/mostro-config/settings.toml
+chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
 </div>
 
 <h4>Paso 10: Ejecutar el contenedor</h4>
@@ -415,7 +423,7 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Tus monedas</span>
   --restart unless-stopped \
   --add-host=host.docker.internal:host-gateway \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
 </div>
 
 <p><strong>Si LND está en un servidor diferente:</strong></p>
@@ -424,7 +432,7 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Tus monedas</span>
   <pre><code>docker run -d --name mostro \
   --restart unless-stopped \
   -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
+  mostrop2p/mostro:v0.16.3</code></pre>
 </div>
 
 <h4>Paso 11: Revisar los logs</h4>
@@ -442,7 +450,7 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Tus monedas</span>
 
 <div class="callout tip">
   <div class="callout-title">💡 Solución de problemas</div>
-  Si ves <code>Permission denied (os error 13)</code>, ejecuta <code>chmod 777 ~/mostro-config/</code> y reinicia: <code>docker restart mostro</code>
+  Si ves <code>Permission denied (os error 13)</code>, vuelve a detectar UID:GID del contenedor y ajusta permisos con <code>chown -R UID:GID ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code>, <code>chmod 600 ~/mostro-config/settings.toml</code> y <code>chmod 640 ~/mostro-config/lnd/admin.macaroon</code>; luego reinicia: <code>docker restart mostro</code>.
 </div>
 
 <p><strong>Ventajas de Docker Hub:</strong></p>
@@ -711,6 +719,8 @@ sudo chown -R 1000:1000 ./config/</code></pre>
 
 </div>
 </details>
+</div>
+</details>
 
 <!-- Option C: Native -->
 <details class="collapsible" id="opcion-c-nativo">
@@ -794,7 +804,7 @@ mostrod --version</code></pre>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="¡Copiado!">Copiar</button></div>
   <pre><code>mkdir -p /opt/mostro
-cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+cp /opt/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
 </div>
 

@@ -269,7 +269,7 @@ rana</code></pre>
 </table>
 </div>
 
-<p><strong>Our recommendation:</strong> If your community has someone comfortable with the Linux command line, they can handle the Docker setup (Option A). For Path B, you want someone with sysadmin experience. The Lightning node setup is the most complex part — consider having someone experienced help, or using a node-in-a-box solution.</p>
+<p><strong>Our recommendation:</strong> If your community has someone comfortable with the Linux command line, they can handle the Docker setup (Option A). For Option C, you want someone with sysadmin experience. The Lightning node setup is the most complex part — consider having someone experienced help, or using a node-in-a-box solution.</p>
 
 <hr>
 
@@ -401,12 +401,18 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Your currencies</s
 
 <div class="callout warning">
   <div class="callout-title">⚠️ Important</div>
-  The container needs write permissions on the configuration directory to create the SQLite database and its temporary files.
+  Avoid <code>chmod 777</code>. Use least privilege: set ownership to the container user and restrict directory/file permissions.
 </div>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
-  <pre><code>chmod 777 ~/mostro-config/</code></pre>
+  <pre><code><span class="cm"># Example container runtime user</span>
+sudo chown -R 1000:1000 ~/mostro-config
+chmod 700 ~/mostro-config
+<span class="cm"># If multiple trusted users need traversal, use 755 instead of 700</span>
+<span class="cm"># chmod 755 ~/mostro-config</span>
+chmod 600 ~/mostro-config/settings.toml
+chmod 640 ~/mostro-config/lnd/admin.macaroon</code></pre>
 </div>
 
 <h4>Step 10: Run the container</h4>
@@ -445,7 +451,7 @@ fiat_currencies_accepted = ['USD', 'EUR']  <span class="cm"># Your currencies</s
 
 <div class="callout tip">
   <div class="callout-title">💡 Troubleshooting</div>
-  If you see <code>Permission denied (os error 13)</code>, run <code>chmod 777 ~/mostro-config/</code> and restart: <code>docker restart mostro</code>
+  If you see <code>Permission denied (os error 13)</code>, verify ownership/perms and re-apply: <code>chown -R 1000:1000 ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code> (or <code>755</code>), <code>chmod 600 ~/mostro-config/settings.toml</code>, <code>chmod 640 ~/mostro-config/lnd/admin.macaroon</code>; then restart: <code>docker restart mostro</code>.
 </div>
 
 <p><strong>Advantages of Docker Hub:</strong></p>
@@ -1418,7 +1424,7 @@ sqlite3 /path/to/mostro.db "SELECT SUM(fee * 2) as total_fees_sats FROM orders W
 <details class="collapsible">
 <summary>Do I need to be a developer to run a Mostro node?</summary>
 <div class="collapsible-content">
-<p>No, but you need to be comfortable with basic command-line operations (typing commands, editing text files). The Docker path (Path A) is designed to be accessible. Having someone technical in your community helps a lot though.</p>
+<p>No, but you need to be comfortable with basic command-line operations (typing commands, editing text files). The Docker path is designed to be accessible. Having someone technical in your community helps a lot though.</p>
 </div>
 </details>
 
