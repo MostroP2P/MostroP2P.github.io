@@ -278,6 +278,11 @@ rana</code></pre>
 
 <p>Todas assumem que você já tem: ✅ Um VPS com Ubuntu · ✅ Acesso SSH · ✅ Um nó LND funcionando.</p>
 
+<div class="callout tip">
+  <div class="callout-title">📁 Caminho padrão do Compose</div>
+  Neste guia, os comandos Docker Compose usam <code>docker/compose.yml</code> e devem ser executados a partir da raiz do repositório (por exemplo, <code>/opt/mostro</code>).
+</div>
+
 <h3>Passos Comuns (para as 3 opções)</h3>
 
 <h4>Passo 1: Conecte-se ao seu VPS</h4>
@@ -341,7 +346,7 @@ docker compose version</code></pre>
 <h4>Passo 6: Obter o template de configuração</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/v0.16.3/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
 </div>
 
 <h4>Passo 7: Copiar credenciais LND</h4>
@@ -449,12 +454,34 @@ sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
   <li>✅ Sem tempo de compilação</li>
   <li>✅ Não precisa clonar repositório</li>
   <li>✅ Menores requisitos de armazenamento</li>
-  <li>✅ Atualizações: <code>docker pull mostrop2p/mostro:latest && docker restart mostro</code></li>
+  <li>✅ Atualizações: use uma tag específica, faça pull da nova imagem e recrie o container (reiniciar sozinho não troca a imagem)</li>
 </ul>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Atualização Docker Hub com tag específica</span>
+export MOSTRO_TAG=v0.16.3
+docker pull mostrop2p/mostro:${MOSTRO_TAG}
+docker stop mostro
+docker rm mostro
+
+<span class="cm"># Recriar (LND no mesmo VPS)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># Recriar (LND em servidor diferente)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}</code></pre>
+</div>
 
 <div class="callout warning">
   <div class="callout-title">🔒 Nota de Segurança</div>
-  Ao usar uma tag de versão específica (ex. <code>mostrop2p/mostro:v0.16.3</code>) em vez de <code>:latest</code>, você tem melhor controle sobre atualizações.
+  Prefira tags de versão explícitas (ex. <code>mostrop2p/mostro:&lt;TAG&gt;</code>) para controlar atualizações e evitar mudanças inesperadas de <code>:latest</code>.
 </div>
 
 <p>🎉 <strong>Parabéns!</strong> Se você vir conexões bem-sucedidas nos logs, seu nó Mostro está funcionando!</p>
@@ -617,13 +644,13 @@ make docker-up</code></pre>
 <p>Verifique se tudo está funcionando:</p>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f compose.yml ps</code></pre>
+  <pre><code>docker compose -f docker/compose.yml ps</code></pre>
 </div>
 
 <h4>Passo 11: Verificar os logs</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f compose.yml logs -f mostro</code></pre>
+  <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
 </div>
 
 <p>Procure estas mensagens:</p>
@@ -668,7 +695,7 @@ sudo chmod -R 755 ./config/
 make docker-up</code></pre>
 </div>
 
-<p><strong>Correção Permanente em docker-compose.yml:</strong></p>
+<p><strong>Correção Permanente em docker/compose.yml:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>services:
@@ -789,7 +816,7 @@ mostrod --version</code></pre>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>mkdir -p /opt/mostro
-cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+cp /opt/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
 </div>
 
@@ -1207,8 +1234,8 @@ journalctl -u mostro -f</code></pre>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f /opt/mostro/docker/compose.yml ps
-docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
+  <pre><code>docker compose -f docker/compose.yml ps
+docker compose -f docker/compose.yml logs -f mostro</code></pre>
 </div>
 
 <h3 id="atualizacao">5.5 Atualizando o Mostro</h3>

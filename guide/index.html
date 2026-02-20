@@ -672,7 +672,8 @@ make docker-up     <span class="cm"># Start</span></code></pre>
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copy" data-copied="Copied!">Copy</button></div>
   <pre><code><span class="cm"># Fix permissions before starting</span>
 sudo chown -R 1000:1000 ./config/
-sudo chmod -R 755 ./config/
+sudo chmod 700 ./config/
+sudo chmod 600 ./config/settings.toml
 
 <span class="cm"># Then start normally</span>
 make docker-up</code></pre>
