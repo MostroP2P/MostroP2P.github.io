@@ -1,0 +1,222 @@
+/* Call for Action — Additional Styles */
+/* Extends guide-styles.css with CFA-specific components */
+
+/* ===== HERO CALLOUT ===== */
+.hero-callout {
+  font-size: 17px;
+  border-left-width: 5px;
+  padding: 24px 28px;
+  background: rgba(140, 198, 63, 0.12) !important;
+}
+
+/* ===== READING TIME ===== */
+.reading-time {
+  color: #92949A;
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+/* ===== HIGHLIGHT BLOCKS ===== */
+.highlight-block {
+  text-align: center;
+  padding: 28px 32px;
+  margin: 32px 0;
+  border-radius: 8px;
+  background: rgba(16, 18, 25, 0.6);
+  border: 1px solid rgba(140, 198, 63, 0.15);
+}
+.highlight-block p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #d4d4d8;
+  margin: 0;
+  line-height: 1.4;
+}
+.highlight-block.accent {
+  background: rgba(140, 198, 63, 0.08);
+  border-color: rgba(140, 198, 63, 0.3);
+}
+.highlight-block.accent p {
+  color: #8CC63F;
+  font-size: 26px;
+}
+
+/* ===== COMMUNITY CARDS GRID ===== */
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin: 24px 0 32px;
+}
+.community-card {
+  background: rgba(16, 18, 25, 0.5);
+  border: 1px solid rgba(140, 198, 63, 0.12);
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.2s;
+}
+.community-card:hover {
+  border-color: rgba(140, 198, 63, 0.35);
+  background: rgba(140, 198, 63, 0.04);
+  transform: translateY(-2px);
+}
+.community-card-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+.community-card h4 {
+  color: #fff;
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.community-card p {
+  color: #92949A;
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===== PROCESS TIMELINE ===== */
+.process-timeline {
+  margin: 24px 0 32px;
+  position: relative;
+  padding-left: 24px;
+}
+.process-timeline::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  top: 32px;
+  bottom: 32px;
+  width: 2px;
+  background: rgba(140, 198, 63, 0.2);
+}
+.process-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 28px;
+  position: relative;
+}
+.process-step:last-child {
+  margin-bottom: 0;
+}
+.process-step-icon {
+  font-size: 28px;
+  min-width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(140, 198, 63, 0.1);
+  border: 1px solid rgba(140, 198, 63, 0.2);
+  border-radius: 50%;
+  z-index: 1;
+}
+.process-step-content {
+  flex: 1;
+  padding-top: 8px;
+}
+.process-step-content h4 {
+  color: #fff;
+  font-size: 17px;
+  margin: 0 0 6px;
+}
+.process-step-content p {
+  color: #92949A;
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===== APPLY CHANNELS ===== */
+.apply-channels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 24px 0 32px;
+}
+.apply-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 16px;
+  background: rgba(16, 18, 25, 0.5);
+  border: 1px solid rgba(140, 198, 63, 0.15);
+  border-radius: 8px;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  transition: all 0.2s;
+}
+.apply-card:hover {
+  border-color: rgba(140, 198, 63, 0.4);
+  background: rgba(140, 198, 63, 0.06);
+  transform: translateY(-2px);
+}
+.apply-card-icon {
+  font-size: 28px;
+}
+.apply-card-label {
+  color: #fff !important;
+  font-weight: bold;
+  font-size: 15px;
+}
+.apply-card-handle {
+  color: #8CC63F !important;
+  font-size: 13px;
+}
+
+/* ===== TIMELINE BADGES ===== */
+.timeline-badges {
+  display: flex;
+  gap: 16px;
+  margin: 24px 0 32px;
+  flex-wrap: wrap;
+}
+.timeline-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px 28px;
+  background: rgba(16, 18, 25, 0.5);
+  border: 1px solid rgba(140, 198, 63, 0.15);
+  border-radius: 8px;
+  flex: 1;
+  min-width: 140px;
+}
+.timeline-badge-label {
+  color: #92949A;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.timeline-badge-value {
+  color: #8CC63F;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* ===== CLOSING STATEMENT ===== */
+.closing-statement p {
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 640px) {
+  .community-grid {
+    grid-template-columns: 1fr;
+  }
+  .apply-channels {
+    grid-template-columns: 1fr 1fr;
+  }
+  .timeline-badges {
+    flex-direction: column;
+  }
+  .highlight-block p { font-size: 18px; }
+  .highlight-block.accent p { font-size: 20px; }
+  .process-timeline { padding-left: 0; }
+  .process-timeline::before { left: 24px; }
+}
