@@ -41,8 +41,9 @@
     <li class="toc-sub"><a href="#chaves-nostr">Chaves Nostr</a></li>
     <li class="toc-sub"><a href="#nivel-tecnico">Nível técnico</a></li>
     <li><a href="#instalacao">3. Instalação</a></li>
-    <li class="toc-sub"><a href="#caminho-a-docker">Caminho A: Docker</a></li>
-    <li class="toc-sub"><a href="#caminho-b-nativo">Caminho B: Nativo</a></li>
+    <li class="toc-sub"><a href="#opcao-a-dockerhub">Opção A: Docker Hub</a></li>
+    <li class="toc-sub"><a href="#opcao-b-docker-build">Opção B: Docker Build</a></li>
+    <li class="toc-sub"><a href="#opcao-c-nativo">Opção C: Nativo</a></li>
     <li><a href="#configuracao">4. Configuração</a></li>
     <li class="toc-sub"><a href="#cfg-nostr">Chaves Nostr</a></li>
     <li class="toc-sub"><a href="#cfg-taxas">Taxas</a></li>
@@ -70,7 +71,7 @@
 <main class="guide-content">
 
 <h1>Executando Seu Próprio Nó Mostro</h1>
-<p class="guide-version">Mostro v0.16.2 — Guia da Comunidade · Fevereiro 2026</p>
+<p class="guide-version">Mostro v0.16.3 — Guia da Comunidade · Fevereiro 2026</p>
 
 <h2 id="o-que-e-mostro">1. O que é Mostro e por que sua comunidade deveria executar um?</h2>
 
@@ -262,23 +263,27 @@ rana</code></pre>
 </table>
 </div>
 
-<p><strong>Nossa recomendação:</strong> Se sua comunidade tem alguém confortável com a linha de comando Linux, essa pessoa pode lidar com a instalação Docker (Caminho A). Para o Caminho B, é necessário alguém com experiência em administração de sistemas. A configuração do nó Lightning é a parte mais complexa — considere pedir ajuda a alguém experiente, ou usar uma solução nó-na-caixa.</p>
+<p><strong>Nossa recomendação:</strong> Se sua comunidade tem alguém confortável com a linha de comando Linux, essa pessoa pode lidar com a instalação Docker (Opção A ou Opção B). Para a Opção C, é necessário alguém com experiência em administração de sistemas. A configuração do nó Lightning é a parte mais complexa — considere pedir ajuda a alguém experiente, ou usar uma solução nó-na-caixa.</p>
 
 <hr>
 
 <h2 id="instalacao">3. Instalação Passo a Passo</h2>
 
-<p>Escolha seu caminho:</p>
+<p>Todas as opções de instalação compartilham os mesmos primeiros passos. Depois escolha a opção que preferir:</p>
 <ul>
-  <li><strong>Caminho A (Docker):</strong> Mais simples, menos passos, atualizações mais fáceis. Recomendado para a maioria.</li>
-  <li><strong>Caminho B (Compilação nativa):</strong> Mais controle, melhor para sysadmins experientes.</li>
+  <li><strong>Opção A (Docker Hub):</strong> A mais rápida. Sem compilar, sem clonar. Recomendada para a maioria.</li>
+  <li><strong>Opção B (Docker Build):</strong> Constrói a imagem localmente a partir do repositório.</li>
+  <li><strong>Opção C (Compilação nativa):</strong> Mais controle, melhor para sysadmins experientes.</li>
 </ul>
 
-<p>Ambos os caminhos assumem que você já tem: ✅ Um VPS com Ubuntu · ✅ Acesso SSH · ✅ Um nó LND funcionando.</p>
+<p>Todas assumem que você já tem: ✅ Um VPS com Ubuntu · ✅ Acesso SSH · ✅ Um nó LND funcionando.</p>
 
-<details class="collapsible" id="caminho-a-docker" open>
-<summary>Caminho A: Instalação Docker (Recomendada para iniciantes)</summary>
-<div class="collapsible-content">
+<div class="callout tip">
+  <div class="callout-title">📁 Caminho padrão do Compose</div>
+  Neste guia, os comandos Docker Compose usam <code>docker/compose.yml</code> e devem ser executados a partir da raiz do repositório (por exemplo, <code>/opt/mostro</code>).
+</div>
+
+<h3>Passos Comuns (para as 3 opções)</h3>
 
 <h4>Passo 1: Conecte-se ao seu VPS</h4>
 <div class="code-block">
@@ -297,6 +302,12 @@ apt upgrade -y</code></pre>
 </div>
 
 <h4>Passo 3: Instalar Docker e Docker Compose</h4>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Nota</div>
+  Docker é necessário para as opções A e B. Se vai compilar manualmente (Opção C), pode pular este passo.
+</div>
+
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code><span class="cm"># Instalar Docker com o script oficial</span>
@@ -315,6 +326,176 @@ docker compose version</code></pre>
   <pre><code>apt install -y git make</code></pre>
 </div>
 
+<p>✅ <strong>Passos comuns completados.</strong> Agora escolha sua opção de instalação:</p>
+
+<hr>
+
+<!-- Opção A: Docker Hub -->
+<details class="collapsible" id="opcao-a-dockerhub" open>
+<summary>Opção A: Docker Hub (A mais rápida — Recomendada)</summary>
+<div class="collapsible-content">
+
+<p>Execute o Mostro diretamente do Docker Hub sem clonar o repositório ou compilar. Perfeito para deployments em VPS.</p>
+
+<h4>Passo 5: Criar diretório de configuração</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>mkdir -p ~/mostro-config/lnd</code></pre>
+</div>
+
+<h4>Passo 6: Obter o template de configuração</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/v0.16.3/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
+</div>
+
+<h4>Passo 7: Copiar credenciais LND</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>cp /caminho/para/seu/tls.cert ~/mostro-config/lnd/tls.cert
+cp /caminho/para/seu/admin.macaroon ~/mostro-config/lnd/admin.macaroon</code></pre>
+</div>
+
+<p>Se o LND está na <strong>mesma máquina</strong>, os caminhos típicos são:</p>
+<ul>
+  <li><code>/root/.lnd/tls.cert</code></li>
+  <li><code>/root/.lnd/data/chain/bitcoin/mainnet/admin.macaroon</code></li>
+</ul>
+
+<h4>Passo 8: Editar a configuração</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>nano ~/mostro-config/settings.toml</code></pre>
+</div>
+
+<p><strong>Alterações necessárias:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>[lightning]
+lnd_cert_file = '/config/lnd/tls.cert'
+lnd_macaroon_file = '/config/lnd/admin.macaroon'
+lnd_grpc_host = 'https://host.docker.internal:10009'  <span class="cm"># Se LND no mesmo VPS</span>
+
+[database]
+url = "sqlite:///config/mostro.db"
+
+[nostr]
+nsec_privkey = 'SUA_CHAVE_NSEC_AQUI'
+relays = ['wss://relay.mostro.network', 'wss://nos.lol']
+
+[mostro]
+fee = 0.006                    <span class="cm"># 0.6% taxa por operação</span>
+max_order_amount = 1000000
+min_payment_amount = 100
+fiat_currencies_accepted = ['USD', 'EUR']</code></pre>
+</div>
+
+<h4>Passo 9: Ajustar permissões</h4>
+
+<div class="callout warning">
+  <div class="callout-title">⚠️ Importante</div>
+  Evite <code>chmod 777</code>. Defina proprietário e permissões restritivas no diretório de configuração, pois ele contém arquivos sensíveis como <code>settings.toml</code> e <code>admin.macaroon</code>.
+</div>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Descobrir UID/GID do runtime do container</span>
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -u
+docker run --rm --entrypoint id mostrop2p/mostro:v0.16.3 -g
+
+<span class="cm"># Substitua 1000:1000 pelo UID:GID detectado</span>
+sudo chown -R 1000:1000 ~/mostro-config
+sudo chmod 700 ~/mostro-config
+sudo chmod 600 ~/mostro-config/settings.toml
+sudo chmod 600 ~/mostro-config/lnd/admin.macaroon</code></pre>
+</div>
+
+<h4>Passo 10: Executar o container</h4>
+
+<p><strong>Se LND está no mesmo VPS:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:v0.16.3</code></pre>
+</div>
+
+<p><strong>Se LND está em um servidor diferente:</strong></p>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:v0.16.3</code></pre>
+</div>
+
+<h4>Passo 11: Verificar os logs</h4>
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code>docker logs -f mostro</code></pre>
+</div>
+
+<p>Procure estas mensagens:</p>
+<ul>
+  <li><code>Settings correctly loaded</code> — Configuração válida</li>
+  <li><code>Connected to LND</code> — Conexão Lightning bem-sucedida</li>
+  <li><code>Connected to relay</code> — Relay Nostr estabelecido</li>
+</ul>
+
+<div class="callout tip">
+  <div class="callout-title">💡 Solução de problemas</div>
+  Se você vir <code>Permission denied (os error 13)</code>, restaure proprietário/permissões corretos com <code>chown -R UID:GID ~/mostro-config</code>, <code>chmod 700 ~/mostro-config</code>, <code>chmod 600 ~/mostro-config/settings.toml</code> e <code>chmod 600 ~/mostro-config/lnd/admin.macaroon</code>; depois reinicie: <code>docker restart mostro</code>. Mantenha arquivos sensíveis legíveis apenas pelo proprietário.
+</div>
+
+<p><strong>Vantagens do Docker Hub:</strong></p>
+<ul>
+  <li>✅ Sem tempo de compilação</li>
+  <li>✅ Não precisa clonar repositório</li>
+  <li>✅ Menores requisitos de armazenamento</li>
+  <li>✅ Atualizações: use uma tag específica, faça pull da nova imagem e recrie o container (reiniciar sozinho não troca a imagem)</li>
+</ul>
+
+<div class="code-block">
+  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
+  <pre><code><span class="cm"># Atualização Docker Hub com tag específica</span>
+export MOSTRO_TAG=v0.16.3
+docker pull mostrop2p/mostro:${MOSTRO_TAG}
+docker stop mostro
+docker rm mostro
+
+<span class="cm"># Recriar (LND no mesmo VPS)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  --add-host=host.docker.internal:host-gateway \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}
+
+<span class="cm"># Recriar (LND em servidor diferente)</span>
+docker run -d --name mostro \
+  --restart unless-stopped \
+  -v ~/mostro-config:/config \
+  mostrop2p/mostro:${MOSTRO_TAG}</code></pre>
+</div>
+
+<div class="callout warning">
+  <div class="callout-title">🔒 Nota de Segurança</div>
+  Prefira tags de versão explícitas (ex. <code>mostrop2p/mostro:&lt;TAG&gt;</code>) para controlar atualizações e evitar mudanças inesperadas de <code>:latest</code>.
+</div>
+
+<p>🎉 <strong>Parabéns!</strong> Se você vir conexões bem-sucedidas nos logs, seu nó Mostro está funcionando!</p>
+
+</div>
+</details>
+
+<hr>
+
+<!-- Opção B: Docker Build -->
+<details class="collapsible" id="opcao-b-docker-build">
+<summary>Opção B: Docker Build (Construir imagem localmente)</summary>
+<div class="collapsible-content">
+
 <h4>Passo 5: Baixar o Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
@@ -332,7 +513,7 @@ cp ../settings.tpl.toml config/settings.toml</code></pre>
 </div>
 
 <div class="callout tip">
-  <div class="callout-title">💡 Mudanças na v0.16.2+</div>
+  <div class="callout-title">💡 Mudanças na v0.16.3+</div>
   <ul>
     <li>Não há mais <code>empty.mostro.db</code> — Mostro cria o banco de dados automaticamente</li>
     <li><code>settings.docker.toml</code> → <code>settings.tpl.toml</code> (nome do template mudou)</li>
@@ -463,13 +644,13 @@ make docker-up</code></pre>
 <p>Verifique se tudo está funcionando:</p>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f compose.yml ps</code></pre>
+  <pre><code>docker compose -f docker/compose.yml ps</code></pre>
 </div>
 
 <h4>Passo 11: Verificar os logs</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f compose.yml logs -f mostro</code></pre>
+  <pre><code>docker compose -f docker/compose.yml logs -f mostro</code></pre>
 </div>
 
 <p>Procure estas mensagens:</p>
@@ -514,7 +695,7 @@ sudo chmod -R 755 ./config/
 make docker-up</code></pre>
 </div>
 
-<p><strong>Correção Permanente em docker-compose.yml:</strong></p>
+<p><strong>Correção Permanente em docker/compose.yml:</strong></p>
 <div class="code-block">
   <div class="code-block-header"><span>yaml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>services:
@@ -555,116 +736,12 @@ sudo chown -R 1000:1000 ./config/</code></pre>
 </div>
 </details>
 
-<hr>
-
-<h4>Alternativa: Execução do Docker Hub (Sem Necessidade de Compilação)</h4>
-
-<div class="callout tip">
-  <div class="callout-title">🚀 Novo na v0.16.2+</div>
-  Agora você pode executar o Mostro diretamente do Docker Hub sem clonar o repositório ou compilar localmente. Perfeito para deployments em VPS!
-</div>
-
-<p><strong>Passos para deployment em VPS:</strong></p>
-
-<h5>1. Criar um diretório de configuração</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>mkdir -p ~/mostro-config/lnd</code></pre>
-</div>
-
-<h5>2. Obter o template de configuração</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>curl -sL https://raw.githubusercontent.com/MostroP2P/mostro/main/settings.tpl.toml -o ~/mostro-config/settings.toml</code></pre>
-</div>
-
-<h5>3. Copiar suas credenciais LND</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>cp /caminho/para/seu/tls.cert ~/mostro-config/lnd/tls.cert
-cp /caminho/para/seu/admin.macaroon ~/mostro-config/lnd/admin.macaroon</code></pre>
-</div>
-
-<h5>4. Editar a configuração</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>nano ~/mostro-config/settings.toml</code></pre>
-</div>
-
-<p><strong>Alterações necessárias para deployment Docker Hub:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>toml</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>[lightning]
-lnd_cert_file = '/config/lnd/tls.cert'
-lnd_macaroon_file = '/config/lnd/admin.macaroon'
-lnd_grpc_host = 'https://host.docker.internal:10009'  <span class="cm"># Se LND no mesmo VPS</span>
-<span class="cm"># Ou use 'https://SEU_IP_LND:10009' se LND em servidor diferente</span>
-
-[database]
-url = "sqlite:///config/mostro.db"
-
-[nostr]
-nsec_privkey = 'SUA_CHAVE_NSEC_AQUI'
-relays = ['wss://relay.mostro.network', 'wss://nos.lol']</code></pre>
-</div>
-
-<h5>5. Executar o contêiner</h5>
-
-<p><strong>Se LND está no mesmo VPS:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker run -d --name mostro \
-  --restart unless-stopped \
-  --add-host=host.docker.internal:host-gateway \
-  -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
-</div>
-
-<p><strong>Se LND está em um servidor diferente:</strong></p>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker run -d --name mostro \
-  --restart unless-stopped \
-  -v ~/mostro-config:/config \
-  mostrop2p/mostro:latest</code></pre>
-</div>
-
-<h5>6. Verificar os logs</h5>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker logs -f mostro</code></pre>
-</div>
-
-<p><strong>Vantagens do deployment Docker Hub:</strong></p>
-<ul>
-  <li>✅ Sem tempo de compilação (5-15 minutos economizados)</li>
-  <li>✅ Não precisa clonar repositório</li>
-  <li>✅ Menores requisitos de armazenamento VPS</li>
-  <li>✅ Atualizações automáticas com <code>docker pull mostrop2p/mostro:latest</code></li>
-  <li>✅ Perfeito para deployments de produção em VPS</li>
-</ul>
-
-<div class="callout warning">
-  <div class="callout-title">🔒 Nota de Segurança</div>
-  Ao usar uma tag de versão específica (ex. <code>mostrop2p/mostro:v0.16.2</code>) em vez de <code>:latest</code>, você tem melhor controle sobre atualizações e pode testar novas versões antes de fazer o deploy.
-</div>
-
-</div>
-</details>
-
-<details class="collapsible" id="caminho-b-nativo">
-<summary>Caminho B: Compilação Nativa (Para operadores técnicos)</summary>
+<!-- Opção C: Compilação Nativa -->
+<details class="collapsible" id="opcao-c-nativo">
+<summary>Opção C: Compilação Nativa (Para operadores técnicos)</summary>
 <div class="collapsible-content">
 
-<h4>Passo 1: Conectar e atualizar</h4>
-<div class="code-block">
-  <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>ssh root@ENDERECO_IP_DO_SEU_VPS
-apt update
-apt upgrade -y</code></pre>
-</div>
-
-<h4>Passo 2: Instalar Rust</h4>
+<h4>Passo 5: Instalar Rust</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code><span class="cm"># Instalar Rust (pressione 1 quando solicitado)</span>
@@ -683,13 +760,13 @@ cargo --version   <span class="cm"># Esperado: cargo 1.86.0+</span></code></pre>
   NÃO instale Rust via <code>apt install rustc</code>. Sempre use <code>rustup</code> como mostrado acima. O pacote do sistema geralmente está desatualizado e causará erros de compilação.
 </div>
 
-<h4>Passo 3: Instalar dependências de compilação</h4>
+<h4>Passo 6: Instalar dependências de compilação</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>apt install -y cmake build-essential libsqlite3-dev libssl-dev pkg-config git sqlite3 protobuf-compiler</code></pre>
 </div>
 
-<h4>Passo 4: Baixar e compilar o Mostro</h4>
+<h4>Passo 7: Baixar e compilar o Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>cd /opt
@@ -709,56 +786,56 @@ swapon /swapfile</code></pre>
   </div>
 </div>
 
-<h4>Passo 5: Instalar o binário</h4>
+<h4>Passo 8: Instalar o binário</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>install target/release/mostrod /usr/local/bin
 mostrod --version</code></pre>
 </div>
 
-<h4>Passo 6: Inicializar o banco de dados</h4>
+<h4>Passo 9: Inicializar o banco de dados</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>cargo install sqlx-cli --version 0.6.2
 ./init_db.sh</code></pre>
 </div>
 
-<h4>Passo 7: Limpar arquivos de compilação</h4>
+<h4>Passo 10: Limpar arquivos de compilação</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>cargo clean</code></pre>
 </div>
 
-<h4>Passo 8: Criar um usuário dedicado</h4>
+<h4>Passo 11: Criar um usuário dedicado</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>adduser --disabled-login mostro</code></pre>
 </div>
 
-<h4>Passo 9: Configurar o Mostro</h4>
+<h4>Passo 12: Configurar o Mostro</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>mkdir -p /opt/mostro
-cp /opt/mostro/mostro/settings.tpl.toml /opt/mostro/settings.toml
+cp /opt/mostro/settings.tpl.toml /opt/mostro/settings.toml
 nano /opt/mostro/settings.toml</code></pre>
 </div>
 
-<p>Edite as mesmas configurações do Caminho A, Passo 7.</p>
+<p>Edite as mesmas configurações do Opção A, Passo 8.</p>
 
-<h4>Passo 10: Teste de execução</h4>
+<h4>Passo 13: Teste de execução</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>/usr/local/bin/mostrod -d /opt/mostro</code></pre>
 </div>
 <p>Se conectar ao LND e aos relays, pressione <code>Ctrl+C</code> para parar.</p>
 
-<h4>Passo 11: Definir permissões</h4>
+<h4>Passo 14: Definir permissões</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>chown -R mostro:mostro /opt/mostro</code></pre>
 </div>
 
-<h4>Passo 12: Configurar como serviço do sistema</h4>
+<h4>Passo 15: Configurar como serviço do sistema</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>nano /etc/systemd/system/mostro.service</code></pre>
@@ -791,7 +868,7 @@ systemctl start mostro.service
 systemctl status mostro.service</code></pre>
 </div>
 
-<h4>Passo 13: Verificar</h4>
+<h4>Passo 16: Verificar</h4>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
   <pre><code>ps aux | grep mostrod
@@ -971,7 +1048,7 @@ port = 50051</code></pre>
 <h4>Instalação do Mostrix</h4>
 <div class="callout warning">
   <div class="callout-title">⚠️ Pré-requisito: Rust/Cargo necessário</div>
-  O Mostrix deve ser compilado a partir do código-fonte. Se você seguiu o Caminho A (Docker), pode não ter o Rust instalado. Siga o <a href="#passo-2-instalar-rust">Caminho B, Passo 2</a> para instalar o Rust via rustup.
+  O Mostrix deve ser compilado a partir do código-fonte. Se você seguiu a Opção A ou B (Docker), pode não ter o Rust instalado. Siga o <a href="#opcao-c-nativo">Opção C, Passo 5</a> para instalar o Rust via rustup.
 </div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
@@ -1072,7 +1149,7 @@ user_mode = "admin"</code></pre>
 <h4>Instalação do mostro-watchdog</h4>
 <div class="callout warning">
   <div class="callout-title">⚠️ Pré-requisito: Rust/Cargo necessário</div>
-  Assim como o Mostrix, o mostro-watchdog deve ser compilado a partir do código-fonte. Certifique-se de ter o Rust instalado (<a href="#passo-2-instalar-rust">Caminho B, Passo 2</a>).
+  Assim como o Mostrix, o mostro-watchdog deve ser compilado a partir do código-fonte. Certifique-se de ter o Rust instalado (<a href="#opcao-c-nativo">Opção C, Passo 5</a>).
 </div>
 <div class="code-block">
   <div class="code-block-header"><span>bash</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
@@ -1157,8 +1234,8 @@ journalctl -u mostro -f</code></pre>
 
 <div class="code-block">
   <div class="code-block-header"><span>bash — Docker</span><button class="copy-btn" onclick="copyCode(this)" data-copy="Copiar" data-copied="Copiado!">Copiar</button></div>
-  <pre><code>docker compose -f /opt/mostro/docker/compose.yml ps
-docker compose -f /opt/mostro/docker/compose.yml logs -f mostro</code></pre>
+  <pre><code>docker compose -f docker/compose.yml ps
+docker compose -f docker/compose.yml logs -f mostro</code></pre>
 </div>
 
 <h3 id="atualizacao">5.5 Atualizando o Mostro</h3>
@@ -1274,7 +1351,7 @@ sqlite3 /caminho/para/mostro.db "SELECT id, fiat_amount, fiat_code, amount, stat
 <details class="collapsible">
 <summary>Preciso ser desenvolvedor para executar um nó Mostro?</summary>
 <div class="collapsible-content">
-<p>Não, mas precisa estar confortável com operações básicas de linha de comando. O caminho Docker (Caminho A) é projetado para ser acessível.</p>
+<p>Não, mas precisa estar confortável com operações básicas de linha de comando. O caminho Docker (Opção A) é projetado para ser acessível.</p>
 </div>
 </details>
 
@@ -1429,7 +1506,7 @@ relays = [
 <div class="guide-footer">
   <p>Este guia é mantido pela comunidade Mostro. Encontrou um erro ou quer melhorar?<br>
   Contribuições são bem-vindas em <a href="https://github.com/MostroP2P/mostro" target="_blank" rel="noopener noreferrer">github.com/MostroP2P/mostro</a></p>
-  <p style="margin-top:12px;">Última atualização: Fevereiro 2026 · Mostro v0.16.2</p>
+  <p style="margin-top:12px;">Última atualização: Fevereiro 2026 · Mostro v0.16.3</p>
 </div>
 
 </main>
