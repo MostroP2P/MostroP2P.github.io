@@ -85,7 +85,7 @@
 .process-timeline::before {
   content: '';
   position: absolute;
-  left: 24px;
+  left: 48px;
   top: 32px;
   bottom: 32px;
   width: 2px;
