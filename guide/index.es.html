@@ -1077,7 +1077,7 @@ cargo build --release
 cargo run</code></pre>
 </div>
 
-<p>En la primera ejecución, Mostrix crea <code>~/.mostrix/settings.toml</code>. Editá este archivo para configurarlo.</p>
+<p>En la primera ejecución, Mostrix crea <code>~/.mostrix/settings.toml</code>. Edita este archivo para configurarlo.</p>
 
 <h4>Configuración de Mostrix en modo administrador</h4>
 <div class="code-block">
@@ -1098,7 +1098,7 @@ relays = [
   "wss://relay.nostr.band"
 ]
 
-<span class="cm"># Monedas fiat que querés ver</span>
+<span class="cm"># Monedas fiat que quieres ver</span>
 currencies = ["USD", "EUR", "ARS"]
 
 <span class="cm"># IMPORTANTE: Configurar como "admin" para habilitar funciones de resolución de disputas</span>
@@ -1112,16 +1112,16 @@ user_mode = "admin"</code></pre>
 
 <h4>Resolución de disputas con Mostrix</h4>
 <ol>
-  <li><strong>Pestaña Disputes Pending</strong> — Muestra todas las disputas con estado "Initiated". Seleccioná una y presioná <strong>Enter</strong> para tomarla (otros admins verán que la reclamaste).</li>
+  <li><strong>Pestaña Disputes Pending</strong> — Muestra todas las disputas con estado "Initiated". Selecciona una y presiona <strong>Enter</strong> para tomarla (otros admins verán que la reclamaste).</li>
   <li><strong>Pestaña Disputes in Progress</strong> — Tu espacio de trabajo. Cada disputa muestra:
     <ul>
       <li>Información completa de la disputa (comprador, vendedor, montos, moneda, calificaciones)</li>
-      <li>Vista de chat dividida — presioná <strong>Tab</strong> para alternar entre el chat del comprador y vendedor</li>
-      <li>Presioná <strong>Shift+I</strong> para habilitar la entrada de chat, escribí tu mensaje</li>
-      <li>Usá <strong>PageUp/PageDown</strong> para desplazarte, <strong>End</strong> para ir al último mensaje</li>
+      <li>Vista de chat dividida — presiona <strong>Tab</strong> para alternar entre el chat del comprador y vendedor</li>
+      <li>Presiona <strong>Shift+I</strong> para habilitar la entrada de chat, escribe tu mensaje</li>
+      <li>Usa <strong>PageUp/PageDown</strong> para desplazarte, <strong>End</strong> para ir al último mensaje</li>
     </ul>
   </li>
-  <li><strong>Finalizar</strong> — Presioná <strong>Shift+F</strong> para abrir el popup de finalización:
+  <li><strong>Finalizar</strong> — Presiona <strong>Shift+F</strong> para abrir el popup de finalización:
     <ul>
       <li><strong>Pay Buyer</strong> — Liberar los sats bloqueados al comprador (usar cuando el vendedor recibió el fiat pero no libera)</li>
       <li><strong>Refund Seller</strong> — Cancelar la hold invoice, devolviendo sats al vendedor (usar cuando el comprador no pagó realmente)</li>
@@ -1138,7 +1138,7 @@ user_mode = "admin"</code></pre>
 
 <h3 id="watchdog">5.3 mostro-watchdog — Notificaciones de disputas en Telegram</h3>
 
-<p><a href="https://github.com/MostroP2P/mostro-watchdog" target="_blank" rel="noopener noreferrer"><strong>mostro-watchdog</strong></a> es un bot de notificaciones que monitorea tu nodo Mostro en busca de disputas y envía alertas instantáneas a un grupo de Telegram. Esto es esencial para tiempos de respuesta rápidos — no querés estar constantemente mirando Mostrix esperando disputas.</p>
+<p><a href="https://github.com/MostroP2P/mostro-watchdog" target="_blank" rel="noopener noreferrer"><strong>mostro-watchdog</strong></a> es un bot de notificaciones que monitorea tu nodo Mostro en busca de disputas y envía alertas instantáneas a un grupo de Telegram. Esto es esencial para tiempos de respuesta rápidos — no quieres estar constantemente mirando Mostrix esperando disputas.</p>
 
 <p><strong>Cómo funciona:</strong></p>
 <div class="code-block">
@@ -1188,7 +1188,7 @@ pubkey = "YOUR_MOSTRO_PUBKEY"
 relays = ["wss://relay.mostro.network", "wss://nos.lol", "wss://relay.nostr.band"]
 
 [telegram]
-<span class="cm"># Obtené esto de @BotFather en Telegram</span>
+<span class="cm"># Obtén esto de @BotFather en Telegram</span>
 bot_token = "YOUR_BOT_TOKEN"
 
 <span class="cm"># El ID del grupo/canal de Telegram para alertas de admin</span>
@@ -1197,11 +1197,11 @@ chat_id = "YOUR_CHAT_ID"</code></pre>
 
 <p><strong>Configuración del bot de Telegram:</strong></p>
 <ol>
-  <li>Enviá un mensaje a <a href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">@BotFather</a> en Telegram → <code>/newbot</code> → seguí las instrucciones</li>
-  <li>Copiá el token del bot a <code>config.toml</code></li>
-  <li>Creá un <strong>grupo privado de Telegram</strong> para tu equipo de administración</li>
-  <li>Agregá el bot al grupo</li>
-  <li>Obtené el chat ID (enviá un mensaje en el grupo, luego revisá <code>https://api.telegram.org/bot&lt;YOUR_TOKEN&gt;/getUpdates</code>)</li>
+  <li>Envía un mensaje a <a href="https://t.me/BotFather" target="_blank" rel="noopener noreferrer">@BotFather</a> en Telegram → <code>/newbot</code> → sigue las instrucciones</li>
+  <li>Copia el token del bot a <code>config.toml</code></li>
+  <li>Crea un <strong>grupo privado de Telegram</strong> para tu equipo de administración</li>
+  <li>Agrega el bot al grupo</li>
+  <li>Obtén el chat ID (envía un mensaje en el grupo, luego revisa <code>https://api.telegram.org/bot&lt;YOUR_TOKEN&gt;/getUpdates</code>)</li>
 </ol>
 
 <h4>Ejecución de mostro-watchdog</h4>
@@ -1219,7 +1219,7 @@ RUST_LOG=mostro_watchdog=debug ./target/release/mostro-watchdog</code></pre>
 
 <div class="callout tip">
   <div class="callout-title">💡 Consejo</div>
-  Ejecutá mostro-watchdog como un servicio systemd (igual que Mostro) para que se inicie automáticamente y funcione 24/7. Tus admins nunca deberían perderse una notificación de disputa.
+  Ejecuta mostro-watchdog como un servicio systemd (igual que Mostro) para que se inicie automáticamente y funcione 24/7. Tus admins nunca deberían perderse una notificación de disputa.
 </div>
 
 <h4>El flujo completo de disputas</h4>
