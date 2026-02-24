@@ -1,0 +1,146 @@
+---
+import type { Locale } from '../i18n/translations';
+import { locales, getLocalePath } from '../i18n/translations';
+import NetworkBackground from '../components/NetworkBackground.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  locale?: Locale;
+  ogImage?: string;
+  canonicalPath?: string;
+  type?: string;
+}
+
+const {
+  title,
+  description = "Non-custodial P2P Bitcoin exchange on Lightning Network & Nostr. Trade Bitcoin peer-to-peer without intermediaries, KYC, or custody.",
+  locale = 'en',
+  ogImage = '/images/mostro-logo.png',
+  canonicalPath,
+  type = 'website',
+} = Astro.props;
+
+const siteUrl = 'https://mostro.network';
+
+// Determine current path without locale prefix
+const currentPath = Astro.url.pathname;
+let basePath = currentPath;
+if (locale !== 'en') {
+  basePath = currentPath.replace(`/${locale}`, '') || '/';
+}
+
+// Canonical URL
+const canonicalUrl = canonicalPath
+  ? `${siteUrl}${canonicalPath}`
+  : `${siteUrl}${currentPath === '/' ? '' : currentPath}`;
+
+// Full OG image URL
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
+
+// Locale to Open Graph locale format
+const ogLocaleMap: Record<string, string> = {
+  en: 'en_US',
+  es: 'es_ES',
+  fr: 'fr_FR',
+  it: 'it_IT',
+  pt: 'pt_BR',
+};
+
+// JSON-LD structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Mostro',
+  url: siteUrl,
+  description: 'Non-custodial peer-to-peer Bitcoin exchange built on Lightning Network and Nostr.',
+  inLanguage: locales.map(l => ogLocaleMap[l] || l),
+  publisher: {
+    '@type': 'Organization',
+    name: 'Mostro P2P',
+    url: 'https://mostro.network',
+    logo: {
+      '@type': 'ImageObject',
+      url: `${siteUrl}/images/mostro-logo.png`,
+    },
+    sameAs: [
+      'https://github.com/MostroP2P',
+      'https://t.me/MostroP2P',
+    ],
+  },
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Bitcoin, P2P, peer-to-peer, exchange, Lightning Network, Nostr, non-custodial, KYC-free, decentralized, trading, buy Bitcoin, sell Bitcoin, open protocol, censorship resistant" />
+    <meta name="author" content="Mostro P2P" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#8CC63F" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Hreflang alternate links for SEO -->
+    {locales.map(l => (
+      <link
+        rel="alternate"
+        hreflang={l}
+        href={`${siteUrl}${getLocalePath(l, basePath)}`}
+      />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={`${siteUrl}${basePath}`} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Mostro — Non-custodial P2P Bitcoin Exchange" />
+    <meta property="og:site_name" content="Mostro" />
+    <meta property="og:locale" content={ogLocaleMap[locale] || locale} />
+    {locales.filter(l => l !== locale).map(l => (
+      <meta property="og:locale:alternate" content={ogLocaleMap[l] || l} />
+    ))}
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalUrl} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    <meta name="twitter:site" content="@MostroP2P" />
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/mostro-logo.png" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="starfield"></div>
+    <NetworkBackground />
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

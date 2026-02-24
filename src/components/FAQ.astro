@@ -1,0 +1,155 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<section id="faq" class="section">
+  <div class="container">
+    <h2 class="section-title">{i.faq.title}</h2>
+    <p class="section-subtitle">{i.faq.subtitle}</p>
+    
+    <div class="faq-container glass">
+      {i.faq.items.map((item, index) => (
+        <div class="faq-item" data-faq={index}>
+          <button class="faq-question">
+            {item.q}
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-content" set:html={item.a.replace(/\n\n/g, '</p><p>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')} />
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // FAQ Accordion functionality
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question') as HTMLButtonElement;
+      const answer = item.querySelector('.faq-answer') as HTMLDivElement;
+      
+      question?.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
+        
+        // Close all items
+        faqItems.forEach(otherItem => {
+          otherItem.classList.remove('active');
+        });
+        
+        // Toggle current item
+        if (!isActive) {
+          item.classList.add('active');
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-item:last-child {
+    border-bottom: none;
+  }
+
+  .faq-question {
+    width: 100%;
+    padding: 28px 32px;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-family: var(--font-sans);
+    gap: 16px;
+    transition: color 0.3s;
+  }
+
+  .faq-question:hover {
+    color: var(--accent);
+  }
+
+  .faq-icon {
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--accent);
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  .faq-item.active .faq-answer {
+    max-height: 2000px;
+  }
+
+  .faq-answer-content {
+    padding: 0 32px 32px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .faq-answer-content :global(p) {
+    margin-bottom: 16px;
+  }
+
+  .faq-answer-content :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .faq-answer-content :global(strong) {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .faq-question {
+      padding: 24px 20px;
+      font-size: 1rem;
+      gap: 12px;
+    }
+
+    .faq-answer-content {
+      padding: 0 20px 24px;
+      font-size: 0.95rem;
+    }
+
+    .faq-icon {
+      font-size: 1.2rem;
+    }
+  }
+</style>

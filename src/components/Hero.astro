@@ -1,0 +1,228 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-video-wrapper">
+        <video
+          class="hero-video"
+          autoplay
+          muted
+          playsinline
+          preload="auto"
+        >
+          <source src="/videos/hero-intro.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="hero-badge">{i.hero.badge}</div>
+      <h1 class="hero-title">
+        <span class="highlight">{i.hero.title}</span>
+      </h1>
+      <p class="hero-subtitle">{i.hero.subtitle}</p>
+      <p class="hero-desc">{i.hero.desc}</p>
+      
+      <div class="hero-actions">
+        <a href="#get-started" class="btn btn-primary">{i.hero.ctaPrimary}</a>
+        <a href="#how-it-works" class="btn btn-outline">{i.hero.ctaSecondary}</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">{i.hero.stat1}</span>
+          <span class="stat-label">{i.hero.stat1Label}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{i.hero.stat2}</span>
+          <span class="stat-label">{i.hero.stat2Label}</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">{i.hero.stat3}</span>
+          <span class="stat-label">{i.hero.stat3Label}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding: 90px 0 80px;
+    text-align: center;
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .hero-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .hero-video-wrapper {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto 24px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  /* Fade edges into the page background */
+  .hero-video-wrapper::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: var(--radius-lg);
+    box-shadow:
+      inset 0 0 80px 40px var(--bg-primary),
+      inset 0 0 160px 80px rgba(29, 33, 44, 0.7);
+  }
+
+  .hero-video {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-lg);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 99px;
+    background: rgba(140, 198, 63, 0.1);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+
+  .hero-title {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+  }
+
+  .highlight {
+    background: linear-gradient(90deg, #8CC63F, #b8e86c, #5fa82a, #d4f59a, #739C3D, #8CC63F);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 6s ease-in-out infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .hero-desc {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 720px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 60px;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 4px; 
+    text-align: center;
+  }
+  
+  .stat-value { 
+    font-size: 1.1rem; 
+    font-weight: 700; 
+    color: var(--accent); 
+  }
+  
+  .stat-label { 
+    font-size: 0.85rem; 
+    color: var(--text-muted); 
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero {
+      padding: 110px 0 60px;
+      min-height: 80vh;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.2rem;
+    }
+    
+    .hero-desc {
+      font-size: 1rem;
+    }
+    
+    .hero-stats {
+      gap: 24px;
+    }
+    
+    .hero-actions {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .btn {
+      width: 100%;
+      max-width: 280px;
+      justify-content: center;
+    }
+  }
+</style>

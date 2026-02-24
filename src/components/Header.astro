@@ -1,0 +1,336 @@
+---
+import { type Locale, t, getLocalePath, getOtherLocales, getLocaleLabel } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<header class="header">
+  <div class="container">
+    <div class="nav-content">
+      <!-- Logo -->
+      <a href={getLocalePath(locale, '/')} class="logo">
+        <img src="/images/mostro-logo.png" alt="Mostro" />
+        <span>Mostro</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="nav-desktop">
+        <a href="#about">{i.nav.about}</a>
+        <a href="#how-it-works">{i.nav.howItWorks}</a>
+        <a href="#features">{i.nav.features}</a>
+        <a href="#faq">{i.nav.faq}</a>
+        <a href="#get-started">{i.nav.getStarted}</a>
+        <a href="#donate" class="donate-link">{i.nav.donate}</a>
+      </nav>
+
+      <!-- Language Switcher -->
+      <div class="lang-switch">
+        <button class="lang-button" id="langButton">
+          🌐 {getLocaleLabel(locale).split(' ')[0]}
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          {getOtherLocales(locale).map(l => (
+            <a href={getLocalePath(l, '/')}>
+              {getLocaleLabel(l)}
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <nav class="nav-mobile" id="mobileNav">
+      <a href="#about">{i.nav.about}</a>
+      <a href="#how-it-works">{i.nav.howItWorks}</a>
+      <a href="#features">{i.nav.features}</a>
+      <a href="#faq">{i.nav.faq}</a>
+      <a href="#get-started">{i.nav.getStarted}</a>
+      <a href="#donate">{i.nav.donate}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Language switcher
+  document.addEventListener('DOMContentLoaded', () => {
+    const langButton = document.getElementById('langButton');
+    const langDropdown = document.getElementById('langDropdown');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileNav = document.getElementById('mobileNav');
+
+    // Language dropdown
+    langButton?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown?.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+      langDropdown?.classList.remove('show');
+    });
+
+    // Mobile menu toggle
+    mobileMenuBtn?.addEventListener('click', () => {
+      mobileMenuBtn.classList.toggle('active');
+      mobileNav?.classList.toggle('show');
+    });
+
+    // Close mobile menu on link click
+    const mobileLinks = mobileNav?.querySelectorAll('a');
+    mobileLinks?.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenuBtn?.classList.remove('active');
+        mobileNav?.classList.remove('show');
+      });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href') as string);
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(29, 33, 44, 0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .logo img {
+    width: auto;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .nav-desktop {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+  }
+
+  .nav-desktop a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-desktop a:hover {
+    color: var(--accent);
+  }
+
+  .donate-link {
+    background: var(--accent);
+    color: var(--bg-primary) !important;
+    padding: 8px 16px;
+    border-radius: var(--radius);
+    font-weight: 600;
+    transition: all 0.3s;
+  }
+
+  .donate-link:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+  }
+
+  /* Language Switcher */
+  .lang-switch {
+    position: relative;
+  }
+
+  .lang-button {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+  }
+
+  .lang-button:hover {
+    border-color: var(--border-hover);
+    background: rgba(140, 198, 63, 0.1);
+  }
+
+  .lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    min-width: 120px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+  }
+
+  .lang-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .lang-dropdown a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .lang-dropdown a:hover {
+    color: var(--accent);
+    background: rgba(140, 198, 63, 0.1);
+  }
+
+  .lang-dropdown a:first-child {
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+  }
+
+  .lang-dropdown a:last-child {
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+  }
+
+  /* Mobile Menu */
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 28px;
+    height: 28px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 10;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all 0.3s;
+    transform-origin: center;
+  }
+
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  .nav-mobile {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .nav-mobile.show {
+    opacity: 1;
+    max-height: 400px;
+  }
+
+  .nav-mobile a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    padding: 8px 0;
+    transition: color 0.2s;
+  }
+
+  .nav-mobile a:hover {
+    color: var(--accent);
+  }
+
+  /* Mobile Styles */
+  @media (max-width: 768px) {
+    .nav-desktop {
+      display: none;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    .nav-mobile {
+      display: flex;
+    }
+
+    .logo {
+      font-size: 1.3rem;
+    }
+
+    .logo img {
+      width: auto;
+      height: 32px;
+    }
+  }
+</style>

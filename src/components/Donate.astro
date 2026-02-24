@@ -1,0 +1,93 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<section id="donate" class="section">
+  <div class="container">
+    <div class="donate-content">
+      <h2 class="section-title">{i.donate.title}</h2>
+      
+      <div class="donate-card glass">
+        <div class="donate-icon">⚡</div>
+        <p class="donate-text">{i.donate.content}</p>
+        <a href={i.donate.link} target="_blank" rel="noopener" class="btn btn-primary donate-btn">
+          {i.donate.button}
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M7 17l9.2-9.2M17 17V7H7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .donate-content {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .donate-card {
+    padding: 48px 32px;
+    text-align: center;
+  }
+
+  .donate-icon {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    display: block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+
+  .donate-text {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+
+  .donate-btn {
+    font-size: 1.1rem;
+    padding: 14px 32px;
+  }
+
+  .donate-btn svg {
+    margin-left: 8px;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .donate-card {
+      padding: 36px 24px;
+    }
+
+    .donate-icon {
+      font-size: 3rem;
+    }
+
+    .donate-text {
+      font-size: 1rem;
+    }
+
+    .donate-btn {
+      width: 100%;
+      max-width: 280px;
+    }
+  }
+</style>

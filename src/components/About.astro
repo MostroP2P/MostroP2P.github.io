@@ -1,0 +1,45 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<section id="about" class="section">
+  <div class="container">
+    <h2 class="section-title">{i.about.title}</h2>
+    
+    <div class="about-content prose">
+      <p>{i.about.content}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .about-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+  }
+
+  .about-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .about-content p {
+      font-size: 1rem;
+    }
+  }
+</style>
