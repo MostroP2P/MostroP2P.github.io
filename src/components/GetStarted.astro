@@ -1,0 +1,137 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+
+const options = [
+  {
+    title: i.getStarted.mobile,
+    desc: i.getStarted.mobileDesc,
+    link: i.getStarted.mobileLink,
+    icon: "📱"
+  },
+  {
+    title: i.getStarted.cli,
+    desc: i.getStarted.cliDesc,
+    link: i.getStarted.cliLink,
+    icon: "💻"
+  },
+  {
+    title: i.getStarted.community,
+    desc: i.getStarted.communityDesc,
+    link: i.getStarted.communityLink,
+    icon: "🌍"
+  },
+  {
+    title: i.getStarted.docs,
+    desc: i.getStarted.docsDesc,
+    link: i.getStarted.docsLink,
+    icon: "📚"
+  }
+];
+---
+
+<section id="get-started" class="section">
+  <div class="container">
+    <h2 class="section-title">{i.getStarted.title}</h2>
+    <p class="section-subtitle">{i.getStarted.subtitle}</p>
+    
+    <div class="get-started-grid">
+      {options.map(option => (
+        <a href={option.link} target="_blank" rel="noopener" class="get-started-card glass card">
+          <div class="get-started-icon">{option.icon}</div>
+          <h3>{option.title}</h3>
+          <p>{option.desc}</p>
+          <div class="get-started-arrow">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17l9.2-9.2M17 17V7H7"/>
+            </svg>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .get-started-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .get-started-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    text-align: center;
+    transition: all 0.3s ease;
+    padding: 32px 24px;
+  }
+
+  .get-started-card:hover {
+    transform: translateY(-5px);
+    color: inherit;
+  }
+
+  .get-started-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .get-started-card h3 {
+    color: var(--accent);
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .get-started-card p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .get-started-arrow {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    color: var(--accent);
+    opacity: 0.7;
+    transition: all 0.3s ease;
+  }
+
+  .get-started-card:hover .get-started-arrow {
+    opacity: 1;
+    transform: translate(2px, -2px);
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .get-started-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .get-started-card {
+      padding: 28px 20px;
+    }
+
+    .get-started-icon {
+      font-size: 2.5rem;
+    }
+
+    .get-started-arrow {
+      top: 20px;
+      right: 20px;
+    }
+  }
+</style>

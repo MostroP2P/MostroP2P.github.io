@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Hero from '../../components/Hero.astro';
+import About from '../../components/About.astro';
+import HowItWorks from '../../components/HowItWorks.astro';
+import Features from '../../components/Features.astro';
+import FAQ from '../../components/FAQ.astro';
+import GetStarted from '../../components/GetStarted.astro';
+import Donate from '../../components/Donate.astro';
+import Footer from '../../components/Footer.astro';
+
+const locale = 'pt';
+const title = "Mostro — Exchange P2P de Bitcoin sem KYC na Lightning Network e Nostr";
+---
+
+<Layout {title} {locale}>
+  <Header {locale} />
+  <main>
+    <Hero {locale} />
+    <About {locale} />
+    <HowItWorks {locale} />
+    <Features {locale} />
+    <FAQ {locale} />
+    <GetStarted {locale} />
+    <Donate {locale} />
+  </main>
+  <Footer {locale} />
+</Layout>

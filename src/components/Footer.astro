@@ -1,0 +1,220 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props { 
+  locale: Locale; 
+}
+const { locale } = Astro.props;
+const i = t(locale);
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <!-- Brand Section -->
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="/images/mostro-logo.png" alt="Mostro" />
+          <span>Mostro</span>
+        </div>
+        <p class="footer-desc">{i.footer.desc}</p>
+      </div>
+
+      <!-- Links Sections -->
+      <div class="footer-links">
+        <div class="footer-section">
+          <h4>{i.footer.protocol}</h4>
+          <a href="https://github.com/MostroP2P/mostro" target="_blank" rel="noopener">
+            Node
+          </a>
+          <a href="https://github.com/MostroP2P/mostrix" target="_blank" rel="noopener">
+            TUI
+          </a>
+          <a href="https://github.com/MostroP2P/mostro-cli" target="_blank" rel="noopener">
+            CLI
+          </a>
+          <a href="https://github.com/MostroP2P/mobile" target="_blank" rel="noopener">
+            Mobile App
+          </a>
+        </div>
+
+        <div class="footer-section">
+          <h4>{i.footer.community}</h4>
+          <a href="https://mostro.community" target="_blank" rel="noopener">
+            Communities
+          </a>
+          <a href="https://t.me/MostroP2P" target="_blank" rel="noopener">
+            {i.footer.telegram}
+          </a>
+          <a href="https://primal.net/p/npub1m0str0d7z2ww8rdh20t2n9lx520xjwhaq24p68umqp06wwrwtsnqen40un" target="_blank" rel="noopener">
+            {i.footer.nostr}
+          </a>
+        </div>
+
+        <div class="footer-section">
+          <h4>{i.footer.support}</h4>
+          <a href="https://geyser.fund/project/mostro" target="_blank" rel="noopener">
+            {i.footer.geyser}
+          </a>
+          <a href="https://mostro.foundation" target="_blank" rel="noopener">
+            {i.footer.foundation}
+          </a>
+        </div>
+
+        <div class="footer-section">
+          <h4>{i.footer.supportedBy}</h4>
+          <a href="https://hrf.org" target="_blank" rel="noopener" class="supporter-link">
+            <img src="/images/hrf-logo.png" alt="HRF" class="supporter-logo" />
+          </a>
+          <a href="https://opensats.org" target="_blank" rel="noopener" class="supporter-link">
+            <img src="/images/opensats-logo.svg" alt="OpenSats" class="supporter-logo opensats-logo" />
+            <span>OpenSats</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Section -->
+    <div class="footer-bottom">
+      <p>{i.footer.bottom}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 60px 0 24px;
+    margin-top: 80px;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand {
+    max-width: 400px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  .footer-logo img {
+    width: auto;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .footer-desc {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 32px;
+  }
+
+  .footer-section h4 {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .footer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .footer-section a {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    transition: color 0.2s;
+    padding: 4px 0;
+  }
+
+  .footer-section a:hover {
+    color: var(--accent);
+  }
+
+  .supporter-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .supporter-logo {
+    height: 40px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+
+  .supporter-link:hover .supporter-logo {
+    opacity: 1;
+  }
+
+  .opensats-logo {
+    height: 40px;
+  }
+
+  .footer-bottom {
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .footer-bottom p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 48px 0 24px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      margin-bottom: 32px;
+    }
+
+    .footer-links {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .footer-logo {
+      font-size: 1.3rem;
+    }
+
+    .footer-logo img {
+      width: auto;
+      height: 32px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .footer-links {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+  }
+</style>
