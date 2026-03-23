@@ -1,0 +1,120 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { t } from '../../i18n/translations';
+
+const locale = 'it';
+const i = t(locale);
+const title = "Termini di Servizio — Mostro";
+---
+
+<Layout {title} {locale}>
+  <Header {locale} />
+  <main>
+    <section class="terms-section">
+      <div class="container">
+        <h1>{i.terms.title}</h1>
+        <p class="intro">{i.terms.intro}</p>
+        
+        <div class="terms-content">
+          <div class="term-item">
+            <h3>1. {i.terms.item1Title}</h3>
+            <p>{i.terms.item1}</p>
+          </div>
+          
+          <div class="term-item">
+            <h3>2. {i.terms.item2Title}</h3>
+            <p>{i.terms.item2}</p>
+          </div>
+          
+          <div class="term-item">
+            <h3>3. {i.terms.item3Title}</h3>
+            <p>{i.terms.item3}</p>
+          </div>
+          
+          <div class="term-item">
+            <h3>4. {i.terms.item4Title}</h3>
+            <p>{i.terms.item4}</p>
+          </div>
+        </div>
+        
+        <a href="/it" class="back-link">← {i.terms.backHome}</a>
+      </div>
+    </section>
+  </main>
+  <Footer {locale} />
+</Layout>
+
+<style>
+  .terms-section {
+    padding: 120px 0 80px;
+    min-height: calc(100vh - 200px);
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  .intro {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 48px;
+    max-width: 800px;
+  }
+
+  .terms-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 800px;
+  }
+
+  .term-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .term-item h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .term-item p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 48px;
+    color: var(--accent);
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .back-link:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 768px) {
+    .terms-section {
+      padding: 100px 0 60px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .term-item {
+      padding: 20px;
+    }
+  }
+</style>

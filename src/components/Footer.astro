@@ -93,6 +93,9 @@ const i = t(locale);
     <!-- Bottom Section -->
     <div class="footer-bottom">
       <p>{i.footer.bottom}</p>
+      <a href={locale === 'en' ? '/terms' : `/${locale}/terms`} class="terms-link">
+        {i.footer.terms}
+      </a>
     </div>
   </div>
 </footer>
@@ -197,6 +200,18 @@ const i = t(locale);
   .footer-bottom p {
     color: var(--text-muted);
     font-size: 0.9rem;
+  }
+
+  .footer-bottom .terms-link {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: inline-block;
+    transition: color 0.2s;
+  }
+
+  .footer-bottom .terms-link:hover {
+    color: var(--accent);
   }
 
   /* Mobile styles */
