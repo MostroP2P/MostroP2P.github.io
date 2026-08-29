@@ -3,12 +3,15 @@ import Layout from '../layouts/Layout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import TermsContent from '../components/TermsContent.astro';
+import { t } from '../i18n/translations';
 
 const locale = 'en';
-const title = "Terms of Service — Mostro";
+const i = t(locale);
+const title = i.meta.termsTitle;
+const description = i.meta.termsDescription;
 ---
 
-<Layout {title} {locale}>
+<Layout {title} {description} {locale} type="article">
   <Header {locale} />
   <main>
     <TermsContent {locale} />

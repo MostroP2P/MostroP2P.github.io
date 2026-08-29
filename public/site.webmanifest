@@ -1,0 +1,14 @@
+{
+  "name": "Mostro — Non-custodial P2P Bitcoin Exchange",
+  "short_name": "Mostro",
+  "description": "Open protocol to buy and sell Bitcoin peer-to-peer over Lightning Network and Nostr. No KYC, no custody.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1D212C",
+  "theme_color": "#8CC63F",
+  "icons": [
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/images/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

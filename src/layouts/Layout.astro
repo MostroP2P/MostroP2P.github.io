@@ -1,6 +1,6 @@
 ---
 import type { Locale } from '../i18n/translations';
-import { locales, getLocalePath } from '../i18n/translations';
+import { locales, getLocalePath, t } from '../i18n/translations';
 import NetworkBackground from '../components/NetworkBackground.astro';
 
 interface Props {
@@ -10,18 +10,23 @@ interface Props {
   ogImage?: string;
   canonicalPath?: string;
   type?: string;
+  /** FAQ entries rendered on this page, used to emit FAQPage structured data. */
+  faqItems?: ReadonlyArray<{ q: string; a: string }>;
 }
 
 const {
   title,
-  description = "Non-custodial P2P Bitcoin exchange on Lightning Network & Nostr. Trade Bitcoin peer-to-peer without intermediaries, KYC, or custody.",
   locale = 'en',
-  ogImage = '/images/mostro-logo.png',
+  ogImage = '/images/og-image.png',
   canonicalPath,
   type = 'website',
+  faqItems,
 } = Astro.props;
 
+const description = Astro.props.description ?? t(locale).meta.description;
+
 const siteUrl = 'https://mostro.network';
+const fontHref = 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap';
 
 // Determine current path without locale prefix
 const currentPath = Astro.url.pathname;
@@ -29,11 +34,13 @@ let basePath = currentPath;
 if (locale !== 'en') {
   basePath = currentPath.replace(`/${locale}`, '') || '/';
 }
+if (!basePath.startsWith('/')) basePath = `/${basePath}`;
+if (!basePath.endsWith('/')) basePath = `${basePath}/`;
 
-// Canonical URL
-const canonicalUrl = canonicalPath
-  ? `${siteUrl}${canonicalPath}`
-  : `${siteUrl}${currentPath === '/' ? '' : currentPath}`;
+// Canonical URL. Astro builds directory-style URLs, so every path ends in a
+// slash; keeping that here avoids canonical/sitemap mismatches.
+const withTrailingSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`);
+const canonicalUrl = `${siteUrl}${withTrailingSlash(canonicalPath ?? currentPath)}`;
 
 // Full OG image URL
 const ogImageUrl = ogImage.startsWith('http') ? ogImage : `${siteUrl}${ogImage}`;
@@ -47,27 +54,77 @@ const ogLocaleMap: Record<string, string> = {
   pt: 'pt_BR',
 };
 
-// JSON-LD structured data
+// JSON-LD structured data, emitted as a single @graph so the entities can
+// reference each other instead of repeating themselves.
+const organization = {
+  '@type': 'Organization',
+  '@id': `${siteUrl}/#organization`,
+  name: 'Mostro P2P',
+  url: `${siteUrl}/`,
+  logo: {
+    '@type': 'ImageObject',
+    url: `${siteUrl}/images/mostro-logo.png`,
+  },
+  sameAs: [
+    'https://github.com/MostroP2P',
+    'https://t.me/MostroP2P',
+    'https://x.com/MostroP2P',
+    'https://primal.net/p/npub1m0str0d7z2ww8rdh20t2n9lx520xjwhaq24p68umqp06wwrwtsnqen40un',
+  ],
+};
+
+const website = {
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  name: 'Mostro',
+  url: `${siteUrl}/`,
+  description: 'Non-custodial peer-to-peer Bitcoin exchange protocol built on Lightning Network and Nostr.',
+  inLanguage: [...locales],
+  publisher: { '@id': `${siteUrl}/#organization` },
+};
+
+const softwareApplication = {
+  '@type': 'SoftwareApplication',
+  '@id': `${siteUrl}/#software`,
+  name: 'Mostro',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Android, iOS, Linux, macOS, Windows',
+  url: `${siteUrl}/`,
+  description: 'Open protocol to buy and sell Bitcoin peer-to-peer over Lightning Network and Nostr, without KYC or custody of user funds.',
+  license: 'https://github.com/MostroP2P/mostro/blob/main/LICENSE',
+  isAccessibleForFree: true,
+  author: { '@id': `${siteUrl}/#organization` },
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+
+// Strip the lightweight markdown used in the FAQ copy so the structured data
+// carries plain text, as Google requires.
+const toPlainText = (value: string) =>
+  value.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\s*\n+\s*/g, ' ').trim();
+
+const faqPage = faqItems?.length
+  ? {
+      '@type': 'FAQPage',
+      '@id': `${canonicalUrl}#faq`,
+          inLanguage: locale,
+      mainEntity: faqItems.map(item => ({
+        '@type': 'Question',
+        name: toPlainText(item.q),
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: toPlainText(item.a),
+        },
+      })),
+    }
+  : null;
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Mostro',
-  url: siteUrl,
-  description: 'Non-custodial peer-to-peer Bitcoin exchange built on Lightning Network and Nostr.',
-  inLanguage: locales.map(l => ogLocaleMap[l] || l),
-  publisher: {
-    '@type': 'Organization',
-    name: 'Mostro P2P',
-    url: 'https://mostro.network',
-    logo: {
-      '@type': 'ImageObject',
-      url: `${siteUrl}/images/mostro-logo.png`,
-    },
-    sameAs: [
-      'https://github.com/MostroP2P',
-      'https://t.me/MostroP2P',
-    ],
-  },
+  '@graph': [organization, website, softwareApplication, faqPage].filter(Boolean),
 };
 ---
 
@@ -83,7 +140,7 @@ const jsonLd = {
     <meta name="description" content={description} />
     <meta name="keywords" content="Bitcoin, P2P, peer-to-peer, exchange, Lightning Network, Nostr, non-custodial, KYC-free, decentralized, trading, buy Bitcoin, sell Bitcoin, open protocol, censorship resistant" />
     <meta name="author" content="Mostro P2P" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
     <meta name="theme-color" content="#8CC63F" />
 
     <!-- Canonical URL -->
@@ -107,7 +164,7 @@ const jsonLd = {
     <meta property="og:image" content={ogImageUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Mostro — Non-custodial P2P Bitcoin Exchange" />
+    <meta property="og:image:alt" content="Mostro — Non-custodial P2P Bitcoin exchange on Lightning Network and Nostr" />
     <meta property="og:site_name" content="Mostro" />
     <meta property="og:locale" content={ogLocaleMap[locale] || locale} />
     {locales.filter(l => l !== locale).map(l => (
@@ -122,17 +179,23 @@ const jsonLd = {
     <meta name="twitter:image" content={ogImageUrl} />
     <meta name="twitter:site" content="@MostroP2P" />
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/mostro-logo.png" />
+    <!-- Favicons. Google needs a square icon to show the site favicon in
+         search results, hence the dedicated square renders. -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/images/icon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/icon-180.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Fonts -->
+    <!-- Fonts. Loaded asynchronously so the webfont request never blocks the
+         first render; `display=swap` keeps text visible meanwhile. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href={fontHref} />
+    <link rel="stylesheet" href={fontHref} media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href={fontHref} /></noscript>
   </head>
   <body>
     <div class="starfield"></div>
