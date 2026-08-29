@@ -161,14 +161,43 @@ export const translations = {
     terms: {
       title: "Terms of Service",
       intro: "By using Mostro, you agree to the following terms and conditions:",
-      item1Title: "Open Source Software",
-      item1: "Mostro is an open-source software that is available for anyone to use, copy, modify, and run. The developers are not responsible for the actions of other individuals using the software in any manner, whether legal or illegal, honest or dishonest.",
-      item2Title: "No Warranties",
-      item2: "Mostro is provided on an \"as is\" and \"as available\" basis, and the developers make no warranties of any kind, express or implied, with respect to Mostro or its use.",
-      item3Title: "Best Efforts Security",
-      item3: "The developers and the dispute resolvers make their best efforts to remove bad actors, frauds, and scams from using Mostro, but the user recognizes that the system can be exploited and accepts full responsibility while using it.",
-      item4Title: "Limitation of Liability",
-      item4: "Neither the developers nor the dispute resolvers are responsible for any losses or damages that the user may suffer as a result of using the bot.",
+      lastUpdated: "Last updated: August 29, 2026",
+      riskTitle: "Risk warning",
+      riskBody: "Mostro is a non-custodial, no-KYC peer-to-peer exchange. Trades settle directly between users over the Lightning Network and are irreversible once completed. You alone are responsible for your keys, your funds and the counterparties you trade with, and you can lose money. Never trade with funds you cannot afford to lose.",
+      items: [
+        {
+          title: "Open Source Software",
+          body: "Mostro is an open-source software that is available for anyone to use, copy, modify, and run. The developers are not responsible for the actions of other individuals using the software in any manner, whether legal or illegal, honest or dishonest.",
+        },
+        {
+          title: "No Warranties",
+          body: "Mostro is provided on an \"as is\" and \"as available\" basis, and the developers make no warranties of any kind, express or implied, with respect to Mostro or its use.",
+        },
+        {
+          title: "Best Efforts Security",
+          body: "The developers and the dispute resolvers make their best efforts to remove bad actors, frauds, and scams from using Mostro, but the user recognizes that the system can be exploited and accepts full responsibility while using it.",
+        },
+        {
+          title: "Limitation of Liability",
+          body: "Neither the developers nor the dispute resolvers are responsible for any losses or damages that the user may suffer as a result of using Mostro.",
+        },
+        {
+          title: "Non-Custodial Protocol",
+          body: "Mostro is a protocol and a set of open-source implementations, not an exchange, a broker or a custodian. It never takes ownership of your funds or your keys: during a trade the sats are locked in a Lightning hold invoice between you and your counterparty. No account is created for you and no personal data is required to trade.",
+        },
+        {
+          title: "Independent Coordinators",
+          body: "Every Mostro instance is operated by an independent third party that sets its own fees, policies and dispute resolution process. Those operators are not agents of the Mostro developers, who neither control nor endorse them. The availability of any instance, relay or Lightning node is not guaranteed, and a trade may fail or be delayed for reasons outside anyone's control.",
+        },
+        {
+          title: "Legal Compliance",
+          body: "You are solely responsible for ensuring that your use of Mostro is lawful where you live, and for reporting and paying any taxes that apply to your trades. Do not use Mostro if peer-to-peer Bitcoin trading is prohibited in your jurisdiction or if applicable law bars you from using this kind of software.",
+        },
+        {
+          title: "Changes to These Terms",
+          body: "These terms may be updated at any time, and the version published on this page is always the one in force. Continuing to use Mostro after a change means that you accept the updated terms.",
+        },
+      ],
       backHome: "Back to Home",
     },
   },
@@ -334,14 +363,43 @@ export const translations = {
     terms: {
       title: "Términos de Servicio",
       intro: "Al usar Mostro, aceptas los siguientes términos y condiciones:",
-      item1Title: "Software de Código Abierto",
-      item1: "Mostro es un software de código abierto disponible para que cualquiera lo use, copie, modifique y ejecute. Los desarrolladores no son responsables de las acciones de otras personas que utilicen el software de cualquier manera, ya sea legal o ilegal, honesta o deshonesta.",
-      item2Title: "Sin Garantías",
-      item2: "Mostro se proporciona \"tal cual\" y \"según disponibilidad\", y los desarrolladores no ofrecen garantías de ningún tipo, expresas o implícitas, con respecto a Mostro o su uso.",
-      item3Title: "Mejores Esfuerzos de Seguridad",
-      item3: "Los desarrolladores y los mediadores de disputas hacen sus mejores esfuerzos para eliminar a los malos actores, fraudes y estafas del uso de Mostro, pero el usuario reconoce que el sistema puede ser explotado y acepta toda la responsabilidad al usarlo.",
-      item4Title: "Limitación de Responsabilidad",
-      item4: "Ni los desarrolladores ni los mediadores de disputas son responsables de las pérdidas o daños que el usuario pueda sufrir como resultado del uso del bot.",
+      lastUpdated: "Última actualización: 29 de agosto de 2026",
+      riskTitle: "Advertencia de riesgo",
+      riskBody: "Mostro es un intercambio peer-to-peer no custodial y sin KYC. Los intercambios se liquidan directamente entre usuarios sobre la red Lightning y son irreversibles una vez completados. Solo tú eres responsable de tus claves, de tus fondos y de las contrapartes con las que operas, y puedes perder dinero. Nunca operes con fondos que no puedas permitirte perder.",
+      items: [
+        {
+          title: "Software de Código Abierto",
+          body: "Mostro es un software de código abierto disponible para que cualquiera lo use, copie, modifique y ejecute. Los desarrolladores no son responsables de las acciones de otras personas que utilicen el software de cualquier manera, ya sea legal o ilegal, honesta o deshonesta.",
+        },
+        {
+          title: "Sin Garantías",
+          body: "Mostro se proporciona \"tal cual\" y \"según disponibilidad\", y los desarrolladores no ofrecen garantías de ningún tipo, expresas o implícitas, con respecto a Mostro o su uso.",
+        },
+        {
+          title: "Mejores Esfuerzos de Seguridad",
+          body: "Los desarrolladores y los mediadores de disputas hacen sus mejores esfuerzos para eliminar a los malos actores, fraudes y estafas del uso de Mostro, pero el usuario reconoce que el sistema puede ser explotado y acepta toda la responsabilidad al usarlo.",
+        },
+        {
+          title: "Limitación de Responsabilidad",
+          body: "Ni los desarrolladores ni los mediadores de disputas son responsables de las pérdidas o daños que el usuario pueda sufrir como resultado del uso de Mostro.",
+        },
+        {
+          title: "Protocolo No Custodial",
+          body: "Mostro es un protocolo y un conjunto de implementaciones de código abierto, no un exchange, un bróker ni un custodio. Nunca toma posesión de tus fondos ni de tus claves: durante un intercambio los sats quedan bloqueados en una hold invoice de Lightning entre tú y tu contraparte. No se crea ninguna cuenta a tu nombre ni se requieren datos personales para operar.",
+        },
+        {
+          title: "Coordinadores Independientes",
+          body: "Cada instancia de Mostro es operada por un tercero independiente que define sus propias comisiones, políticas y proceso de resolución de disputas. Esos operadores no son agentes de los desarrolladores de Mostro, quienes ni los controlan ni los respaldan. No se garantiza la disponibilidad de ninguna instancia, relay o nodo Lightning, y un intercambio puede fallar o demorarse por motivos fuera del control de cualquiera.",
+        },
+        {
+          title: "Cumplimiento Legal",
+          body: "Eres el único responsable de asegurarte de que tu uso de Mostro sea legal en el lugar donde vives, y de declarar y pagar los impuestos que correspondan a tus operaciones. No uses Mostro si el intercambio de Bitcoin entre pares está prohibido en tu jurisdicción o si la ley aplicable te impide usar este tipo de software.",
+        },
+        {
+          title: "Cambios en Estos Términos",
+          body: "Estos términos pueden actualizarse en cualquier momento, y la versión publicada en esta página es siempre la vigente. Continuar usando Mostro después de un cambio implica que aceptas los términos actualizados.",
+        },
+      ],
       backHome: "Volver al Inicio",
     },
   },
@@ -507,14 +565,43 @@ export const translations = {
     terms: {
       title: "Termini di Servizio",
       intro: "Utilizzando Mostro, accetti i seguenti termini e condizioni:",
-      item1Title: "Software Open Source",
-      item1: "Mostro è un software open source disponibile per chiunque voglia usarlo, copiarlo, modificarlo ed eseguirlo. Gli sviluppatori non sono responsabili delle azioni di altri individui che utilizzano il software in qualsiasi modo, legale o illegale, onesto o disonesto.",
-      item2Title: "Nessuna Garanzia",
-      item2: "Mostro è fornito \"così com'è\" e \"come disponibile\", e gli sviluppatori non forniscono garanzie di alcun tipo, esplicite o implicite, riguardo a Mostro o al suo utilizzo.",
-      item3Title: "Massimi Sforzi per la Sicurezza",
-      item3: "Gli sviluppatori e i risolutori di dispute fanno del loro meglio per rimuovere malintenzionati, frodi e truffe dall'utilizzo di Mostro, ma l'utente riconosce che il sistema può essere sfruttato e accetta la piena responsabilità durante l'utilizzo.",
-      item4Title: "Limitazione di Responsabilità",
-      item4: "Né gli sviluppatori né i risolutori di dispute sono responsabili per eventuali perdite o danni che l'utente possa subire come risultato dell'utilizzo del bot.",
+      lastUpdated: "Ultimo aggiornamento: 29 agosto 2026",
+      riskTitle: "Avvertenza sui rischi",
+      riskBody: "Mostro è un exchange peer-to-peer non custodiale e senza KYC. Gli scambi vengono regolati direttamente tra utenti sulla rete Lightning e sono irreversibili una volta completati. Sei l'unico responsabile delle tue chiavi, dei tuoi fondi e delle controparti con cui operi, e puoi perdere denaro. Non operare mai con fondi che non puoi permetterti di perdere.",
+      items: [
+        {
+          title: "Software Open Source",
+          body: "Mostro è un software open source disponibile per chiunque voglia usarlo, copiarlo, modificarlo ed eseguirlo. Gli sviluppatori non sono responsabili delle azioni di altri individui che utilizzano il software in qualsiasi modo, legale o illegale, onesto o disonesto.",
+        },
+        {
+          title: "Nessuna Garanzia",
+          body: "Mostro è fornito \"così com'è\" e \"come disponibile\", e gli sviluppatori non forniscono garanzie di alcun tipo, esplicite o implicite, riguardo a Mostro o al suo utilizzo.",
+        },
+        {
+          title: "Massimi Sforzi per la Sicurezza",
+          body: "Gli sviluppatori e i risolutori di dispute fanno del loro meglio per rimuovere malintenzionati, frodi e truffe dall'utilizzo di Mostro, ma l'utente riconosce che il sistema può essere sfruttato e accetta la piena responsabilità durante l'utilizzo.",
+        },
+        {
+          title: "Limitazione di Responsabilità",
+          body: "Né gli sviluppatori né i risolutori di dispute sono responsabili per eventuali perdite o danni che l'utente possa subire come risultato dell'utilizzo di Mostro.",
+        },
+        {
+          title: "Protocollo Non Custodiale",
+          body: "Mostro è un protocollo e un insieme di implementazioni open source, non un exchange, un broker o un custode. Non prende mai possesso dei tuoi fondi né delle tue chiavi: durante uno scambio i sat restano bloccati in una hold invoice Lightning tra te e la tua controparte. Non viene creato alcun account a tuo nome e non sono richiesti dati personali per operare.",
+        },
+        {
+          title: "Coordinatori Indipendenti",
+          body: "Ogni istanza di Mostro è gestita da una terza parte indipendente che stabilisce le proprie commissioni, politiche e processo di risoluzione delle dispute. Tali operatori non sono agenti degli sviluppatori di Mostro, che non li controllano né li avallano. La disponibilità di qualsiasi istanza, relay o nodo Lightning non è garantita, e uno scambio può fallire o subire ritardi per motivi fuori dal controllo di chiunque.",
+        },
+        {
+          title: "Conformità Legale",
+          body: "Sei l'unico responsabile di verificare che il tuo utilizzo di Mostro sia lecito nel luogo in cui vivi e di dichiarare e pagare le imposte applicabili alle tue operazioni. Non usare Mostro se lo scambio peer-to-peer di Bitcoin è vietato nella tua giurisdizione o se la legge applicabile ti impedisce di usare questo tipo di software.",
+        },
+        {
+          title: "Modifiche a Questi Termini",
+          body: "Questi termini possono essere aggiornati in qualsiasi momento e la versione pubblicata su questa pagina è sempre quella in vigore. Continuare a usare Mostro dopo una modifica significa che accetti i termini aggiornati.",
+        },
+      ],
       backHome: "Torna alla Home",
     },
   },
@@ -680,14 +767,43 @@ export const translations = {
     terms: {
       title: "Termos de Serviço",
       intro: "Ao usar o Mostro, você concorda com os seguintes termos e condições:",
-      item1Title: "Software de Código Aberto",
-      item1: "Mostro é um software de código aberto disponível para qualquer pessoa usar, copiar, modificar e executar. Os desenvolvedores não são responsáveis pelas ações de outros indivíduos que usam o software de qualquer maneira, seja legal ou ilegal, honesta ou desonesta.",
-      item2Title: "Sem Garantias",
-      item2: "Mostro é fornecido \"como está\" e \"conforme disponível\", e os desenvolvedores não oferecem garantias de qualquer tipo, expressas ou implícitas, em relação ao Mostro ou seu uso.",
-      item3Title: "Melhores Esforços de Segurança",
-      item3: "Os desenvolvedores e os mediadores de disputas fazem seus melhores esforços para remover maus atores, fraudes e golpes do uso do Mostro, mas o usuário reconhece que o sistema pode ser explorado e aceita total responsabilidade ao usá-lo.",
-      item4Title: "Limitação de Responsabilidade",
-      item4: "Nem os desenvolvedores nem os mediadores de disputas são responsáveis por quaisquer perdas ou danos que o usuário possa sofrer como resultado do uso do bot.",
+      lastUpdated: "Última atualização: 29 de agosto de 2026",
+      riskTitle: "Aviso de risco",
+      riskBody: "Mostro é uma exchange peer-to-peer não custodial e sem KYC. As negociações são liquidadas diretamente entre usuários pela rede Lightning e são irreversíveis depois de concluídas. Você é o único responsável pelas suas chaves, pelos seus fundos e pelas contrapartes com quem negocia, e pode perder dinheiro. Nunca negocie com fundos que você não pode perder.",
+      items: [
+        {
+          title: "Software de Código Aberto",
+          body: "Mostro é um software de código aberto disponível para qualquer pessoa usar, copiar, modificar e executar. Os desenvolvedores não são responsáveis pelas ações de outros indivíduos que usam o software de qualquer maneira, seja legal ou ilegal, honesta ou desonesta.",
+        },
+        {
+          title: "Sem Garantias",
+          body: "Mostro é fornecido \"como está\" e \"conforme disponível\", e os desenvolvedores não oferecem garantias de qualquer tipo, expressas ou implícitas, em relação ao Mostro ou seu uso.",
+        },
+        {
+          title: "Melhores Esforços de Segurança",
+          body: "Os desenvolvedores e os mediadores de disputas fazem seus melhores esforços para remover maus atores, fraudes e golpes do uso do Mostro, mas o usuário reconhece que o sistema pode ser explorado e aceita total responsabilidade ao usá-lo.",
+        },
+        {
+          title: "Limitação de Responsabilidade",
+          body: "Nem os desenvolvedores nem os mediadores de disputas são responsáveis por quaisquer perdas ou danos que o usuário possa sofrer como resultado do uso do Mostro.",
+        },
+        {
+          title: "Protocolo Não Custodial",
+          body: "Mostro é um protocolo e um conjunto de implementações de código aberto, não uma exchange, uma corretora ou um custodiante. Ele nunca assume a posse dos seus fundos nem das suas chaves: durante uma negociação os sats ficam travados em uma hold invoice da Lightning entre você e sua contraparte. Nenhuma conta é criada em seu nome e nenhum dado pessoal é exigido para negociar.",
+        },
+        {
+          title: "Coordenadores Independentes",
+          body: "Cada instância do Mostro é operada por um terceiro independente que define suas próprias taxas, políticas e processo de resolução de disputas. Esses operadores não são agentes dos desenvolvedores do Mostro, que não os controlam nem os endossam. A disponibilidade de qualquer instância, relay ou nó Lightning não é garantida, e uma negociação pode falhar ou atrasar por motivos fora do controle de qualquer pessoa.",
+        },
+        {
+          title: "Conformidade Legal",
+          body: "Você é o único responsável por garantir que o seu uso do Mostro seja lícito no lugar onde vive, e por declarar e pagar os impostos aplicáveis às suas negociações. Não use o Mostro se a negociação peer-to-peer de Bitcoin for proibida na sua jurisdição ou se a lei aplicável impedir você de usar esse tipo de software.",
+        },
+        {
+          title: "Alterações Nestes Termos",
+          body: "Estes termos podem ser atualizados a qualquer momento, e a versão publicada nesta página é sempre a vigente. Continuar usando o Mostro após uma alteração significa que você aceita os termos atualizados.",
+        },
+      ],
       backHome: "Voltar ao Início",
     },
   },
@@ -853,14 +969,43 @@ export const translations = {
     terms: {
       title: "Conditions d'Utilisation",
       intro: "En utilisant Mostro, vous acceptez les termes et conditions suivants:",
-      item1Title: "Logiciel Open Source",
-      item1: "Mostro est un logiciel open source disponible pour quiconque souhaite l'utiliser, le copier, le modifier et l'exécuter. Les développeurs ne sont pas responsables des actions d'autres personnes utilisant le logiciel de quelque manière que ce soit, légale ou illégale, honnête ou malhonnête.",
-      item2Title: "Aucune Garantie",
-      item2: "Mostro est fourni \"tel quel\" et \"selon disponibilité\", et les développeurs ne fournissent aucune garantie d'aucune sorte, expresse ou implicite, concernant Mostro ou son utilisation.",
-      item3Title: "Meilleurs Efforts de Sécurité",
-      item3: "Les développeurs et les médiateurs de litiges font de leur mieux pour éliminer les mauvais acteurs, les fraudes et les escroqueries de l'utilisation de Mostro, mais l'utilisateur reconnaît que le système peut être exploité et accepte l'entière responsabilité lors de son utilisation.",
-      item4Title: "Limitation de Responsabilité",
-      item4: "Ni les développeurs ni les médiateurs de litiges ne sont responsables des pertes ou dommages que l'utilisateur pourrait subir suite à l'utilisation du bot.",
+      lastUpdated: "Dernière mise à jour : 29 août 2026",
+      riskTitle: "Avertissement sur les risques",
+      riskBody: "Mostro est un échange pair-à-pair non custodial et sans KYC. Les échanges sont réglés directement entre utilisateurs sur le réseau Lightning et sont irréversibles une fois terminés. Vous êtes seul responsable de vos clés, de vos fonds et des contreparties avec lesquelles vous échangez, et vous pouvez perdre de l'argent. N'échangez jamais des fonds que vous ne pouvez pas vous permettre de perdre.",
+      items: [
+        {
+          title: "Logiciel Open Source",
+          body: "Mostro est un logiciel open source disponible pour quiconque souhaite l'utiliser, le copier, le modifier et l'exécuter. Les développeurs ne sont pas responsables des actions d'autres personnes utilisant le logiciel de quelque manière que ce soit, légale ou illégale, honnête ou malhonnête.",
+        },
+        {
+          title: "Aucune Garantie",
+          body: "Mostro est fourni \"tel quel\" et \"selon disponibilité\", et les développeurs ne fournissent aucune garantie d'aucune sorte, expresse ou implicite, concernant Mostro ou son utilisation.",
+        },
+        {
+          title: "Meilleurs Efforts de Sécurité",
+          body: "Les développeurs et les médiateurs de litiges font de leur mieux pour éliminer les mauvais acteurs, les fraudes et les escroqueries de l'utilisation de Mostro, mais l'utilisateur reconnaît que le système peut être exploité et accepte l'entière responsabilité lors de son utilisation.",
+        },
+        {
+          title: "Limitation de Responsabilité",
+          body: "Ni les développeurs ni les médiateurs de litiges ne sont responsables des pertes ou dommages que l'utilisateur pourrait subir suite à l'utilisation de Mostro.",
+        },
+        {
+          title: "Protocole Non Custodial",
+          body: "Mostro est un protocole et un ensemble d'implémentations open source, et non une plateforme d'échange, un courtier ou un dépositaire. Il ne prend jamais possession de vos fonds ni de vos clés : pendant un échange, les sats sont verrouillés dans une hold invoice Lightning entre vous et votre contrepartie. Aucun compte n'est créé à votre nom et aucune donnée personnelle n'est requise pour échanger.",
+        },
+        {
+          title: "Coordinateurs Indépendants",
+          body: "Chaque instance de Mostro est exploitée par un tiers indépendant qui fixe ses propres frais, politiques et processus de résolution des litiges. Ces opérateurs ne sont pas des agents des développeurs de Mostro, qui ne les contrôlent ni ne les approuvent. La disponibilité d'une instance, d'un relais ou d'un nœud Lightning n'est pas garantie, et un échange peut échouer ou être retardé pour des raisons hors du contrôle de quiconque.",
+        },
+        {
+          title: "Conformité Légale",
+          body: "Il vous appartient de vous assurer que votre utilisation de Mostro est licite là où vous résidez, et de déclarer et payer les impôts applicables à vos échanges. N'utilisez pas Mostro si l'échange pair-à-pair de Bitcoin est interdit dans votre juridiction ou si la loi applicable vous interdit d'utiliser ce type de logiciel.",
+        },
+        {
+          title: "Modifications de Ces Conditions",
+          body: "Ces conditions peuvent être mises à jour à tout moment, et la version publiée sur cette page est toujours celle en vigueur. Continuer à utiliser Mostro après une modification signifie que vous acceptez les conditions mises à jour.",
+        },
+      ],
       backHome: "Retour à l'Accueil",
     },
   },

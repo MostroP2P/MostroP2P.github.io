@@ -1,0 +1,139 @@
+---
+import { t, type Locale } from '../i18n/translations';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const i = t(locale);
+const homeHref = locale === 'en' ? '/' : `/${locale}`;
+---
+
+<section class="terms-section">
+  <div class="container">
+    <h1>{i.terms.title}</h1>
+    <p class="intro">{i.terms.intro}</p>
+    <p class="last-updated">{i.terms.lastUpdated}</p>
+
+    <aside class="risk-warning" role="note">
+      <h2>⚠️ {i.terms.riskTitle}</h2>
+      <p>{i.terms.riskBody}</p>
+    </aside>
+
+    <div class="terms-content" id="disclaimer">
+      {i.terms.items.map((item, index) => (
+        <div class="term-item">
+          <h3>{index + 1}. {item.title}</h3>
+          <p>{item.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <a href={homeHref} class="back-link">← {i.terms.backHome}</a>
+  </div>
+</section>
+
+<style>
+  .terms-section {
+    padding: 120px 0 80px;
+    min-height: calc(100vh - 200px);
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+
+  .intro {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    max-width: 800px;
+  }
+
+  .last-updated {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    margin-bottom: 40px;
+  }
+
+  .risk-warning {
+    max-width: 800px;
+    margin-bottom: 48px;
+    padding: 24px;
+    border: 1px solid var(--accent);
+    border-left-width: 4px;
+    border-radius: 12px;
+    background: var(--bg-secondary);
+  }
+
+  .risk-warning h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .risk-warning p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .terms-content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    max-width: 800px;
+    scroll-margin-top: 100px;
+  }
+
+  .term-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .term-item h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .term-item p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 48px;
+    color: var(--accent);
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+
+  .back-link:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 768px) {
+    .terms-section {
+      padding: 100px 0 60px;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .term-item,
+    .risk-warning {
+      padding: 20px;
+    }
+  }
+</style>
