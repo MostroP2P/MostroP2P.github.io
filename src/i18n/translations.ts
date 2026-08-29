@@ -1,5 +1,10 @@
 export const translations = {
   en: {
+    meta: {
+      description: "Mostro is an open, non-custodial protocol to buy and sell Bitcoin peer-to-peer over Lightning Network and Nostr. No KYC, no registration, no custody of your funds.",
+      termsTitle: "Terms of Service — Mostro P2P Bitcoin Protocol",
+      termsDescription: "Terms of Service, risk warning and disclaimer for Mostro, the non-custodial peer-to-peer Bitcoin protocol built on Lightning Network and Nostr.",
+    },
     nav: {
       home: "Home",
       about: "About",
@@ -203,6 +208,11 @@ export const translations = {
     },
   },
   es: {
+    meta: {
+      description: "Mostro es un protocolo abierto y no custodial para comprar y vender Bitcoin P2P sobre Lightning Network y Nostr. Sin KYC, sin registro y sin custodia de tus fondos.",
+      termsTitle: "Términos de Servicio — Protocolo Bitcoin P2P Mostro",
+      termsDescription: "Términos de servicio, advertencia de riesgo y descargo de responsabilidad de Mostro, el protocolo Bitcoin peer-to-peer no custodial sobre Lightning Network y Nostr.",
+    },
     nav: {
       home: "Inicio",
       about: "Acerca de",
@@ -406,6 +416,11 @@ export const translations = {
     },
   },
   it: {
+    meta: {
+      description: "Mostro è un protocollo aperto e non custodial per comprare e vendere Bitcoin P2P su Lightning Network e Nostr. Senza KYC, senza registrazione e senza custodia dei tuoi fondi.",
+      termsTitle: "Termini di Servizio — Protocollo Bitcoin P2P Mostro",
+      termsDescription: "Termini di servizio, avvertenza sui rischi e disclaimer di Mostro, il protocollo Bitcoin peer-to-peer non custodial su Lightning Network e Nostr.",
+    },
     nav: {
       home: "Home",
       about: "Chi siamo",
@@ -609,6 +624,11 @@ export const translations = {
     },
   },
   pt: {
+    meta: {
+      description: "Mostro é um protocolo aberto e não custodial para comprar e vender Bitcoin P2P na Lightning Network e no Nostr. Sem KYC, sem registro e sem custódia dos seus fundos.",
+      termsTitle: "Termos de Serviço — Protocolo Bitcoin P2P Mostro",
+      termsDescription: "Termos de serviço, aviso de risco e isenção de responsabilidade do Mostro, o protocolo Bitcoin peer-to-peer não custodial na Lightning Network e no Nostr.",
+    },
     nav: {
       home: "Início",
       about: "Sobre",
@@ -812,6 +832,11 @@ export const translations = {
     },
   },
   fr: {
+    meta: {
+      description: "Mostro est un protocole ouvert et non custodial pour acheter et vendre du Bitcoin en P2P via Lightning Network et Nostr. Sans KYC, sans inscription et sans conservation de vos fonds.",
+      termsTitle: "Conditions d'utilisation — Protocole Bitcoin P2P Mostro",
+      termsDescription: "Conditions d'utilisation, avertissement sur les risques et clause de non-responsabilité de Mostro, le protocole Bitcoin pair-à-pair non custodial sur Lightning Network et Nostr.",
+    },
     nav: {
       home: "Accueil",
       about: "À propos",
@@ -1034,7 +1059,7 @@ export function getLocaleFromUrl(url: URL): Locale {
 
 export function getLocalePath(locale: Locale, path: string = '/') {
   if (locale === 'en') return path;
-  return `/${locale}${path === '/' ? '' : path}`;
+  return `/${locale}${path === '/' ? '/' : path}`;
 }
 
 export function getOtherLocales(locale: Locale): Locale[] {

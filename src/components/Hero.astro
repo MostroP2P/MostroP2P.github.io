@@ -23,10 +23,12 @@ const i = t(locale);
         </video>
       </div>
       <div class="hero-badge">{i.hero.badge}</div>
+      <!-- The tagline lives inside the h1 so the page's single top-level
+           heading carries the keywords, not just the brand name. -->
       <h1 class="hero-title">
         <span class="highlight">{i.hero.title}</span>
+        <span class="hero-subtitle">{i.hero.subtitle}</span>
       </h1>
-      <p class="hero-subtitle">{i.hero.subtitle}</p>
       <p class="hero-desc">{i.hero.desc}</p>
       
       <div class="hero-actions">
@@ -144,8 +146,10 @@ const i = t(locale);
   }
 
   .hero-subtitle {
+    display: block;
     font-size: 1.5rem;
     font-weight: 600;
+    line-height: 1.4;
     color: var(--accent);
     margin-bottom: 20px;
   }
