@@ -4,7 +4,7 @@ export default defineConfig({
   site: 'https://mostro.network',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'es', 'it', 'pt', 'fr'],
+    locales: ['en', 'es', 'it', 'pt', 'fr', 'nl'],
     routing: {
       prefixDefaultLocale: false,
     },
@@ -17,6 +17,7 @@ export default defineConfig({
     '/it/disclaimer': '/it/terms#disclaimer',
     '/pt/disclaimer': '/pt/terms#disclaimer',
     '/fr/disclaimer': '/fr/terms#disclaimer',
+    '/nl/disclaimer': '/nl/terms#disclaimer',
   },
   build: {
     format: 'directory',

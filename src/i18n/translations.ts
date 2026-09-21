@@ -1039,10 +1039,218 @@ export const translations = {
       backHome: "Retour à l'Accueil",
     },
   },
+  nl: {
+    meta: {
+      description: "Mostro is een open, non-custodial protocol om peer-to-peer bitcoin te kopen en verkopen via het Lightning Network en Nostr. Geen KYC, geen registratie, en niemand anders houdt je geld vast.",
+      termsTitle: "Gebruiksvoorwaarden voor het Mostro P2P Bitcoin-protocol",
+      termsDescription: "Gebruiksvoorwaarden, risicowaarschuwing en disclaimer van Mostro, het non-custodial peer-to-peer bitcoinprotocol op het Lightning Network en Nostr.",
+    },
+    nav: {
+      home: "Start",
+      about: "Over",
+      howItWorks: "Hoe het werkt",
+      features: "Kenmerken",
+      faq: "Veelgestelde vragen",
+      getStarted: "Beginnen",
+      donate: "Doneren",
+    },
+    hero: {
+      badge: "🚀 Open protocol",
+      title: "Mostro",
+      subtitle: "Non-custodial P2P bitcoin-exchange op Lightning Network en Nostr",
+      desc: "Peer-to-peer handelen in bitcoin, zonder tussenpersoon. Koop en verkoop bitcoin rechtstreeks met andere gebruikers, met volledige privacy en de zeggenschap over je eigen geld.",
+      ctaPrimary: "Beginnen",
+      ctaSecondary: "Hoe het werkt",
+      stat1: "Non-custodial",
+      stat1Label: "Jouw sleutels, jouw bitcoin",
+      stat2: "Razendsnel",
+      stat2Label: "Direct afgewikkeld",
+      stat3: "Bestand tegen censuur",
+      stat3Label: "Gebouwd op Nostr",
+    },
+    about: {
+      title: "Over Mostro",
+      content: "Mostro is een vooruitstrevend project dat bitcointransacties over het Lightning Network op een nieuwe manier mogelijk maakt. Het beantwoordt de groeiende vraag naar het kopen en verkopen van bitcoin zonder je persoonlijke gegevens prijs te geven, met een baanbrekende oplossing voor een peer-to-peer platform.\n\nMostro regelt de communicatie bovenop Nostr en vormt zo een gedecentraliseerd platform zonder één punt waar alles op vastloopt. Dat maakt het beter bestand tegen censuur dan bestaande alternatieven.",
+    },
+    howItWorks: {
+      title: "Hoe werkt het?",
+      subtitle: "Non-custodial P2P handelen in 4 stappen. Geen tussenpersoon, geen KYC.",
+      content: "Mostro werkt als escrow waarmee koper en verkoper peer-to-peer bitcoin ruilen. Dat verkleint het risico voor allebei, terwijl de sats maar zo kort mogelijk vastgehouden worden. Mostro verwerkt bitcoin met een node op het Lightning Network. Die node maakt hold invoices voor verkopers en betaalt de gewone Lightning-invoices van kopers.\n\nHet werkt binnen het Nostr-protocol, dus kopers en verkopers hebben een Mostro-client nodig om bitcoin te kopen of verkopen. Gebruikers kunnen Mostro's beoordelen, en Mostro's moeten concurreren om gebruikers te houden. Slechte Mostro's worden door gebruikers gemeden en verliezen zo hun bestaansrecht.",
+      step1: "Neem een Lightning-wallet",
+      step1Desc: "Download een wallet die Lightning ondersteunt en zet er wat sats op.",
+      step2: "Kies een Mostro-client",
+      step2Desc: "Gebruik een mobiele app, een webclient of de opdrachtregel om met Mostro-nodes te verbinden.",
+      step3: "Plaats of neem een order",
+      step3Desc: "Zet zelf een koop- of verkooporder neer, of kijk wat andere handelaren aanbieden.",
+      step4: "Handel peer-to-peer",
+      step4Desc: "De bitcoin staat vast in escrow via een Lightning hold invoice. Zodra de fiatbetaling bevestigd is, komen de sats meteen vrij.",
+    },
+    features: {
+      title: "Waarom Mostro?",
+      subtitle: "Gebouwd voor privacy, veiligheid en vrijheid",
+      feature1: "Privacy vanaf het ontwerp",
+      feature1Desc: "End-to-end versleutelde communicatie. Geen accounts, geen opgeslagen persoonsgegevens.",
+      feature2: "Bestand tegen censuur",
+      feature2Desc: "Gedecentraliseerd op het Nostr-protocol. Geen enkel punt waar alles op vastloopt.",
+      feature3: "Non-custodial",
+      feature3Desc: "Je bitcoin blijft in je eigen wallet tot het moment van ruilen. Zo kort mogelijk in bewaring.",
+      feature4: "Open protocol",
+      feature4Desc: "100% open source. Iedereen kan nodes draaien, clients bouwen en de code controleren.",
+      feature5: "Meerdere nodes",
+      feature5Desc: "Kies uit verschillende Mostro-nodes. Concurrentie zorgt voor betere dienstverlening.",
+      feature6: "Geen KYC",
+      feature6Desc: "Geen registratie, geen verificatie, geen identiteitscontrole.",
+    },
+    faq: {
+      title: "Veelgestelde vragen",
+      subtitle: "Alles wat je over Mostro moet weten",
+      items: [
+        {
+          q: "Wat is Mostro? Is het een app?",
+          a: "Mostro is geen app, maar een protocol om peer-to-peer bitcoin te ruilen via het Lightning Network en Nostr. Het protocol legt de regels en berichten vast waarmee twee mensen bitcoin ruilen zonder tussenpersoon. Om Mostro te gebruiken heb je een client nodig: een mobiele app, een programma op je computer of een opdrachtregelprogramma.\n\nDe verwarring is begrijpelijk, want er zijn apps die het Mostro-protocol uitvoeren, maar die apps zijn Mostro niet: ze zijn een manier om ermee te werken. Denken dat Mostro een app is, is als denken dat bitcoin een wallet is. Mostro is geen blockchain en geen extra laag (L2 of L3) op bitcoin, en het maakt geen nieuw geldstelsel: het coördineert uitsluitend P2P-ruil van bitcoin met bestaande infrastructuur."
+        },
+        {
+          q: "Moet ik me registreren of mijn identiteit laten controleren?",
+          a: "Nee. Mostro vraagt geen registratie, geen e-mailadres, geen telefoonnummer en geen enkele vorm van KYC. Je identiteit wordt vanzelf aangemaakt in de client die je gebruikt, en alleen jij hebt hem in handen via een herstelzin van 12 woorden."
+        },
+        {
+          q: "Hoe beschermt Mostro mij als mijn tegenpartij me probeert op te lichten?",
+          a: "De sats van de verkoper staan vast in zijn eigen wallet via een hold invoice, totdat hij bevestigt dat hij de fiatbetaling heeft ontvangen. Loopt het mis, dan kan elk van beiden een dispuut openen en bekijkt een bemiddelaar de zaak. Bovendien is de chat tussen de gebruikers niet te wissen of te wijzigen, zodat na te gaan is wat er werkelijk is gebeurd."
+        },
+        {
+          q: "Zijn mijn transacties privé?",
+          a: "Ja. Alle communicatie is end-to-end versleuteld. Mostro gebruikt voor elke transactie andere sleutels, zodat je ruilen niet aan elkaar te koppelen zijn. Je kunt zelfs in een privacymodus handelen waarin zelfs de Mostro-node zelf niet kan weten welke transacties van jou zijn. Ook de beheerders van Mostro-nodes hebben geen enkele persoonlijke gegevens van gebruikers."
+        },
+        {
+          q: "Wat als er tijdens een transactie iets met mijn telefoon gebeurt?",
+          a: "Gaat je telefoon uit, breekt hij, raak je hem kwijt of wordt hij gestolen tijdens een transactie, dan krijg je alleen weer toegang als je een back-up van je herstelzin hebt. Zet je die zin terug op een ander apparaat, dan heb je je sleutels weer en kun je verder.\n\nZonder die back-up is er geen manier om de sessie of het bijbehorende geld terug te halen, want Mostro heeft geen accounts, geen centrale klantenservice en geen herstelprocedure. Maak die back-up daarom voordat je aan je eerste transactie begint."
+        },
+        {
+          q: "Wat maakt Mostro anders dan andere P2P-exchanges?",
+          a: "Drie wezenlijke verschillen:\n\n**Echt bestand tegen censuur:** Mostro is geen platform en geen bedrijf, maar een protocol. Er is geen centrale server om uit te zetten, geen app om te \"verwijderen\" en geen database om in beslag te nemen. Het draait op Nostr, een open en gedecentraliseerd protocol.\n\n**Privacy vanaf het ontwerp, niet als optie:** er zijn geen accounts, e-mailadressen of blijvende identiteiten. Elke transactie gebruikt andere sleutels, en het berichtenverkeer loopt via end-to-end versleutelde chat.\n\n**Zo min mogelijk, en nooit blijvend, in bewaring:** Mostro houdt het geld van gebruikers niet vast. Het werkt met Lightning hold invoices: de sats blijven vastgezet in de wallet van de verkoper tot hij de ontvangst van de fiat bevestigt."
+        },
+        {
+          q: "Wat rekent Mostro per transactie?",
+          a: "Elke beheerder van een Mostro-node bepaalt zijn eigen tarieven. Die zijn meestal laag (bijvoorbeeld rond 0,3% voor zowel koper als verkoper). Kijk altijd naar de tarieven van de node die je kiest voordat je gaat handelen."
+        },
+        {
+          q: "Welke valuta en betaalmethodes accepteert Mostro?",
+          a: "Dat hangt van de Mostro-node af. De beheerders bepalen welke fiatvaluta ze ondersteunen, en de gebruikers kiezen de betaalmethode (bankoverschrijving, contant, mobiel betalen, enzovoort). Mostro komt niet tussen bij de fiatbetaling: het coördineert alleen de ruil van de sats."
+        },
+        {
+          q: "Is er één Mostro-node of zijn het er meer?",
+          a: "Het zijn er meer. Mostro is het protocol, en elke Mostro-node is een zelfstandige uitvoering daarvan. Iedereen kan een eigen node draaien, met eigen tarieven, ondersteunde valuta en regels. Er is geen centrale of officiële node: valt er één weg, dan blijven de andere beschikbaar en werkt het protocol gewoon door."
+        },
+        {
+          q: "Waarom bestaan er meerdere Mostro-nodes in plaats van één?",
+          a: "Omdat decentralisatie het systeem bestand maakt tegen censuur. Was er één node, dan zou die uitzetten of blokkeren genoeg zijn om alle handel stil te leggen. Met meerdere nodes, beheerd door verschillende mensen in verschillende rechtsgebieden, is er geen enkel punt waar alles op vastloopt. Bovendien levert die verscheidenheid concurrentie op: betere tarieven, betere dienstverlening en meer keuze voor gebruikers, die zelf bepalen met welke node ze werken."
+        },
+        {
+          q: "Hoe begin ik met Mostro?",
+          a: "Download een Mostro-client, maak een back-up van je herstelzin van 12 woorden en je kunt beginnen. Je plaatst een koop- of verkooporder, of neemt een bestaande order uit het orderboek. Je hebt alleen een Lightning-wallet nodig om sats te sturen of te ontvangen."
+        },
+        {
+          q: "Ik wil mijn eigen Mostro-node draaien, waar begin ik?",
+          a: "Mostro is vrije software en iedereen kan een eigen node draaien. Je hebt een server nodig, een Lightning-node (LND) en toegang tot Nostr-relays. De volledige technische documentatie staat in de officiële GitHub-repository van Mostro, met installatiehandleidingen stap voor stap. Zit je in een lokale bitcoingemeenschap, dan is een eigen node een directe manier om je mensen P2P-handel zonder tussenpersoon te bieden."
+        }
+      ],
+    },
+    getStarted: {
+      title: "Aan de slag met Mostro",
+      subtitle: "Alles wat je nodig hebt om peer-to-peer in bitcoin te handelen",
+      mobile: "Mobiele app",
+      mobileDesc: "Download Mostro voor Android via GitHub. De iOS-versie komt eraan.",
+      mobileLink: "https://github.com/MostroP2P/mobile/releases",
+      cli: "Mostrix TUI",
+      cliDesc: "Een prettige terminalinterface voor Mostro. Eenvoudig, zonder vensters.",
+      cliLink: "https://github.com/MostroP2P/mostrix",
+      community: "Sluit je aan",
+      communityDesc: "Vind lokale handelsgemeenschappen op mostro.community.",
+      communityLink: "https://mostro.community",
+      docs: "Documentatie",
+      docsDesc: "Lees hoe Mostro werkt, met veelgestelde vragen en handleidingen.",
+      docsLink: "https://mostro.network/docs-english/",
+      dev: "Bouwen op Mostro",
+      devDesc: "De protocolspecificatie, de berichtformaten en alles wat je nodig hebt om een Mostro-client te bouwen.",
+      devLink: "https://mostro.network/protocol/",
+    },
+    donate: {
+      title: "Steun de ontwikkeling van Mostro",
+      content: "Mostro is FOSS (vrije en open source software). Vind je het project nuttig, overweeg dan een donatie zodat we het op de lange termijn kunnen ontwikkelen en onderhouden. Bedankt!",
+      button: "Doneren via Geyser",
+      link: "https://geyser.fund/project/mostro",
+    },
+    footer: {
+      desc: "Non-custodial P2P bitcoin-exchange, gebouwd op Lightning Network en Nostr.",
+      protocol: "Protocol",
+      community: "Gemeenschap",
+      development: "Ontwikkeling",
+      support: "Bijdragen",
+      github: "GitHub",
+      telegram: "Telegram",
+      nostr: "Nostr",
+      foundation: "Stichting",
+      supportedBy: "Ondersteund door",
+      geyser: "Doneren",
+      protocolSpec: "Protocolspecificatie",
+      node: "Node",
+      tui: "TUI",
+      cli: "CLI",
+      mobileApp: "Mobiele app",
+      stats: "Netwerkstatistieken",
+      communities: "Gemeenschappen",
+      userGuide: "Handleiding",
+      runNode: "Een node draaien",
+      bottom: "Gemaakt met ⚡ door de Mostro-gemeenschap · 100% open source",
+      terms: "Gebruiksvoorwaarden",
+    },
+    terms: {
+      title: "Gebruiksvoorwaarden",
+      intro: "Door Mostro te gebruiken ga je akkoord met de volgende voorwaarden:",
+      lastUpdated: "Laatst bijgewerkt: 29 augustus 2026",
+      riskTitle: "Risicowaarschuwing",
+      riskBody: "Mostro is een non-custodial peer-to-peer exchange zonder KYC. Trades worden rechtstreeks tussen gebruikers afgewikkeld over het Lightning Network en zijn onomkeerbaar zodra ze rond zijn. Jij alleen bent verantwoordelijk voor je sleutels, je geld en de tegenpartijen met wie je handelt, en je kunt geld verliezen. Handel nooit met geld dat je niet kunt missen.",
+      items: [
+        {
+          title: "Open source software",
+          body: "Mostro is open source software die iedereen mag gebruiken, kopiëren, aanpassen en draaien. De ontwikkelaars zijn niet verantwoordelijk voor wat anderen met de software doen, legaal of illegaal, eerlijk of oneerlijk.",
+        },
+        {
+          title: "Geen garanties",
+          body: "Mostro wordt geleverd \"zoals hij is\" en \"zoals hij beschikbaar is\". De ontwikkelaars geven geen enkele garantie, uitdrukkelijk of stilzwijgend, over Mostro of het gebruik ervan.",
+        },
+        {
+          title: "Beveiliging naar beste vermogen",
+          body: "De ontwikkelaars en de dispuutbehandelaars doen hun best om kwaadwillenden, fraude en oplichting uit Mostro te weren, maar de gebruiker erkent dat het systeem misbruikt kan worden en aanvaardt de volledige verantwoordelijkheid voor het gebruik ervan.",
+        },
+        {
+          title: "Beperking van aansprakelijkheid",
+          body: "Noch de ontwikkelaars, noch de dispuutbehandelaars zijn aansprakelijk voor verlies of schade die de gebruiker lijdt door het gebruik van Mostro.",
+        },
+        {
+          title: "Non-custodial protocol",
+          body: "Mostro is een protocol met een aantal open source uitvoeringen, geen exchange, geen bemiddelaar en geen bewaarder. Het wordt nooit eigenaar van je geld of je sleutels: tijdens een trade staan de sats vast in een Lightning hold invoice tussen jou en je tegenpartij. Er wordt geen account voor je aangemaakt en je hoeft geen persoonsgegevens af te staan om te handelen.",
+        },
+        {
+          title: "Zelfstandige beheerders",
+          body: "Elke Mostro-instantie wordt beheerd door een zelfstandige derde partij, die eigen tarieven, regels en dispuutprocedures vaststelt. Die beheerders treden niet op namens de ontwikkelaars van Mostro, die hen niet aansturen en niet aanbevelen. Er is geen garantie dat een instantie, relay of Lightning-node beschikbaar is, en een trade kan mislukken of vertraging oplopen door oorzaken waar niemand vat op heeft.",
+        },
+        {
+          title: "Naleving van de wet",
+          body: "Jij bent er als enige verantwoordelijk voor dat je gebruik van Mostro is toegestaan waar je woont, en voor het aangeven en betalen van de belasting die over je trades verschuldigd is. Gebruik Mostro niet als peer-to-peer handel in bitcoin in jouw rechtsgebied verboden is, of als de wet je dit soort software verbiedt.",
+        },
+        {
+          title: "Wijzigingen in deze voorwaarden",
+          body: "Deze voorwaarden kunnen op elk moment worden bijgewerkt; de versie op deze pagina is altijd de geldende. Blijf je Mostro na een wijziging gebruiken, dan aanvaard je de bijgewerkte voorwaarden.",
+        },
+      ],
+      backHome: "Terug naar start",
+    },
+  },
 } as const;
 
 export type Locale = keyof typeof translations;
-export const locales: Locale[] = ['en', 'es', 'it', 'pt', 'fr'];
+export const locales: Locale[] = ['en', 'es', 'it', 'pt', 'fr', 'nl'];
 
 export function t(locale: Locale) {
   return translations[locale];
@@ -1054,6 +1262,7 @@ export function getLocaleFromUrl(url: URL): Locale {
   if (lang === 'it') return 'it';  
   if (lang === 'pt') return 'pt';
   if (lang === 'fr') return 'fr';
+  if (lang === 'nl') return 'nl';
   return 'en';
 }
 
@@ -1073,6 +1282,7 @@ export function getLocaleLabel(locale: Locale): string {
     it: 'IT 🇮🇹',
     pt: 'PT 🇧🇷',
     fr: 'FR 🇫🇷',
+    nl: 'NL 🇳🇱',
   };
   return labels[locale];
 }
