@@ -137,8 +137,6 @@ export const translations = {
     donate: {
       title: "Support Mostro Development",
       content: "Mostro is FOSS (Free and Open Source Software). If you think the project is useful, consider making a donation to help us develop and maintain it in the long term. Thanks!",
-      button: "Donate on Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Non-custodial P2P Bitcoin exchange built on Lightning Network and Nostr.",
@@ -151,7 +149,6 @@ export const translations = {
       nostr: "Nostr",
       foundation: "Foundation",
       supportedBy: "Supported by",
-      geyser: "Donate",
       protocolSpec: "Protocol Spec",
       node: "Node",
       tui: "TUI",
@@ -346,8 +343,6 @@ export const translations = {
     donate: {
       title: "Apoya el Desarrollo de Mostro",
       content: "Mostro es FOSS (Software Libre y de Código Abierto). Si encuentras útil el proyecto, considera hacer una donación para ayudarnos a desarrollarlo y mantenerlo a largo plazo. ¡Gracias!",
-      button: "Donar en Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Exchange P2P de Bitcoin no custodial construido sobre Lightning Network y Nostr.",
@@ -360,7 +355,6 @@ export const translations = {
       nostr: "Nostr",
       foundation: "Fundación",
       supportedBy: "Apoyado por",
-      geyser: "Donar",
       protocolSpec: "Especificación",
       node: "Nodo",
       tui: "TUI",
@@ -555,8 +549,6 @@ export const translations = {
     donate: {
       title: "Supporta lo Sviluppo di Mostro",
       content: "Mostro è FOSS (Software Libero e Open Source). Se pensi che il progetto sia utile, considera di fare una donazione per aiutarci a svilupparlo e mantenerlo a lungo termine. Grazie!",
-      button: "Dona su Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Exchange P2P di Bitcoin non-custodial costruito su Lightning Network e Nostr.",
@@ -569,7 +561,6 @@ export const translations = {
       nostr: "Nostr", 
       foundation: "Fondazione",
       supportedBy: "Supportato da",
-      geyser: "Dona",
       protocolSpec: "Specifica",
       node: "Nodo",
       tui: "TUI",
@@ -764,8 +755,6 @@ export const translations = {
     donate: {
       title: "Apoie o Desenvolvimento do Mostro",
       content: "Mostro é FOSS (Software Livre e de Código Aberto). Se você acha o projeto útil, considere fazer uma doação para nos ajudar a desenvolvê-lo e mantê-lo a longo prazo. Obrigado!",
-      button: "Doar no Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Exchange P2P de Bitcoin não-custodial construído sobre Lightning Network e Nostr.",
@@ -778,7 +767,6 @@ export const translations = {
       nostr: "Nostr",
       foundation: "Fundação",
       supportedBy: "Apoiado por",
-      geyser: "Doar",
       protocolSpec: "Especificação",
       node: "Nó",
       tui: "TUI",
@@ -973,8 +961,6 @@ export const translations = {
     donate: {
       title: "Soutenir le Développement de Mostro",
       content: "Mostro est FOSS (Logiciel Libre et Open Source). Si vous trouvez le projet utile, considérez faire un don pour nous aider à le développer et le maintenir à long terme. Merci !",
-      button: "Faire un don sur Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Échange P2P de Bitcoin non-custodial construit sur Lightning Network et Nostr.",
@@ -987,7 +973,6 @@ export const translations = {
       nostr: "Nostr",
       foundation: "Fondation",
       supportedBy: "Soutenu par",
-      geyser: "Faire un don",
       protocolSpec: "Spécification",
       node: "Nœud",
       tui: "TUI",
@@ -1182,8 +1167,6 @@ export const translations = {
     donate: {
       title: "Steun de ontwikkeling van Mostro",
       content: "Mostro is FOSS (vrije en open source software). Vind je het project nuttig, overweeg dan een donatie zodat we het op de lange termijn kunnen ontwikkelen en onderhouden. Bedankt!",
-      button: "Doneren via Geyser",
-      link: "https://geyser.fund/project/mostro",
     },
     footer: {
       desc: "Non-custodial P2P bitcoin-exchange, gebouwd op Lightning Network en Nostr.",
@@ -1196,7 +1179,6 @@ export const translations = {
       nostr: "Nostr",
       foundation: "Stichting",
       supportedBy: "Ondersteund door",
-      geyser: "Doneren",
       protocolSpec: "Protocolspecificatie",
       node: "Node",
       tui: "TUI",
