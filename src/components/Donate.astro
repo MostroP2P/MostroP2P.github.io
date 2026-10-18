@@ -35,7 +35,7 @@ const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
               <image href="/images/mostro-logo.png" x={qr.logo.x} y={qr.logo.y} width={qr.logo.width} height={qr.logo.height} />
             </svg>
           </a>
-          <button type="button" class="ln-copy" data-copy={LN_ADDRESS} data-copied-label={i.donate.copied}>
+          <button type="button" class="ln-copy" data-copy={LN_ADDRESS} data-copied-label={i.donate.copied} data-manual-label={i.donate.copyManual}>
             <span class="ln-address">{lnUser}@<wbr />{lnDomain}</span>
             <span class="ln-copy-label">{i.donate.copy}</span>
           </button>
@@ -67,6 +67,7 @@ const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
         } catch {
           // Clipboard unavailable: select the address so it can be copied by hand
           window.getSelection()?.selectAllChildren(address);
+          status.textContent = button.dataset.manualLabel ?? '';
           return;
         }
         label.textContent = button.dataset.copiedLabel ?? defaultLabel;

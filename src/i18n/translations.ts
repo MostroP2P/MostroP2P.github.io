@@ -141,6 +141,7 @@ export const translations = {
       qrLabel: "Open in your Lightning wallet",
       copy: "Copy",
       copied: "Copied",
+      copyManual: "Clipboard unavailable. The address is selected so you can copy it manually.",
       onchain: "If you want to send an on-chain donation, email us at {email} and we'll send you the address.",
     },
     footer: {
@@ -352,6 +353,7 @@ export const translations = {
       qrLabel: "Abrir en tu billetera Lightning",
       copy: "Copiar",
       copied: "Copiado",
+      copyManual: "No se pudo copiar. La dirección quedó seleccionada para que la copies manualmente.",
       onchain: "Si quieres enviar una donación onchain, envíanos un email a {email} y te enviamos la dirección.",
     },
     footer: {
@@ -563,6 +565,7 @@ export const translations = {
       qrLabel: "Apri nel tuo wallet Lightning",
       copy: "Copia",
       copied: "Copiato",
+      copyManual: "Copia non disponibile. L'indirizzo è selezionato, copialo manualmente.",
       onchain: "Se vuoi inviare una donazione on-chain, scrivici un'email a {email} e ti invieremo l'indirizzo.",
     },
     footer: {
@@ -774,6 +777,7 @@ export const translations = {
       qrLabel: "Abrir na sua carteira Lightning",
       copy: "Copiar",
       copied: "Copiado",
+      copyManual: "Não foi possível copiar. O endereço está selecionado para você copiar manualmente.",
       onchain: "Se você quiser enviar uma doação on-chain, envie um e-mail para {email} e nós enviaremos o endereço.",
     },
     footer: {
@@ -985,6 +989,7 @@ export const translations = {
       qrLabel: "Ouvrir dans votre portefeuille Lightning",
       copy: "Copier",
       copied: "Copié",
+      copyManual: "Copie impossible. L'adresse est sélectionnée pour que vous puissiez la copier manuellement.",
       onchain: "Si vous souhaitez faire un don on-chain, écrivez-nous à {email} et nous vous enverrons l'adresse.",
     },
     footer: {
@@ -1196,6 +1201,7 @@ export const translations = {
       qrLabel: "Openen in je Lightning-wallet",
       copy: "Kopiëren",
       copied: "Gekopieerd",
+      copyManual: "Kopiëren lukt niet. Het adres is geselecteerd, zodat je het handmatig kunt kopiëren.",
       onchain: "Wil je on-chain doneren? Stuur een e-mail naar {email}, dan sturen we je het adres.",
     },
     footer: {
