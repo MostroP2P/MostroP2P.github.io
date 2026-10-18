@@ -16,12 +16,6 @@ const i = t(locale);
       <div class="donate-card glass">
         <div class="donate-icon">⚡</div>
         <p class="donate-text">{i.donate.content}</p>
-        <a href={i.donate.link} target="_blank" rel="noopener" class="btn btn-primary donate-btn">
-          {i.donate.button}
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M7 17l9.2-9.2M17 17V7H7"/>
-          </svg>
-        </a>
       </div>
     </div>
   </div>
@@ -59,16 +53,6 @@ const i = t(locale);
     color: var(--text-secondary);
     font-size: 1.1rem;
     line-height: 1.8;
-    margin-bottom: 32px;
-  }
-
-  .donate-btn {
-    font-size: 1.1rem;
-    padding: 14px 32px;
-  }
-
-  .donate-btn svg {
-    margin-left: 8px;
   }
 
   /* Mobile styles */
@@ -83,11 +67,6 @@ const i = t(locale);
 
     .donate-text {
       font-size: 1rem;
-    }
-
-    .donate-btn {
-      width: 100%;
-      max-width: 280px;
     }
   }
 </style>
