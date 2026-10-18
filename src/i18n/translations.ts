@@ -137,6 +137,12 @@ export const translations = {
     donate: {
       title: "Support Mostro Development",
       content: "Mostro is FOSS (Free and Open Source Software). If you think the project is useful, consider making a donation to help us develop and maintain it in the long term. Thanks!",
+      lnLabel: "Lightning Address",
+      qrLabel: "Open in your Lightning wallet",
+      copy: "Copy",
+      copied: "Copied",
+      copyManual: "Clipboard unavailable. The address is selected so you can copy it manually.",
+      onchain: "If you want to send an on-chain donation, email us at {email} and we'll send you the address.",
     },
     footer: {
       desc: "Non-custodial P2P Bitcoin exchange built on Lightning Network and Nostr.",
@@ -343,6 +349,12 @@ export const translations = {
     donate: {
       title: "Apoya el Desarrollo de Mostro",
       content: "Mostro es FOSS (Software Libre y de Código Abierto). Si encuentras útil el proyecto, considera hacer una donación para ayudarnos a desarrollarlo y mantenerlo a largo plazo. ¡Gracias!",
+      lnLabel: "Lightning Address",
+      qrLabel: "Abrir en tu billetera Lightning",
+      copy: "Copiar",
+      copied: "Copiado",
+      copyManual: "No se pudo copiar. La dirección quedó seleccionada para que la copies manualmente.",
+      onchain: "Si quieres enviar una donación onchain, envíanos un email a {email} y te enviamos la dirección.",
     },
     footer: {
       desc: "Exchange P2P de Bitcoin no custodial construido sobre Lightning Network y Nostr.",
@@ -549,6 +561,12 @@ export const translations = {
     donate: {
       title: "Supporta lo Sviluppo di Mostro",
       content: "Mostro è FOSS (Software Libero e Open Source). Se pensi che il progetto sia utile, considera di fare una donazione per aiutarci a svilupparlo e mantenerlo a lungo termine. Grazie!",
+      lnLabel: "Lightning Address",
+      qrLabel: "Apri nel tuo wallet Lightning",
+      copy: "Copia",
+      copied: "Copiato",
+      copyManual: "Copia non disponibile. L'indirizzo è selezionato, copialo manualmente.",
+      onchain: "Se vuoi inviare una donazione on-chain, scrivici un'email a {email} e ti invieremo l'indirizzo.",
     },
     footer: {
       desc: "Exchange P2P di Bitcoin non-custodial costruito su Lightning Network e Nostr.",
@@ -755,6 +773,12 @@ export const translations = {
     donate: {
       title: "Apoie o Desenvolvimento do Mostro",
       content: "Mostro é FOSS (Software Livre e de Código Aberto). Se você acha o projeto útil, considere fazer uma doação para nos ajudar a desenvolvê-lo e mantê-lo a longo prazo. Obrigado!",
+      lnLabel: "Lightning Address",
+      qrLabel: "Abrir na sua carteira Lightning",
+      copy: "Copiar",
+      copied: "Copiado",
+      copyManual: "Não foi possível copiar. O endereço está selecionado para você copiar manualmente.",
+      onchain: "Se você quiser enviar uma doação on-chain, envie um e-mail para {email} e nós enviaremos o endereço.",
     },
     footer: {
       desc: "Exchange P2P de Bitcoin não-custodial construído sobre Lightning Network e Nostr.",
@@ -961,6 +985,12 @@ export const translations = {
     donate: {
       title: "Soutenir le Développement de Mostro",
       content: "Mostro est FOSS (Logiciel Libre et Open Source). Si vous trouvez le projet utile, considérez faire un don pour nous aider à le développer et le maintenir à long terme. Merci !",
+      lnLabel: "Lightning Address",
+      qrLabel: "Ouvrir dans votre portefeuille Lightning",
+      copy: "Copier",
+      copied: "Copié",
+      copyManual: "Copie impossible. L'adresse est sélectionnée pour que vous puissiez la copier manuellement.",
+      onchain: "Si vous souhaitez faire un don on-chain, écrivez-nous à {email} et nous vous enverrons l'adresse.",
     },
     footer: {
       desc: "Échange P2P de Bitcoin non-custodial construit sur Lightning Network et Nostr.",
@@ -1167,6 +1197,12 @@ export const translations = {
     donate: {
       title: "Steun de ontwikkeling van Mostro",
       content: "Mostro is FOSS (vrije en open source software). Vind je het project nuttig, overweeg dan een donatie zodat we het op de lange termijn kunnen ontwikkelen en onderhouden. Bedankt!",
+      lnLabel: "Lightning Address",
+      qrLabel: "Openen in je Lightning-wallet",
+      copy: "Kopiëren",
+      copied: "Gekopieerd",
+      copyManual: "Kopiëren lukt niet. Het adres is geselecteerd, zodat je het handmatig kunt kopiëren.",
+      onchain: "Wil je on-chain doneren? Stuur een e-mail naar {email}, dan sturen we je het adres.",
     },
     footer: {
       desc: "Non-custodial P2P bitcoin-exchange, gebouwd op Lightning Network en Nostr.",

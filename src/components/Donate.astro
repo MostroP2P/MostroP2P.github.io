@@ -1,25 +1,86 @@
 ---
 import { type Locale, t } from '../i18n/translations';
+import { buildStyledQr } from '../utils/lightningQr';
 
-interface Props { 
-  locale: Locale; 
+interface Props {
+  locale: Locale;
 }
 const { locale } = Astro.props;
 const i = t(locale);
+
+const LN_ADDRESS = 'funding@pay.mostro.foundation';
+const ONCHAIN_EMAIL = 'funding@mostro.network';
+const [lnUser, lnDomain] = LN_ADDRESS.split('@');
+const lightningUri = `lightning:${LN_ADDRESS}`;
+const qr = buildStyledQr(lightningUri);
+const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
 ---
 
 <section id="donate" class="section">
   <div class="container">
     <div class="donate-content">
       <h2 class="section-title">{i.donate.title}</h2>
-      
+
       <div class="donate-card glass">
         <div class="donate-icon">⚡</div>
         <p class="donate-text">{i.donate.content}</p>
+
+        <div class="ln-box">
+          <span class="ln-label">{i.donate.lnLabel}</span>
+          <a href={lightningUri} class="ln-qr" aria-label={i.donate.qrLabel}>
+            <svg viewBox={`0 0 ${qr.size} ${qr.size}`} aria-hidden="true">
+              <path d={qr.dots} fill="#0E130C" />
+              <path d={qr.eyesOuter} fill="#0E130C" fill-rule="evenodd" />
+              <path d={qr.eyesInner} fill="#4A9A26" />
+              <image href="/images/mostro-logo.png" x={qr.logo.x} y={qr.logo.y} width={qr.logo.width} height={qr.logo.height} />
+            </svg>
+          </a>
+          <button type="button" class="ln-copy" data-copy={LN_ADDRESS} data-copied-label={i.donate.copied} data-manual-label={i.donate.copyManual}>
+            <span class="ln-address">{lnUser}@<wbr />{lnDomain}</span>
+            <span class="ln-copy-label">{i.donate.copy}</span>
+          </button>
+          <span class="ln-copy-status" role="status"></span>
+        </div>
+
+        <p class="donate-onchain">
+          {onchainBefore}<a href={`mailto:${ONCHAIN_EMAIL}`}>{ONCHAIN_EMAIL}</a>{onchainAfter}
+        </p>
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  const COPIED_RESET_MS = 1600;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll<HTMLButtonElement>('.ln-copy').forEach(button => {
+      const label = button.querySelector('.ln-copy-label') as HTMLSpanElement;
+      const address = button.querySelector('.ln-address') as HTMLSpanElement;
+      const status = button.nextElementSibling as HTMLSpanElement;
+      const defaultLabel = label.textContent;
+      let resetTimer: number | undefined;
+
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(button.dataset.copy ?? '');
+        } catch {
+          // Clipboard unavailable: select the address so it can be copied by hand
+          window.getSelection()?.selectAllChildren(address);
+          status.textContent = button.dataset.manualLabel ?? '';
+          return;
+        }
+        label.textContent = button.dataset.copiedLabel ?? defaultLabel;
+        status.textContent = label.textContent;
+        window.clearTimeout(resetTimer);
+        resetTimer = window.setTimeout(() => {
+          label.textContent = defaultLabel;
+          status.textContent = '';
+        }, COPIED_RESET_MS);
+      });
+    });
+  });
+</script>
 
 <style>
   .donate-content {
@@ -55,6 +116,110 @@ const i = t(locale);
     line-height: 1.8;
   }
 
+  .ln-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 32px;
+  }
+
+  .ln-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .ln-qr {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 1 / 1;
+    padding: 14px;
+    background: #fff;
+    border-radius: 24px;
+    transition: box-shadow 0.3s;
+  }
+
+  .ln-qr:hover {
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+
+  .ln-qr:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .ln-qr svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .ln-copy {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    padding: 14px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .ln-copy:hover {
+    border-color: var(--border-hover);
+  }
+
+  .ln-copy:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .ln-address {
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .ln-copy-label {
+    flex-shrink: 0;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .ln-copy-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .donate-onchain {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .donate-onchain a {
+    overflow-wrap: anywhere;
+  }
+
   /* Mobile styles */
   @media (max-width: 768px) {
     .donate-card {
@@ -67,6 +232,10 @@ const i = t(locale);
 
     .donate-text {
       font-size: 1rem;
+    }
+
+    .ln-qr {
+      max-width: 240px;
     }
   }
 </style>
