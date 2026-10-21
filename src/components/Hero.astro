@@ -1,5 +1,6 @@
 ---
 import { type Locale, t } from '../i18n/translations';
+import AppDownload from './AppDownload.astro';
 
 interface Props { 
   locale: Locale; 
@@ -35,6 +36,8 @@ const i = t(locale);
         <a href="#get-started" class="btn btn-primary">{i.hero.ctaPrimary}</a>
         <a href="#how-it-works" class="btn btn-outline">{i.hero.ctaSecondary}</a>
       </div>
+
+      <AppDownload {locale} />
 
       <div class="hero-stats">
         <div class="stat">
@@ -167,7 +170,7 @@ const i = t(locale);
     gap: 16px;
     justify-content: center;
     flex-wrap: wrap;
-    margin-bottom: 60px;
+    margin-bottom: 32px;
   }
 
   .hero-stats {
