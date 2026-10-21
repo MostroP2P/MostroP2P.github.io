@@ -1,5 +1,6 @@
 ---
 import { type Locale, t } from '../i18n/translations';
+import AppDownload from './AppDownload.astro';
 
 interface Props { 
   locale: Locale; 
@@ -8,12 +9,6 @@ const { locale } = Astro.props;
 const i = t(locale);
 
 const options = [
-  {
-    title: i.getStarted.mobile,
-    desc: i.getStarted.mobileDesc,
-    link: i.getStarted.mobileLink,
-    icon: "📱"
-  },
   {
     title: i.getStarted.cli,
     desc: i.getStarted.cliDesc,
@@ -45,7 +40,17 @@ const options = [
   <div class="container">
     <h2 class="section-title">{i.getStarted.title}</h2>
     <p class="section-subtitle">{i.getStarted.subtitle}</p>
-    
+
+    <!-- Not a card link like the ones below: it holds several links. -->
+    <div class="app-panel glass">
+      <div class="app-panel-copy">
+        <div class="get-started-icon" aria-hidden="true">📱</div>
+        <h3>{i.download.title}</h3>
+        <p>{i.download.desc}</p>
+      </div>
+      <AppDownload {locale} variant="panel" />
+    </div>
+
     <div class="get-started-grid">
       {options.map(option => (
         <a href={option.link} target="_blank" rel="noopener" class="get-started-card glass card">
@@ -64,11 +69,42 @@ const options = [
 </section>
 
 <style>
+  .app-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 32px;
+    margin-top: 48px;
+    padding: 32px 40px;
+  }
+
+  .app-panel-copy {
+    text-align: left;
+  }
+
+  .app-panel .get-started-icon {
+    margin-bottom: 12px;
+  }
+
+  .app-panel h3 {
+    color: var(--accent);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+
+  .app-panel p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    font-size: 1rem;
+    max-width: 520px;
+  }
+
   .get-started-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 24px;
-    margin-top: 48px;
+    margin-top: 24px;
   }
 
   .get-started-card {
@@ -121,6 +157,22 @@ const options = [
   }
 
   /* Mobile styles */
+  @media (max-width: 900px) {
+    .app-panel {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding: 28px 20px;
+    }
+
+    .app-panel-copy {
+      text-align: center;
+    }
+
+    .app-panel p {
+      margin: 0 auto;
+    }
+  }
+
   @media (max-width: 768px) {
     .get-started-grid {
       grid-template-columns: 1fr;

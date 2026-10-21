@@ -1,5 +1,6 @@
 ---
 import { type Locale, t } from '../i18n/translations';
+import { APP_REPO_URL } from '../config/app';
 
 interface Props { 
   locale: Locale; 
@@ -36,8 +37,8 @@ const i = t(locale);
           <a href="https://github.com/MostroP2P/mostro-cli" target="_blank" rel="noopener">
             {i.footer.cli}
           </a>
-          <a href="https://github.com/MostroP2P/mobile" target="_blank" rel="noopener">
-            {i.footer.mobileApp}
+          <a href={APP_REPO_URL} target="_blank" rel="noopener">
+            {i.footer.app}
           </a>
           <a href="https://mostro.world" target="_blank" rel="noopener">
             {i.footer.stats}
