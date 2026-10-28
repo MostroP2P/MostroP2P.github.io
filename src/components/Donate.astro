@@ -14,6 +14,7 @@ const [lnUser, lnDomain] = LN_ADDRESS.split('@');
 const lightningUri = `lightning:${LN_ADDRESS}`;
 const qr = buildStyledQr(lightningUri);
 const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
+const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foundation}');
 ---
 
 <section id="donate" class="section">
@@ -40,7 +41,14 @@ const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
             <span class="ln-copy-label">{i.donate.copy}</span>
           </button>
           <span class="ln-copy-status" role="status"></span>
+          <a href={lightningUri} class="btn btn-primary ln-open">
+            {i.donate.openWallet}
+          </a>
         </div>
+
+        <p class="donate-foundation">
+          {foundationBefore}<a href="https://mostro.foundation" target="_blank" rel="noopener">Mostro Foundation</a>{foundationAfter}
+        </p>
 
         <p class="donate-onchain">
           {onchainBefore}<a href={`mailto:${ONCHAIN_EMAIL}`}>{ONCHAIN_EMAIL}</a>{onchainAfter}
@@ -207,8 +215,21 @@ const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
     white-space: nowrap;
   }
 
+  .ln-open {
+    width: 100%;
+    max-width: 360px;
+    justify-content: center;
+  }
+
+  .donate-foundation {
+    margin-top: 24px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
   .donate-onchain {
-    margin-top: 32px;
+    margin-top: 24px;
     padding-top: 24px;
     border-top: 1px solid var(--border);
     color: var(--text-secondary);
