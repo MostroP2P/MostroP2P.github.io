@@ -187,6 +187,18 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
     return response.json();
   }
 
+  // msat per unit of each BOLT11 amount multiplier (pico is handled apart: 1p = 0.1 msat)
+  const BOLT11_MSAT: Record<string, number> = { '': 1e11, m: 1e8, u: 1e5, n: 100 };
+
+  // Amount in an invoice's prefix: lnbc50u1… is 50 µBTC = 5,000,000 msat
+  function invoiceMsat(pr: string): number | undefined {
+    const hrp = pr.slice(0, pr.lastIndexOf('1')).toLowerCase();
+    const match = /^ln[a-z]+(\d+)([munp]?)$/.exec(hrp);
+    if (!match) return undefined;
+    const amount = Number(match[1]);
+    return match[2] === 'p' ? amount / 10 : amount * BOLT11_MSAT[match[2]];
+  }
+
   async function signZapRequest(recipient: string, msat: number, comment: string): Promise<string> {
     const nostr = window.nostr!;
     const event = await nostr.signEvent({
@@ -311,7 +323,10 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
       }
 
       const response = await fetchJson<InvoiceResponse>(callback.toString()).catch(() => undefined);
-      if (!response?.pr || response.status === 'ERROR') return showError(form, messages.errorRequest);
+      // LUD-06: only accept an invoice for exactly the amount requested
+      if (!response?.pr || response.status === 'ERROR' || invoiceMsat(response.pr) !== msat) {
+        return showError(form, messages.errorRequest);
+      }
       showInvoice(response.pr, sats, response.verify);
     };
 
@@ -344,6 +359,8 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
       weblnButton.disabled = true;
       try {
         await window.webln!.enable();
+        // The donor left this invoice while the wallet prompt was open
+        if (session !== current) return;
         await window.webln!.sendPayment(pr);
         if (session === current) showView(paidView);
       } catch {
@@ -438,7 +455,8 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
     outline-offset: 4px;
   }
 
-  .ln-qr svg {
+  /* Global so it also sizes the invoice QR injected through innerHTML */
+  .ln-qr :global(svg) {
     display: block;
     width: 100%;
     height: 100%;
