@@ -1,5 +1,5 @@
 ---
-import { type Locale, t } from '../i18n/translations';
+import { type Locale, t, getLocalePath } from '../i18n/translations';
 import { APP_REPO_URL } from '../config/app';
 
 interface Props { 
@@ -76,6 +76,9 @@ const i = t(locale);
 
         <div class="footer-section">
           <h4>{i.footer.support}</h4>
+          <a href={`${getLocalePath(locale, '/')}#donate`}>
+            {i.nav.donate}
+          </a>
           <a href="https://mostro.foundation" target="_blank" rel="noopener">
             {i.footer.foundation}
           </a>
