@@ -216,7 +216,8 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
 
     let payParams: Promise<PayParams> | undefined;
     let invoice = '';
-    // Bumped on every view change so a stale payment check stops polling
+    // Bumped on every view change so stale async work (payment checks,
+    // wallet payments) stops instead of touching the new view
     let session = 0;
 
     const showView = (view: HTMLElement) => {
@@ -254,6 +255,7 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
         if (session !== current) return;
         try {
           const status = await fetchJson<{ settled?: boolean }>(verifyUrl);
+          if (session !== current) return;
           if (status.settled) {
             showView(paidView);
             return;
@@ -276,6 +278,7 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
       (invoiceView.querySelector('.ln-invoice-amount') as HTMLSpanElement).textContent =
         messages.invoiceFor.replace('{amount}', number.format(sats));
       weblnButton.hidden = !window.webln;
+      weblnButton.disabled = false;
       showView(invoiceView);
       if (verifyUrl) watchPayment(verifyUrl);
     };
@@ -334,13 +337,19 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
     });
 
     weblnButton.addEventListener('click', async () => {
+      // Capture the invoice now: a new one can be created while the wallet prompt is open
+      const pr = invoice;
+      const current = session;
       showError(invoiceView, '');
+      weblnButton.disabled = true;
       try {
         await window.webln!.enable();
-        await window.webln!.sendPayment(invoice);
-        showView(paidView);
+        await window.webln!.sendPayment(pr);
+        if (session === current) showView(paidView);
       } catch {
-        showError(invoiceView, messages.errorWebln);
+        if (session === current) showError(invoiceView, messages.errorWebln);
+      } finally {
+        if (session === current) weblnButton.disabled = false;
       }
     });
 
