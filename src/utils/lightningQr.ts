@@ -29,14 +29,21 @@ function dot(x: number, y: number): string {
     `a${DOT_RADIUS} ${DOT_RADIUS} 0 1 0 ${-d} 0Z`;
 }
 
+export interface StyledQrOptions {
+  /** 'Alphanumeric' gives a smaller code for upper-cased payloads such as BOLT11 invoices */
+  mode?: 'Byte' | 'Alphanumeric';
+  /** Q still leaves enough redundancy for the logo and suits long payloads */
+  errorCorrection?: 'Q' | 'H';
+}
+
 /**
  * Builds the SVG paths for a QR code with round dots, rounded finder eyes
- * and a cleared center for the Mostro logo. Uses error correction level H
- * so the code still scans with the center modules removed.
+ * and a cleared center for the Mostro logo. Defaults to error correction
+ * level H so the code still scans with the center modules removed.
  */
-export function buildStyledQr(data: string): StyledQr {
-  const qr = qrcode(0, 'H');
-  qr.addData(data);
+export function buildStyledQr(data: string, { mode = 'Byte', errorCorrection = 'H' }: StyledQrOptions = {}): StyledQr {
+  const qr = qrcode(0, errorCorrection);
+  qr.addData(data, mode);
   qr.make();
 
   const n = qr.getModuleCount();
@@ -87,4 +94,15 @@ export function buildStyledQr(data: string): StyledQr {
       height: round(height),
     },
   };
+}
+
+/** Renders a styled QR as SVG markup, for building it in the browser. */
+export function styledQrSvg(qr: StyledQr): string {
+  const { x, y, width, height } = qr.logo;
+  return `<svg viewBox="0 0 ${qr.size} ${qr.size}" aria-hidden="true">` +
+    `<path d="${qr.dots}" fill="#0E130C" />` +
+    `<path d="${qr.eyesOuter}" fill="#0E130C" fill-rule="evenodd" />` +
+    `<path d="${qr.eyesInner}" fill="#4A9A26" />` +
+    `<image href="/images/mostro-logo.png" x="${x}" y="${y}" width="${width}" height="${height}" />` +
+    `</svg>`;
 }
