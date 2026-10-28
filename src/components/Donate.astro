@@ -12,6 +12,20 @@ const LN_ADDRESS = 'funding@pay.mostro.foundation';
 const ONCHAIN_EMAIL = 'funding@mostro.network';
 const [lnUser, lnDomain] = LN_ADDRESS.split('@');
 const lightningUri = `lightning:${LN_ADDRESS}`;
+const LNURLP_URL = `https://${lnDomain}/.well-known/lnurlp/${lnUser}`;
+// Hex pubkey of Mostro's Nostr account (npub1m0str0d7…), the recipient of zaps
+const ZAP_RECIPIENT = 'dbe0b1bdbe129ce38db753d6a997e6a29e693afd02aa1d1f9b005fa7386e5c26';
+const PRESETS = [1000, 5000, 21000, 100000];
+const DEFAULT_AMOUNT = 5000;
+const compact = new Intl.NumberFormat(locale, { notation: 'compact' });
+const messages = JSON.stringify({
+  creating: i.donate.creating,
+  invoiceFor: i.donate.invoiceFor,
+  errorAmount: i.donate.errorAmount,
+  errorRequest: i.donate.errorRequest,
+  errorZap: i.donate.errorZap,
+  errorWebln: i.donate.errorWebln,
+});
 const qr = buildStyledQr(lightningUri);
 const [onchainBefore, onchainAfter] = i.donate.onchain.split('{email}');
 const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foundation}');
@@ -44,6 +58,52 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
           <a href={lightningUri} class="btn btn-primary ln-open">
             {i.donate.openWallet}
           </a>
+        </div>
+
+        <div class="ln-amount" data-lnurlp={LNURLP_URL} data-zap-recipient={ZAP_RECIPIENT} data-locale={locale} data-messages={messages}>
+          <form class="ln-amount-form" novalidate>
+            <span class="ln-label">{i.donate.amountLabel}</span>
+            <div class="ln-presets" role="group" aria-label={i.donate.amountLabel}>
+              {PRESETS.map(sats => (
+                <button type="button" class="ln-preset" data-sats={sats} aria-pressed={sats === DEFAULT_AMOUNT ? 'true' : 'false'}>
+                  {compact.format(sats)}
+                </button>
+              ))}
+            </div>
+            <label class="ln-field">
+              <span>{i.donate.amountInput}</span>
+              <input type="number" name="amount" min="1" step="1" inputmode="numeric" value={DEFAULT_AMOUNT} required />
+            </label>
+            <label class="ln-field">
+              <span>{i.donate.messageLabel}</span>
+              <textarea name="comment" rows="2" maxlength="255"></textarea>
+            </label>
+            <label class="ln-zap" hidden>
+              <input type="checkbox" name="zap" />
+              <span>{i.donate.zapLabel}</span>
+            </label>
+            <button type="submit" class="btn btn-outline ln-submit">{i.donate.createInvoice}</button>
+            <p class="ln-error" role="alert"></p>
+          </form>
+
+          <div class="ln-invoice" hidden>
+            <span class="ln-label ln-invoice-amount"></span>
+            <a class="ln-qr ln-invoice-qr" aria-label={i.donate.qrLabel}></a>
+            <button type="button" class="ln-copy" data-copy="" data-copied-label={i.donate.copied} data-manual-label={i.donate.copyManual}>
+              <span class="ln-address ln-invoice-text"></span>
+              <span class="ln-copy-label">{i.donate.copy}</span>
+            </button>
+            <span class="ln-copy-status" role="status"></span>
+            <button type="button" class="btn btn-primary ln-open ln-webln" hidden>{i.donate.payWebln}</button>
+            <a class="btn btn-primary ln-open ln-invoice-open">{i.donate.openWallet}</a>
+            <p class="ln-error" role="alert"></p>
+            <button type="button" class="ln-back">{i.donate.back}</button>
+          </div>
+
+          <div class="ln-paid" hidden>
+            <p role="status">{i.donate.paid}</p>
+            <button type="button" class="ln-back">{i.donate.back}</button>
+          </div>
         </div>
 
         <p class="donate-foundation">
@@ -87,6 +147,241 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
         }, COPIED_RESET_MS);
       });
     });
+  });
+</script>
+
+<script>
+  import { buildStyledQr, styledQrSvg } from '../utils/lightningQr';
+
+  interface PayParams {
+    tag: string;
+    callback: string;
+    minSendable: number;
+    maxSendable: number;
+    commentAllowed?: number;
+    allowsNostr?: boolean;
+    nostrPubkey?: string;
+  }
+
+  interface InvoiceResponse {
+    pr?: string;
+    verify?: string;
+    status?: string;
+    reason?: string;
+  }
+
+  declare global {
+    interface Window {
+      webln?: { enable(): Promise<void>; sendPayment(pr: string): Promise<unknown> };
+      nostr?: { getPublicKey(): Promise<string>; signEvent(event: object): Promise<object> };
+    }
+  }
+
+  const ZAP_RELAYS = ['wss://relay.damus.io', 'wss://nos.lol', 'wss://relay.primal.net'];
+  const VERIFY_INTERVAL_MS = 3000;
+  const VERIFY_TIMEOUT_MS = 10 * 60 * 1000;
+
+  async function fetchJson<T>(url: string): Promise<T> {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+
+  // msat per unit of each BOLT11 amount multiplier (pico is handled apart: 1p = 0.1 msat)
+  const BOLT11_MSAT: Record<string, number> = { '': 1e11, m: 1e8, u: 1e5, n: 100 };
+
+  // Amount in an invoice's prefix: lnbc50u1… is 50 µBTC = 5,000,000 msat
+  function invoiceMsat(pr: string): number | undefined {
+    const hrp = pr.slice(0, pr.lastIndexOf('1')).toLowerCase();
+    const match = /^ln[a-z]+(\d+)([munp]?)$/.exec(hrp);
+    if (!match) return undefined;
+    const amount = Number(match[1]);
+    return match[2] === 'p' ? amount / 10 : amount * BOLT11_MSAT[match[2]];
+  }
+
+  async function signZapRequest(recipient: string, msat: number, comment: string): Promise<string> {
+    const nostr = window.nostr!;
+    const event = await nostr.signEvent({
+      kind: 9734,
+      pubkey: await nostr.getPublicKey(),
+      created_at: Math.floor(Date.now() / 1000),
+      content: comment,
+      tags: [['relays', ...ZAP_RELAYS], ['amount', String(msat)], ['p', recipient]],
+    });
+    return JSON.stringify(event);
+  }
+
+  function setupAmountForm(root: HTMLElement) {
+    const messages = JSON.parse(root.dataset.messages ?? '{}');
+    const number = new Intl.NumberFormat(root.dataset.locale);
+    const form = root.querySelector('.ln-amount-form') as HTMLFormElement;
+    const amountInput = form.elements.namedItem('amount') as HTMLInputElement;
+    const commentInput = form.elements.namedItem('comment') as HTMLTextAreaElement;
+    const zapLabel = form.querySelector('.ln-zap') as HTMLLabelElement;
+    const zapInput = form.elements.namedItem('zap') as HTMLInputElement;
+    const submit = form.querySelector('.ln-submit') as HTMLButtonElement;
+    const presets = form.querySelectorAll<HTMLButtonElement>('.ln-preset');
+    const invoiceView = root.querySelector('.ln-invoice') as HTMLDivElement;
+    const paidView = root.querySelector('.ln-paid') as HTMLDivElement;
+    const weblnButton = invoiceView.querySelector('.ln-webln') as HTMLButtonElement;
+    const submitLabel = submit.textContent;
+
+    let payParams: Promise<PayParams> | undefined;
+    let invoice = '';
+    // Bumped on every view change so stale async work (payment checks,
+    // wallet payments) stops instead of touching the new view
+    let session = 0;
+
+    const showView = (view: HTMLElement) => {
+      for (const el of [form, invoiceView, paidView]) el.hidden = el !== view;
+      root.querySelectorAll('.ln-error').forEach(el => { el.textContent = ''; });
+      session++;
+    };
+
+    const showError = (view: HTMLElement, message: string) => {
+      (view.querySelector('.ln-error') as HTMLParagraphElement).textContent = message;
+    };
+
+    const syncPresets = () => {
+      showError(form, '');
+      presets.forEach(preset => {
+        preset.setAttribute('aria-pressed', String(preset.dataset.sats === amountInput.value));
+      });
+    };
+
+    const getPayParams = () => {
+      payParams ??= fetchJson<PayParams>(root.dataset.lnurlp ?? '').then(params => {
+        if (params.tag !== 'payRequest') throw new Error('Not a payRequest');
+        return params;
+      });
+      // Let a later submit retry after a failed request
+      payParams.catch(() => { payParams = undefined; });
+      return payParams;
+    };
+
+    const watchPayment = async (verifyUrl: string) => {
+      const current = session;
+      const deadline = Date.now() + VERIFY_TIMEOUT_MS;
+      while (session === current && Date.now() < deadline) {
+        await new Promise(resolve => setTimeout(resolve, VERIFY_INTERVAL_MS));
+        if (session !== current) return;
+        try {
+          const status = await fetchJson<{ settled?: boolean }>(verifyUrl);
+          if (session !== current) return;
+          if (status.settled) {
+            showView(paidView);
+            return;
+          }
+        } catch {
+          // Keep polling: a failed check doesn't mean the invoice is gone
+        }
+      }
+    };
+
+    const showInvoice = (pr: string, sats: number, verifyUrl?: string) => {
+      invoice = pr;
+      const uri = `lightning:${pr}`;
+      const qrLink = invoiceView.querySelector('.ln-invoice-qr') as HTMLAnchorElement;
+      qrLink.innerHTML = styledQrSvg(buildStyledQr(uri.toUpperCase(), { mode: 'Alphanumeric', errorCorrection: 'Q' }));
+      qrLink.href = uri;
+      (invoiceView.querySelector('.ln-invoice-open') as HTMLAnchorElement).href = uri;
+      (invoiceView.querySelector('.ln-copy') as HTMLButtonElement).dataset.copy = pr;
+      (invoiceView.querySelector('.ln-invoice-text') as HTMLSpanElement).textContent = pr;
+      (invoiceView.querySelector('.ln-invoice-amount') as HTMLSpanElement).textContent =
+        messages.invoiceFor.replace('{amount}', number.format(sats));
+      weblnButton.hidden = !window.webln;
+      weblnButton.disabled = false;
+      showView(invoiceView);
+      if (verifyUrl) watchPayment(verifyUrl);
+    };
+
+    const createInvoice = async () => {
+      const params = await getPayParams().catch(() => undefined);
+      if (!params) return showError(form, messages.errorRequest);
+
+      const min = Math.ceil(params.minSendable / 1000);
+      const max = Math.floor(params.maxSendable / 1000);
+      const sats = Number(amountInput.value);
+      if (!Number.isInteger(sats) || sats < min || sats > max) {
+        return showError(form, messages.errorAmount
+          .replace('{min}', number.format(min))
+          .replace('{max}', number.format(max)));
+      }
+
+      const msat = sats * 1000;
+      const callback = new URL(params.callback);
+      callback.searchParams.set('amount', String(msat));
+      const comment = commentInput.value.trim();
+      if (zapInput.checked && window.nostr && params.allowsNostr && params.nostrPubkey) {
+        try {
+          callback.searchParams.set('nostr', await signZapRequest(root.dataset.zapRecipient ?? '', msat, comment));
+        } catch {
+          return showError(form, messages.errorZap);
+        }
+      } else if (comment && params.commentAllowed) {
+        callback.searchParams.set('comment', comment.slice(0, params.commentAllowed));
+      }
+
+      const response = await fetchJson<InvoiceResponse>(callback.toString()).catch(() => undefined);
+      // LUD-06: only accept an invoice for exactly the amount requested
+      if (!response?.pr || response.status === 'ERROR' || invoiceMsat(response.pr) !== msat) {
+        return showError(form, messages.errorRequest);
+      }
+      showInvoice(response.pr, sats, response.verify);
+    };
+
+    presets.forEach(preset => {
+      preset.addEventListener('click', () => {
+        amountInput.value = preset.dataset.sats ?? '';
+        syncPresets();
+      });
+    });
+    amountInput.addEventListener('input', syncPresets);
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      showError(form, '');
+      submit.disabled = true;
+      submit.textContent = messages.creating;
+      try {
+        await createInvoice();
+      } finally {
+        submit.disabled = false;
+        submit.textContent = submitLabel;
+      }
+    });
+
+    weblnButton.addEventListener('click', async () => {
+      // Capture the invoice now: a new one can be created while the wallet prompt is open
+      const pr = invoice;
+      const current = session;
+      showError(invoiceView, '');
+      weblnButton.disabled = true;
+      try {
+        await window.webln!.enable();
+        // The donor left this invoice while the wallet prompt was open
+        if (session !== current) return;
+        await window.webln!.sendPayment(pr);
+        if (session === current) showView(paidView);
+      } catch {
+        if (session === current) showError(invoiceView, messages.errorWebln);
+      } finally {
+        if (session === current) weblnButton.disabled = false;
+      }
+    });
+
+    root.querySelectorAll('.ln-back').forEach(button => {
+      button.addEventListener('click', () => showView(form));
+    });
+
+    // Nostr extensions may inject window.nostr after the page has loaded
+    const showZapOption = () => { zapLabel.hidden = !window.nostr; };
+    showZapOption();
+    window.addEventListener('load', showZapOption);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll<HTMLElement>('.ln-amount').forEach(setupAmountForm);
   });
 </script>
 
@@ -160,7 +455,8 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
     outline-offset: 4px;
   }
 
-  .ln-qr svg {
+  /* Global so it also sizes the invoice QR injected through innerHTML */
+  .ln-qr :global(svg) {
     display: block;
     width: 100%;
     height: 100%;
@@ -219,6 +515,149 @@ const [foundationBefore, foundationAfter] = i.donate.foundationNote.split('{foun
     width: 100%;
     max-width: 360px;
     justify-content: center;
+  }
+
+  .ln-amount {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .ln-amount-form,
+  .ln-invoice,
+  .ln-paid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .ln-amount [hidden] {
+    display: none;
+  }
+
+  .ln-presets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+    max-width: 360px;
+  }
+
+  .ln-preset {
+    padding: 10px 0;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .ln-preset:hover {
+    border-color: var(--border-hover);
+  }
+
+  .ln-preset[aria-pressed='true'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .ln-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+    max-width: 360px;
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .ln-field input,
+  .ln-field textarea {
+    padding: 12px 14px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 1rem;
+    resize: vertical;
+  }
+
+  .ln-preset:focus-visible,
+  .ln-field input:focus-visible,
+  .ln-field textarea:focus-visible,
+  .ln-back:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .ln-zap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+    text-align: left;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+
+  .ln-zap input {
+    accent-color: var(--accent);
+  }
+
+  .ln-submit {
+    width: 100%;
+    max-width: 360px;
+    justify-content: center;
+  }
+
+  .ln-submit:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
+  .ln-error:empty {
+    display: none;
+  }
+
+  .ln-error {
+    max-width: 360px;
+    color: #f87171;
+    font-size: 0.9rem;
+  }
+
+  .ln-invoice .ln-qr {
+    max-width: 320px;
+  }
+
+  .ln-invoice .ln-copy .ln-address {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ln-back {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .ln-paid p {
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 600;
   }
 
   .donate-foundation {
