@@ -532,7 +532,7 @@ $('replayWinBtn').addEventListener('click',()=>{if(state!=='win')return;ensureAu
 const keys={left:false,right:false,jump:false,jumpPressed:false};
 const KMAP={ArrowLeft:'left',KeyA:'left',ArrowRight:'right',KeyD:'right',ArrowUp:'jump',KeyW:'jump',Space:'jump'};
 window.addEventListener('keydown',e=>{
-  if(e.target.closest&&e.target.closest('a,select'))return; // let links and the language picker keep their keys
+  if(e.target.closest&&e.target.closest('a,select,button'))return; // focused links, buttons and the language picker keep their keys
   const k=KMAP[e.code];
   if((state==='clear'||state==='win')&&e.code==='KeyR'){e.preventDefault();if(e.repeat||!ovReady)return;ensureAudio();loadLevel(level);return;}
   if(state!=='play'&&(e.code==='Enter'||e.code==='Space')){
@@ -544,6 +544,9 @@ window.addEventListener('keydown',e=>{
   if(k){e.preventDefault();if(k==='jump'&&!keys.jump)keys.jumpPressed=true;keys[k]=true;}
 });
 window.addEventListener('keyup',e=>{const k=KMAP[e.code];if(k)keys[k]=false;});
+// A key released while the game is in the background never sends keyup here: drop held input on blur.
+function releaseKeys(){keys.left=keys.right=keys.jump=keys.jumpPressed=false;}
+window.addEventListener('blur',releaseKeys);
 const dpad=$('dpad');let dpId=null;
 function dpSet(e){const r=dpad.getBoundingClientRect();const left=e.clientX<r.left+r.width/2;keys.left=left;keys.right=!left;$('hl').classList.toggle('active',left);$('hr').classList.toggle('active',!left);}
 function dpOff(){keys.left=keys.right=false;$('hl').classList.remove('active');$('hr').classList.remove('active');}
@@ -1089,7 +1092,7 @@ function frame(now){
   while(acc>=1000/60){update();acc-=1000/60;}
   render();requestAnimationFrame(frame);
 }
-document.addEventListener('visibilitychange',()=>{last=performance.now();acc=0;if(ac){if(document.hidden)ac.suspend();else ac.resume();}});
+document.addEventListener('visibilitychange',()=>{last=performance.now();acc=0;if(document.hidden){releaseKeys();dpOff();}if(ac){if(document.hidden)ac.suspend();else ac.resume();}});
 applyLang();
 requestAnimationFrame(frame);
 </script>

@@ -8,7 +8,8 @@ const { locale } = Astro.props;
 const i = t(locale);
 
 // The game is a standalone page; it reads ?lang= so it opens in the visitor's language.
-const playHref = locale === 'en' ? '/run/' : `/run/?lang=${locale}`;
+// Always pass the locale, English included, so it wins over the browser language.
+const playHref = `/run/?lang=${locale}`;
 const AYLU_X_URL = 'https://x.com/aylufuente';
 ---
 
