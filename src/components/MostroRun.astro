@@ -1,0 +1,140 @@
+---
+import { type Locale, t } from '../i18n/translations';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const i = t(locale);
+
+// The game is a standalone page; it reads ?lang= so it opens in the visitor's language.
+const playHref = locale === 'en' ? '/run/' : `/run/?lang=${locale}`;
+const AYLU_X_URL = 'https://x.com/aylufuente';
+---
+
+<section id="run" class="section">
+  <div class="container">
+    <div class="run-card glass">
+      <a class="run-shot" href={playHref} aria-label={`${i.run.cta}: Mostro Run`}>
+        <img
+          src="/images/mostro-run.png"
+          alt={i.run.alt}
+          width="1200"
+          height="675"
+          loading="lazy"
+          decoding="async"
+        />
+        <span class="run-play" aria-hidden="true">▶</span>
+      </a>
+      <div class="run-copy">
+        <h2>{i.run.title}</h2>
+        <p class="run-subtitle">{i.run.subtitle}</p>
+        <p class="run-desc">{i.run.desc}</p>
+        <div class="run-actions">
+          <a class="btn btn-primary" href={playHref}>▶ {i.run.cta}</a>
+          <span class="run-credit">
+            {i.run.by} <a href={AYLU_X_URL} target="_blank" rel="noopener">Aylu</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .run-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: 40px;
+    align-items: center;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+  }
+
+  .run-shot {
+    position: relative;
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    line-height: 0;
+  }
+
+  .run-shot img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s ease;
+  }
+
+  .run-shot:hover img {
+    transform: scale(1.03);
+  }
+
+  .run-play {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--bg-primary);
+    font-size: 28px;
+    line-height: 1;
+    padding-left: 4px;
+    box-shadow: 0 0 30px var(--accent-glow);
+    opacity: 0.92;
+    transition: transform 0.2s ease;
+  }
+
+  .run-shot:hover .run-play {
+    transform: scale(1.08);
+  }
+
+  .run-copy h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .run-subtitle {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+
+  .run-desc {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .run-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 20px;
+  }
+
+  .run-credit {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 860px) {
+    .run-card {
+      grid-template-columns: 1fr;
+      gap: 24px;
+      padding: 20px;
+    }
+
+    .run-copy h2 {
+      font-size: 1.6rem;
+    }
+  }
+</style>
