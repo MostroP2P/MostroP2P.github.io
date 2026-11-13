@@ -1,0 +1,9 @@
+---
+// Mostro Run, a standalone canvas game by Aylu (https://x.com/aylufuente).
+// The game is a self-contained HTML document; this page serves it verbatim at /run/
+// so it works the same under `astro dev` and in the static build.
+// Fonts live in public/run/fonts/.
+import game from './_game.html?raw';
+---
+
+<Fragment set:html={game} />
