@@ -545,8 +545,6 @@ window.addEventListener('keydown',e=>{
 });
 window.addEventListener('keyup',e=>{const k=KMAP[e.code];if(k)keys[k]=false;});
 // A key released while the game is in the background never sends keyup here: drop held input on blur.
-function releaseKeys(){keys.left=keys.right=keys.jump=keys.jumpPressed=false;}
-window.addEventListener('blur',releaseKeys);
 const dpad=$('dpad');let dpId=null;
 function dpSet(e){const r=dpad.getBoundingClientRect();const left=e.clientX<r.left+r.width/2;keys.left=left;keys.right=!left;$('hl').classList.toggle('active',left);$('hr').classList.toggle('active',!left);}
 function dpOff(){keys.left=keys.right=false;$('hl').classList.remove('active');$('hr').classList.remove('active');}
@@ -556,6 +554,8 @@ dpad.addEventListener('pointermove',e=>{if(e.pointerId===dpId)dpSet(e);});
 const jb=$('jumpBtn');
 jb.addEventListener('pointerdown',e=>{e.preventDefault();try{jb.setPointerCapture(e.pointerId);}catch(_){}if(!keys.jump)keys.jumpPressed=true;keys.jump=true;jb.classList.add('active');});
 ['pointerup','pointercancel','lostpointercapture'].forEach(ev=>jb.addEventListener(ev,()=>{keys.jump=false;jb.classList.remove('active');}));
+function releaseKeys(){keys.left=keys.right=keys.jump=keys.jumpPressed=false;dpId=null;dpOff();jb.classList.remove('active');}
+window.addEventListener('blur',releaseKeys);
 document.addEventListener('contextmenu',e=>{if(isTouch)e.preventDefault();});
 
 // ================= logic =================
@@ -1092,7 +1092,7 @@ function frame(now){
   while(acc>=1000/60){update();acc-=1000/60;}
   render();requestAnimationFrame(frame);
 }
-document.addEventListener('visibilitychange',()=>{last=performance.now();acc=0;if(document.hidden){releaseKeys();dpOff();}if(ac){if(document.hidden)ac.suspend();else ac.resume();}});
+document.addEventListener('visibilitychange',()=>{last=performance.now();acc=0;if(document.hidden)releaseKeys();if(ac){if(document.hidden)ac.suspend();else ac.resume();}});
 applyLang();
 requestAnimationFrame(frame);
 </script>
