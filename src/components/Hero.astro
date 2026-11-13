@@ -35,6 +35,10 @@ const i = t(locale);
       <div class="hero-actions">
         <a href="#get-started" class="btn btn-primary">{i.hero.ctaPrimary}</a>
         <a href="#how-it-works" class="btn btn-outline">{i.hero.ctaSecondary}</a>
+        <a href="#run" class="btn btn-game">
+          <span class="game-sprite" aria-hidden="true"></span>
+          {i.hero.ctaGame}
+        </a>
       </div>
 
       <AppDownload {locale} />
@@ -171,6 +175,48 @@ const i = t(locale);
     justify-content: center;
     flex-wrap: wrap;
     margin-bottom: 32px;
+  }
+
+  /* Invitation to the game: quieter than the primary CTA. The Mostro comes
+     from Aylu's sprite sheet (113x124 cells: idle, walk 1-3, jump) shown at
+     ~32% scale, and walks on hover. */
+  .btn-game {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding-left: 16px;
+  }
+
+  .btn-game:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  .game-sprite {
+    --cell-w: 36.5px;
+    width: var(--cell-w);
+    height: 40px;
+    margin: -10px 0;
+    flex-shrink: 0;
+    background: url('/run/mostro-sprites.png') 0 0 / calc(var(--cell-w) * 5) 80px no-repeat;
+  }
+
+  .btn-game:hover .game-sprite,
+  .btn-game:focus-visible .game-sprite {
+    animation: mostro-walk 0.45s steps(3) infinite;
+  }
+
+  @keyframes mostro-walk {
+    from { background-position-x: calc(var(--cell-w) * -1); }
+    to { background-position-x: calc(var(--cell-w) * -4); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-game:hover .game-sprite,
+    .btn-game:focus-visible .game-sprite {
+      animation: none;
+    }
   }
 
   .hero-stats {
